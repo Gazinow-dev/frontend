@@ -1,12 +1,13 @@
 import { Pressable, Text, View } from 'react-native';
 
+import { SEARCH_NAVIGATION, SUBWAY_SEARCH } from '@/constants/navigation';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 
 const Home = () => {
   const rootNavigation = useRootNavigation();
 
   const navigateSubwaySearch = () => {
-    rootNavigation.push('SearchNavigation', { screen: 'SubwaySearch' });
+    rootNavigation.push(SEARCH_NAVIGATION, { screen: SUBWAY_SEARCH });
   };
 
   return (
