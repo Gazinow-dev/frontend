@@ -5,7 +5,7 @@ import { RootNavigation } from '@/navigation';
 
 const App = (): JSX.Element => {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <RootNavigation />
     </SafeAreaView>
   );
