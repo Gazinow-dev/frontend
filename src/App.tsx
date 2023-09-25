@@ -1,14 +1,18 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import styled from 'styled-components/native';
 
 import { RootNavigation } from '@/navigation';
 
 const App = (): JSX.Element => {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeArea>
       <RootNavigation />
-    </SafeAreaView>
+    </SafeArea>
   );
 };
 
 export default App;
+
+const SafeArea = styled.SafeAreaView`
+  flex: 1;
+`;
