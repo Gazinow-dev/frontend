@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { Login } from '@/components/auth/page';
-import { MainBottomTabNavigation } from '@/navigation';
+import { MainBottomTabNavigation, SearchNavigation } from '@/navigation';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +16,7 @@ const RootNavigation = () => {
       <Stack.Navigator initialRouteName="MainBottomTab" screenOptions={screenOption}>
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="MainBottomTab" component={MainBottomTabNavigation} />
+        <Stack.Screen name="SearchNavigation" component={SearchNavigation} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -10,7 +10,7 @@ const screenOption = {
 
 const MainBottomTabNavigation = () => {
   return (
-    <Tab.Navigator screenOptions={screenOption}>
+    <Tab.Navigator initialRouteName="Home" screenOptions={screenOption}>
       <Tab.Screen name="Home" component={Home} />
     </Tab.Navigator>
   );
