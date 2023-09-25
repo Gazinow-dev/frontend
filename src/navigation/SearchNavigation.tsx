@@ -1,8 +1,8 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { SubwaySearch } from '@/components/search/page';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const screenOption = {
   headerShown: false,

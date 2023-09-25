@@ -1,10 +1,12 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { Login } from '@/components/auth/page';
 import { MainBottomTabNavigation, SearchNavigation } from '@/navigation';
+import { RootStackParamList } from '@/types/navigation';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const screenOption = {
   headerShown: false,
@@ -23,3 +25,7 @@ const RootNavigation = () => {
 };
 
 export default RootNavigation;
+
+export const useRootNavigation = <RouteName extends keyof RootStackParamList>() => {
+  return useNavigation<NativeStackNavigationProp<RootStackParamList, RouteName>>();
+};
