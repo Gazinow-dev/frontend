@@ -1,3 +1,4 @@
+export const MY_PAGE_NAVIGATION = 'MyPageNavigation' as const;
 export const EDIT_ROUTE_NAVIGATION = 'EditRouteNavigation' as const;
 export const SAVED_ROUTES_PAGE = 'SavedRoutesPage' as const;
 export const ADD_NEW_ROUTE_PAGE = 'AddNewRoutePage' as const;
@@ -9,3 +10,9 @@ export const SUBWAY_PATH_DETAIL = 'SubwayPathDetail' as const;
 export const MAIN_BOTTOM_TAB = 'MainBottomTab' as const;
 export const LOGIN = 'Login' as const;
 export const HOME = 'Home' as const;
+export const MY_PAGE = 'MyPage' as const;
+export const CHANGE_NICKNAME_PAGE = 'ChangeNicknamePage' as const;
+export const ACCOUNT_MANAGE_PAGE = 'AccountManagePage' as const;
+export const ALERT_SETTINGS_PAGE = 'AlertSettingsPage' as const;
+export const CHANGE_PW_PAGE = 'ChangePwPage' as const;
+export const CONFIRM_QUIT_PAGE = 'ConfirmQuitPage' as const;

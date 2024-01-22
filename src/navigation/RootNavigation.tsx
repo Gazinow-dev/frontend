@@ -2,8 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import type { StackNavigationProp } from '@react-navigation/stack';
 
-import { EDIT_ROUTE_NAVIGATION, LOGIN, MAIN_BOTTOM_TAB, SEARCH_NAVIGATION } from '@/constants';
-import { EditRouteNavigation, MainBottomTabNavigation, SearchNavigation } from '@/navigation';
+import { EDIT_ROUTE_NAVIGATION, LOGIN, MAIN_BOTTOM_TAB, MY_PAGE_NAVIGATION, SEARCH_NAVIGATION } from '@/constants';
+import { EditRouteNavigation, MainBottomTabNavigation, MyPageNavigation, SearchNavigation } from '@/navigation';
 import { LoginPage } from '@/pages/auth';
 import type { RootStackParamList } from '@/types/navigation';
 import { tokenReissueFetch } from '@/apis/auth';
@@ -69,6 +69,7 @@ const RootNavigation = () => {
       <Stack.Screen name={MAIN_BOTTOM_TAB} component={MainBottomTabNavigation} />
       <Stack.Screen name={SEARCH_NAVIGATION} component={SearchNavigation} />
       <Stack.Screen name={EDIT_ROUTE_NAVIGATION} component={EditRouteNavigation} />
+      <Stack.Screen name={MY_PAGE_NAVIGATION} component={MyPageNavigation} />
     </Stack.Navigator>
   );
 };
