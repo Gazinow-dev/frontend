@@ -8,17 +8,17 @@ import { Image } from 'react-native';
 import { iconPath } from '@/assets/icons/iconPath';
 
 const AlertSettingsPage = () => {
-    const nickName = '사용자17349245'
-    const userEmail = 'abcdef@naver.com'
-    const versionInfo = '0.0.0'
-    const navigation = useRootNavigation();
+    // const nickName = '사용자17349245'
+    // const userEmail = 'abcdef@naver.com'
+    // const versionInfo = '0.0.0'
+    // const navigation = useRootNavigation();
 
     //     const changeNickName() => {
     // nickName= 
     //     }
     return (
         <Container>
-            <NickNameContainer onPress={() => { navigation.navigate(MY_PAGE_NAVIGATION, { screen: 'ChangeNicknamePage' }) }}>
+            {/* <NickNameContainer onPress={() => { navigation.push(MY_PAGE_NAVIGATION, { screen: 'ChangeNicknamePage' }) }}>
                 <FontText
                     value={nickName}
                     textSize="16px"
@@ -75,7 +75,7 @@ const AlertSettingsPage = () => {
                     // onPress={submitFormData}
                     lineHeight="17px"
                 />
-            </VersionContainer>
+            </VersionContainer> */}
         </Container >
     );
 };

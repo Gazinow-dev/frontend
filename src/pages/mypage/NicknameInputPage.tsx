@@ -1,53 +1,3 @@
-// import styled from '@emotion/native';
-// import { FontText } from '@/components/common/atoms';
-// import { COLOR } from '@/constants';
-// import React from 'react';
-
-// const NicknameInput = () => {
-//   return (
-//     <Container>
-//         <FontText
-//           value="새 경로 이름"
-//           textSize="14px"
-//           textWeight="Medium"
-//           lineHeight="21px"
-//           textColor={COLOR.BASIC_BLACK}
-//         />
-//     </Container>
-//   );
-// };
-
-// export default NicknameInput;
-
-// const Container = styled.View`
-//   background-color: ${COLOR.WHITE};
-//   padding-horizontal: 16px;
-//   flex: 1;
-// `;
-// const InputBox = styled.Pressable`
-//   padding-vertical: 12px;
-//   padding-horizontal: 16px;
-//   margin-vertical: 7px;
-//   border-radius: 5px;
-//   background-color : ${COLOR.LIGHT_GRAY}
-// `;
-// const TextLengthBox = styled.View`
-//   align-items: flex-end;
-//   flex: 1;
-// `;
-// const BottomBtn = styled.Pressable`
-//   padding-vertical: 11px;
-//   border-radius: 5px;
-//   align-items: center;
-//   bottom: 41;
-//   ${({ disabled }) =>
-//     disabled ?
-//       `background-color : #dddddd`
-//       :
-//       `background-color : ${COLOR.BASIC_BLACK};`
-//   }
-// `;
-
 import styled from '@emotion/native';
 import { debounce } from 'lodash';
 import { useCallback, useState } from 'react';
@@ -58,20 +8,12 @@ import { COLOR } from '@/constants';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { useAppDispatch, useAppSelect } from '@/store';
 import { getSearchText } from '@/store/modules/subwaySearchModule';
-import { Image, View } from 'react-native';
+import { Image } from 'react-native';
 import { iconPath } from '@/assets/icons/iconPath';
-import { NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '@/types/navigation';
-import { Text } from 'react-native-svg';
-import axios, { AxiosError } from 'axios';
-import { API_BASE_URL } from '@env';
+import { AxiosError } from 'axios';
 
-const NicknameInput = ({
-    navigation,
-}: {
-    navigation: NavigationProp<RootStackParamList, 'MyPageNavigation'>;
-}) => {
-    const rootNavigation = useRootNavigation();
+const NicknameInputPage = () => {
+    const navigation = useRootNavigation();
     const dispatch = useAppDispatch();
     const { stationType } = useAppSelect(({ subwaySearch }) => subwaySearch);
     const submitNickname = (newNickname) => {
@@ -87,9 +29,20 @@ const NicknameInput = ({
 
     navigation.setOptions({
         title: '닉네임 수정',
-        headerRight: () => (
+          headerLeft: () => (
+            <HeaderLeft >
+                <IconButton
+                    isFontIcon={false}
+                    imagePath="x"
+                    iconWidth="23px"
+                    iconHeight="23px"
+                    onPress={() => navigation.goBack()}
+                />
+            </HeaderLeft>
+        ),
+         headerRight: () => (
             <TextButton
-                value="완료"
+                value="완료    "
                 textSize="16px"
                 textColor={COLOR.GRAY_999}
                 textWeight="Medium"
@@ -98,11 +51,12 @@ const NicknameInput = ({
             />
         ),
     })
+
     const [newNickname, setNewNickname] = useState<string>('');
 
-    const backToScreen = () => {
-        rootNavigation.goBack();
-    };
+    // const backToScreen = () => {
+    //     rootNavigation.goBack();
+    // };
 
     const changeNickname = (text: string) => {
         setNewNickname(text);
@@ -145,25 +99,36 @@ const NicknameInput = ({
                 <Image source={iconPath.x_circle} style={{ width: 14, height: 14 }} />
                 <FontText
                     value=" 중복된 닉네임입니다"
-                    textSize="12px"
+                    textSize="14px"
                     textWeight="Medium"
-                    lineHeight="14px"
-                    textColor={COLOR.GRAY_999}
+                    lineHeight="20px"
+                    textColor="#EB5147"
+                />
+            </ConfirmContainer>
+            <ConfirmContainer>
+                <Image source={iconPath.checked} style={{ width: 14, height: 10 }} />
+                <FontText
+                    value=" 사용 가능한 닉네임입니다"
+                    textSize="14px"
+                    textWeight="Medium"
+                    lineHeight="20px"
+                    textColor="#0BC73F"
                 />
             </ConfirmContainer>
         </>
     );
 };
 
-export default NicknameInput;
+export default NicknameInputPage;
 
 const Container = styled.View`
   flex-direction: row;
   align-items: center;
   border-radius: 5px;
   border: 1px solid #d4d4d4;
-  padding: 4px 16px 4px 18.25px;
+  padding: 8px 16px 8px 18.25px;
   margin: 34px 16px 0;
+  background-color: ${COLOR.WHITE}
 `;
 
 const ConfirmContainer = styled.View`
@@ -175,4 +140,9 @@ const ConfirmContainer = styled.View`
 const SearchInput = styled(Input)`
   height: 36px;
   flex: 1;
+`;
+
+const HeaderLeft = styled.View`
+  margin-left: 16px;
+  flex-direction: row;
 `;

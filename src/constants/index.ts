@@ -29,5 +29,6 @@ export {
   ALERT_SETTINGS_PAGE,
   CHANGE_PW_PAGE,
   CONFIRM_QUIT_PAGE,
+  CONTRACT_PAGE,
 } from './navigation';
 export { default as COLOR } from './color';

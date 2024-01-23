@@ -3,22 +3,38 @@ import styled from '@emotion/native';
 import { IconButton, TextButton } from '@/components/common/molecules';
 import { FontText } from '@/components/common/atoms';
 import { useRootNavigation } from '@/navigation/RootNavigation';
-import { CHANGE_NICKNAME_PAGE, CHANGE_PW_PAGE, CONFIRM_QUIT_PAGE, MY_PAGE_NAVIGATION } from '@/constants/navigation';
-import { Image } from 'react-native';
-import { iconPath } from '@/assets/icons/iconPath';
+import { CHANGE_PW_PAGE, CONFIRM_QUIT_PAGE, MY_PAGE_NAVIGATION } from '@/constants/navigation';
+import { LogoutModal } from '@/components/myPage';
+import { useState } from 'react';
 
 const AccountManagePage = () => {
-    const nickName = '사용자17349245'
-    const userEmail = 'abcdef@naver.com'
-    const versionInfo = '0.0.0'
     const navigation = useRootNavigation();
+    const [popupVisible, setPopupVisible] = useState<boolean>(false);
 
-    //     const changeNickName() => {
-    // nickName= 
-    //     }
+    const showLogoutPopup = () => setPopupVisible(true);
+    const hideLogoutPopup = () => setPopupVisible(false);
+    const handleLogout = async () => {
+        console.log('로그아웃 확인 클릭')
+        hideLogoutPopup();
+    };
+    navigation.setOptions({
+        title: '계정관리',
+        headerLeft: () => (
+            <HeaderLeft >
+                <IconButton
+                    isFontIcon={false}
+                    imagePath="backBtn"
+                    iconWidth="27px"
+                    iconHeight="20px"
+                    onPress={() => navigation.goBack()}
+                />
+            </HeaderLeft>
+        )
+    })
+
     return (
         <Container>
-            <MenuContainer onPress={() => { navigation.navigate(MY_PAGE_NAVIGATION, { screen: CHANGE_PW_PAGE }) }}>
+            <MenuContainer onPress={() => navigation.push(MY_PAGE_NAVIGATION, { screen: CHANGE_PW_PAGE })}>
                 <TextButton
                     value="비밀번호 변경"
                     textSize="16px"
@@ -26,15 +42,21 @@ const AccountManagePage = () => {
                     lineHeight="21px"
                 />
             </MenuContainer>
-            <MenuContainer onPress={() => { navigation.navigate(MY_PAGE_NAVIGATION, { screen: CONFIRM_QUIT_PAGE }) }}>
+            <MenuContainer onPress={() => showLogoutPopup()}>
                 <TextButton
                     value="로그아웃"
                     textSize="16px"
                     textWeight="Regular"
                     lineHeight="21px"
+                    onPress={() => showLogoutPopup()}
                 />
             </MenuContainer>
-            <MenuContainer onPress={() => { navigation.navigate(MY_PAGE_NAVIGATION, { screen: CONFIRM_QUIT_PAGE }) }}>
+            <LogoutModal
+                isVisible={popupVisible}
+                onCancel={hideLogoutPopup}
+                onLogout={handleLogout}
+            />
+            <MenuContainer onPress={() => navigation.push(MY_PAGE_NAVIGATION, { screen: CONFIRM_QUIT_PAGE })}>
                 <FontText
                     value="회원 탈퇴"
                     textSize="16px"
@@ -53,10 +75,13 @@ const Container = styled.View`
 `;
 const MenuContainer = styled.Pressable`
   flex-direction: row;
-  justify-content: space-between;
   padding: 0 16px;
   height: 53px;
   align-items: center;
   border-bottom-width: 1px;
   border-bottom-color: #ebebeb;
+`;
+const HeaderLeft = styled.View`
+  margin-left: 10px;
+  flex-direction: row;
 `;

@@ -14,6 +14,7 @@ export interface IconPathTypes {
   addRoute: ImageSourcePropType;
   checked: ImageSourcePropType;
   x_circle: ImageSourcePropType;
+  x: ImageSourcePropType;
   line1: ImageSourcePropType;
   line2: ImageSourcePropType;
   line3: ImageSourcePropType;
@@ -49,6 +50,7 @@ export const iconPath: IconPathTypes = {
   addRoute: require('@/assets/icons/plus-circle.png'),
   checked: require('@/assets/icons/checked.png'),
   x_circle: require('@/assets/icons/x-circle.png'),
+  x: require('@/assets/icons/x.png'),
   line1: require('@/assets/icons/lines/line1.png'),
   line2: require('@/assets/icons/lines/line2.png'),
   line3: require('@/assets/icons/lines/line3.png'),

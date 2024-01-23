@@ -36,4 +36,5 @@ export type MyPageStackParamList = {
   AlertSettingsPage: undefined;
   ChangePwPage: undefined;
   ConfirmQuitPage: undefined;
+  ContractPage: undefined;
 };

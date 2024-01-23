@@ -1,110 +1,211 @@
 import styled from '@emotion/native';
 
 import { IconButton, TextButton } from '@/components/common/molecules';
-import { FontText } from '@/components/common/atoms';
+import { FontText, Input, Space } from '@/components/common/atoms';
 import { useRootNavigation } from '@/navigation/RootNavigation';
-import { ACCOUNT_MANAGE_PAGE, CHANGE_NICKNAME_PAGE, MY_PAGE_NAVIGATION } from '@/constants/navigation';
 import { Image } from 'react-native';
 import { iconPath } from '@/assets/icons/iconPath';
+import { COLOR } from '@/constants';
+import { useCallback, useState } from 'react';
+import { debounce } from 'lodash';
+import { ChangePwModal } from '@/components/myPage';
 
 const ChangePwPage = () => {
-    const nickName = '사용자17349245'
-    const userEmail = 'abcdef@naver.com'
-    const versionInfo = '0.0.0'
     const navigation = useRootNavigation();
+    // const submitNewPw = () => {
+    //     console.log('비밀번호 변경 완료')
+    // }
+    navigation.setOptions({
+        title: '비밀번호 변경',
+        headerLeft: () => (
+            <HeaderLeft >
+                <IconButton
+                    isFontIcon={false}
+                    imagePath="backBtn"
+                    iconWidth="27px"
+                    iconHeight="20px"
+                    onPress={() => navigation.goBack()}
+                />
+            </HeaderLeft>
+        ),
+        headerRight: () => (
+            <TextButton
+                value="완료    "
+                textSize="16px"
+                textColor={COLOR.GRAY_999}
+                textWeight="Medium"
+                lineHeight="21px"
+                onPress={() => submitNewPw()}
+            />
+        ),
+    })
+    const [popupVisible, setPopupVisible] = useState<boolean>(false);
+    const submitNewPw = () => setPopupVisible(true);
+    const handleConfirm = async () => {
+        navigation.goBack();
+        setPopupVisible(false);
+    };
 
-    //     const changeNickName() => {
-    // nickName= 
-    //     }
+    const [newNickname, setNewNickname] = useState<string>('');
+
+    const backToScreen = () => {
+        navigation.goBack();
+    };
+
+    const changeNickname = (text: string) => {
+        setNewNickname(text);
+        sendSearchText(text);
+    };
+
+    const sendSearchText = useCallback(
+        debounce((text: string) => {
+            // dispatch(getSearchText(text));
+        }, 500),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [],
+    );
+
+    const deleteInputText = () => {
+        setNewNickname('');
+    };
+
     return (
         <Container>
-            <NickNameContainer onPress={() => { navigation.navigate(MY_PAGE_NAVIGATION, { screen: CHANGE_NICKNAME_PAGE }) }}>
-                <FontText
-                    value={nickName}
-                    textSize="16px"
-                    textWeight="Regular"
-                    lineHeight="21px"
+            <Space height='39px' />
+            <FontText
+                value="현재 비밀번호"
+                textSize="14px"
+                textWeight="SemiBold"
+                lineHeight="21px"
+                textColor={COLOR.BASIC_BLACK}
+            />
+            <InputContainer>
+                <SearchInput
+                    value={newNickname}
+                    placeholder={`비밀번호를 입력해주세요`}
+                    placeholderTextColor={COLOR.BE_GRAY}
+                    inputMode="search"
+                    onChangeText={changeNickname}
+                    autoFocus
                 />
                 <IconButton
                     iconType="Ionicons"
                     isFontIcon
-                    iconName="pencil"
-                    iconWidth="13"
-                    iconColor="#49454F"
-                // onPress={changeNickName()}
+                    iconName="close-circle"
+                    iconWidth="19.5"
+                    iconColor="rgba(0, 0, 0, 0.46)"
+                    onPress={deleteInputText}
                 />
-            </NickNameContainer>
-            <FontText
-                value={userEmail}
-                textSize="12px"
-                textWeight="Regular"
-                lineHeight="15px"
-            />
-            <MenuContainer onPress={() => { navigation.navigate(MY_PAGE_NAVIGATION, { screen: ACCOUNT_MANAGE_PAGE }) }}>
-                <TextButton
-                    value="계정관리"
-                    textSize="16px"
-                    textWeight="Regular"
-                    // onPress={submitFormData}
-                    lineHeight="21px"
-                />
-                <Image source={iconPath.backBtn} style={{ width: 14, height: 17, transform: [{ scaleX: -1 }] }} />
-            </MenuContainer>
-            <MenuContainer 
-            // onPress={() => { navigation.navigate(MY_PAGE_NAVIGATION, { screen: 약관 및 정책 }) }}
-            >
-                <TextButton
-                    value="약관 및 정책"
-                    textSize="16px"
-                    textWeight="Regular"
-                    // onPress={submitFormData}
-                    lineHeight="21px"
-                />
-                <Image source={iconPath.backBtn} style={{ width: 14, height: 17, transform: [{ scaleX: -1 }] }} />
-            </MenuContainer>
-            <VersionContainer>
+            </InputContainer>
+            <ConfirmContainer>
+                <Image source={iconPath.x_circle} style={{ width: 14, height: 14 }} />
                 <FontText
-                    value="버전"
-                    textSize="16px"
-                    textWeight="Regular"
-                    // onPress={submitFormData}
-                    lineHeight="21px"
-                />
-                <FontText
-                    value={`v ${versionInfo} 최신버전입니다`}
+                    value=" 비밀번호가 틀립니다"
                     textSize="12px"
-                    textWeight="Regular"
-                    // onPress={submitFormData}
-                    lineHeight="17px"
+                    textWeight="Medium"
+                    lineHeight="14px"
+                    textColor={COLOR.GRAY_999}
                 />
-            </VersionContainer>
-        </Container >
+            </ConfirmContainer>
+            <Space height='28px' />
+            <FontText
+                value="새로운 비밀번호"
+                textSize="14px"
+                textWeight="SemiBold"
+                lineHeight="21px"
+                textColor={COLOR.BASIC_BLACK}
+            />
+            <InputContainer>
+                <SearchInput
+                    value={newNickname}
+                    placeholder={`변경하실 비밀번호를 입력해주세요`}
+                    placeholderTextColor={COLOR.BE_GRAY}
+                    inputMode="search"
+                    onChangeText={changeNickname}
+                />
+                <IconButton
+                    iconType="Ionicons"
+                    isFontIcon
+                    iconName="close-circle"
+                    iconWidth="19.5"
+                    iconColor="rgba(0, 0, 0, 0.46)"
+                    onPress={deleteInputText}
+                />
+            </InputContainer>
+            <ConfirmContainer>
+                <Image source={iconPath.x_circle} style={{ width: 14, height: 14 }} />
+                <FontText
+                    value=" 비밀번호가 틀립니다"
+                    textSize="12px"
+                    textWeight="Medium"
+                    lineHeight="14px"
+                    textColor={COLOR.GRAY_999}
+                />
+            </ConfirmContainer>
+
+            <InputContainer>
+                <SearchInput
+                    value={newNickname}
+                    placeholder={`비밀번호를 확인해주세요`}
+                    placeholderTextColor={COLOR.BE_GRAY}
+                    inputMode="search"
+                    onChangeText={changeNickname}
+                />
+                <IconButton
+                    iconType="Ionicons"
+                    isFontIcon
+                    iconName="close-circle"
+                    iconWidth="19.5"
+                    iconColor="rgba(0, 0, 0, 0.46)"
+                    onPress={deleteInputText}
+                />
+            </InputContainer>
+            <ConfirmContainer>
+                <Image source={iconPath.x_circle} style={{ width: 14, height: 14 }} />
+                <FontText
+                    value=" 비밀번호가 틀립니다"
+                    textSize="12px"
+                    textWeight="Medium"
+                    lineHeight="14px"
+                    textColor={COLOR.GRAY_999}
+                />
+            </ConfirmContainer>
+            <ChangePwModal
+                isVisible={popupVisible}
+                onConfirm={handleConfirm}
+            />
+        </Container>
     );
 };
 export default ChangePwPage;
 
 const Container = styled.View`
-  background-color: white;
+  padding: 0 16px;
+  background-color: ${COLOR.WHITE};
+  flex:1;
+`;
+
+const InputContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  border-radius: 5px;
+  padding: 4px 16px 4px 18.25px;
+  margin-top: 8px;
+  background-color: ${COLOR.LIGHT_GRAY};
+`;
+
+const ConfirmContainer = styled.View`
+  margin: 8px 5px;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const HeaderLeft = styled.View`
+  margin-left: 10px;
+  flex-direction: row;
+`;
+
+const SearchInput = styled(Input)`
+  height: 36px;
   flex: 1;
-`;
-const NickNameContainer = styled.Pressable`
-  flex-direction: row;
-`;
-const MenuContainer = styled.Pressable`
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0 16px;
-  height: 53px;
-  align-items: center;
-  border-bottom-width: 1px;
-  border-bottom-color: #ebebeb;
-`;
-const VersionContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0 16px;
-  height: 53px;
-  align-items: center;
-  border-bottom-width: 1px;
-  border-bottom-color: #ebebeb;
 `;
