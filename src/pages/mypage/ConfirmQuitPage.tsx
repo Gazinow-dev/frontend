@@ -4,29 +4,27 @@ import { IconButton, TextButton } from '@/components/common/molecules';
 import { FontText, Space } from '@/components/common/atoms';
 import COLOR from '@/constants/color';
 import { useRootNavigation } from '@/navigation/RootNavigation';
+import { AxiosError } from 'axios';
+import { axiosInstance } from '@/apis/axiosInstance';
 
 const ConfirmQuitPage = () => {
     const nickName = '사용자17349245'
     const navigation = useRootNavigation();
 
-    const onPressQuit = () => {
-        console.log('탈퇴 버튼 클릭')
-    }
+    const onPressQuit = async () => {
+        console.log('탈퇴 버튼 클릭');
     
-    navigation.setOptions({
-        title: '',
-        headerLeft: () => (
-            <HeaderLeft >
-                <IconButton
-                    isFontIcon={false}
-                    imagePath="backBtn"
-                    iconWidth="27px"
-                    iconHeight="20px"
-                    onPress={() => navigation.goBack()}
-                />
-            </HeaderLeft>
-        ),
-    })
+        try {
+            await axiosInstance.delete('/api/v1/member/delete_member', {
+                data: {}
+            });
+            console.log('탈퇴 요청 성공');
+        } catch (err) {
+            const error = err as AxiosError;
+            console.error('탈퇴 요청 실패:', error.response?.data);
+        }
+    };
+    
     return (
         <Container>
             <AlertContainer>
@@ -97,8 +95,4 @@ const BottomBtn = styled.Pressable`
   align-items: center;
   flex: 1;
   background-color : ${COLOR.BASIC_BLACK};
-`;
-const HeaderLeft = styled.View`
-  margin-left: 10px;
-  flex-direction: row;
 `;

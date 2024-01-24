@@ -8,20 +8,6 @@ import { useRootNavigation } from '@/navigation/RootNavigation';
 const ContractPage = () => {
     const navigation = useRootNavigation();
 
-    navigation.setOptions({
-        title: '',
-        headerLeft: () => (
-            <HeaderLeft >
-                <IconButton
-                    isFontIcon={false}
-                    imagePath="backBtn"
-                    iconWidth="27px"
-                    iconHeight="20px"
-                    onPress={() => navigation.goBack()}
-                />
-            </HeaderLeft>
-        ),
-    })
     return (
         <Container>
             <AlertContainer>

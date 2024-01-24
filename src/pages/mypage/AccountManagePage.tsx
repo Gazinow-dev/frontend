@@ -30,21 +30,6 @@ const AccountManagePage = () => {
     const showLogoutPopup = () => setPopupVisible(true);
     const hideLogoutPopup = () => setPopupVisible(false);
 
-    navigation.setOptions({
-        title: '계정관리',
-        headerLeft: () => (
-            <HeaderLeft>
-                <IconButton
-                    isFontIcon={false}
-                    imagePath="backBtn"
-                    iconWidth="27px"
-                    iconHeight="20px"
-                    onPress={() => navigation.goBack()}
-                />
-            </HeaderLeft>
-        ),
-    });
-
     const renderMenu = ({ text, onPress }: RenderMenuProps) => (
         <MenuContainer onPress={onPress}>
             <TextButton

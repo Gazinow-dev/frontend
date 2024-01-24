@@ -16,18 +16,6 @@ const ChangePwPage = () => {
     //     console.log('비밀번호 변경 완료')
     // }
     navigation.setOptions({
-        title: '비밀번호 변경',
-        headerLeft: () => (
-            <HeaderLeft >
-                <IconButton
-                    isFontIcon={false}
-                    imagePath="backBtn"
-                    iconWidth="27px"
-                    iconHeight="20px"
-                    onPress={() => navigation.goBack()}
-                />
-            </HeaderLeft>
-        ),
         headerRight: () => (
             <TextButton
                 value="완료    "
