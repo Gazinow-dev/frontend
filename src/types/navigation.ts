@@ -10,7 +10,7 @@ export type RootStackParamList = {
 export type EditRouteStackParamList = {
   SavedRoutesPage: undefined;
   AddNewRoutePage: undefined;
-  SubwaySearch: undefined;
+  SubwaySearch: { isBackBtn: boolean };
   SubwayPathResult: {
     departure: { name: string; line: string };
     arrival: { name: string; line: string };
@@ -20,7 +20,7 @@ export type EditRouteStackParamList = {
 };
 
 export type SearchStackParamList = {
-  SubwaySearch: undefined;
+  SubwaySearch: { isBackBtn: boolean };
   SubwayPathResult: {
     departure: { name: string; line: string };
     arrival: { name: string; line: string };
