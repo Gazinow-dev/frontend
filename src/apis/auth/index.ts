@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 import { axiosInstance } from '../axiosInstance';
-import type { LoginFormTypes, LoginFetchResponse } from '@/types/apis';
+import type { LoginFormTypes, LoginFetchResponse, LogoutFetchData } from '@/types/apis';
 import { API_BASE_URL } from '@env';
 
 export const loginFetch = async (data: LoginFormTypes) => {
@@ -38,6 +38,18 @@ export const tokenReissueFetch = async ({
       newAccessToken: res.data.data.accessToken,
       newRefreshToken: res.data.data.refreshToken,
     };
+  } catch (err) {
+    const er = err as AxiosError;
+    throw er;
+  }
+};
+
+export const logoutFetch = async ({ accessToken, refreshToken }: LogoutFetchData) => {
+  try {
+    await axiosInstance.post(
+      '/api/v1/member/logout',
+      { accessToken, refreshToken },
+    );
   } catch (err) {
     const er = err as AxiosError;
     throw er;

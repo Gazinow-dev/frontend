@@ -1,26 +1,39 @@
+import React, { useState } from 'react';
 import styled from '@emotion/native';
-
 import { IconButton, TextButton } from '@/components/common/molecules';
-import { FontText } from '@/components/common/atoms';
 import { useRootNavigation } from '@/navigation/RootNavigation';
-import { CHANGE_PW_PAGE, CONFIRM_QUIT_PAGE, MY_PAGE_NAVIGATION } from '@/constants/navigation';
+import { CHANGE_PW_PAGE, CONFIRM_QUIT_PAGE, LOGIN, MY_PAGE_NAVIGATION } from '@/constants/navigation';
 import { LogoutModal } from '@/components/myPage';
-import { useState } from 'react';
+import { getEncryptedStorage } from '@/utils';
+import { useLogoutMutation } from '@/hooks/queries/authQuery';
+
+interface RenderMenuProps {
+    text: string;
+    onPress: () => void;
+}
 
 const AccountManagePage = () => {
     const navigation = useRootNavigation();
-    const [popupVisible, setPopupVisible] = useState<boolean>(false);
+    const [popupVisible, setPopupVisible] = useState(false);
+
+    const { logoutMutate } = useLogoutMutation({
+        onSuccess: () => navigation.reset({ routes: [{ name: LOGIN }] }),
+    });
+
+    const handleLogout = async () => {
+        const accessToken = await getEncryptedStorage('access_token');
+        const refreshToken = await getEncryptedStorage('refresh_token');
+        logoutMutate({ accessToken, refreshToken });
+        hideLogoutPopup();
+    };
 
     const showLogoutPopup = () => setPopupVisible(true);
     const hideLogoutPopup = () => setPopupVisible(false);
-    const handleLogout = async () => {
-        console.log('로그아웃 확인 클릭')
-        hideLogoutPopup();
-    };
+
     navigation.setOptions({
         title: '계정관리',
         headerLeft: () => (
-            <HeaderLeft >
+            <HeaderLeft>
                 <IconButton
                     isFontIcon={false}
                     imagePath="backBtn"
@@ -29,59 +42,45 @@ const AccountManagePage = () => {
                     onPress={() => navigation.goBack()}
                 />
             </HeaderLeft>
-        )
-    })
+        ),
+    });
+
+    const renderMenu = ({ text, onPress }: RenderMenuProps) => (
+        <MenuContainer onPress={onPress}>
+            <TextButton
+                value={text}
+                textSize="16px"
+                textWeight="Regular"
+                lineHeight="21px"
+                onPress={onPress}
+            />
+        </MenuContainer>
+    );
 
     return (
         <Container>
-            <MenuContainer onPress={() => navigation.push(MY_PAGE_NAVIGATION, { screen: CHANGE_PW_PAGE })}>
-                <TextButton
-                    value="비밀번호 변경"
-                    textSize="16px"
-                    textWeight="Regular"
-                    lineHeight="21px"
-                />
-            </MenuContainer>
-            <MenuContainer onPress={() => showLogoutPopup()}>
-                <TextButton
-                    value="로그아웃"
-                    textSize="16px"
-                    textWeight="Regular"
-                    lineHeight="21px"
-                    onPress={() => showLogoutPopup()}
-                />
-            </MenuContainer>
-            <LogoutModal
-                isVisible={popupVisible}
-                onCancel={hideLogoutPopup}
-                onLogout={handleLogout}
-            />
-            <MenuContainer onPress={() => navigation.push(MY_PAGE_NAVIGATION, { screen: CONFIRM_QUIT_PAGE })}>
-                <FontText
-                    value="회원 탈퇴"
-                    textSize="16px"
-                    textWeight="Regular"
-                    lineHeight="21px"
-                />
-            </MenuContainer>
-        </Container >
+            {renderMenu({ text: '비밀번호 변경', onPress: () => navigation.push(MY_PAGE_NAVIGATION, { screen: CHANGE_PW_PAGE }) })}
+            {renderMenu({ text: '로그아웃', onPress: () => showLogoutPopup() })}
+            {renderMenu({ text: '회원 탈퇴', onPress: () => navigation.push(MY_PAGE_NAVIGATION, { screen: CONFIRM_QUIT_PAGE }) })}
+            <LogoutModal isVisible={popupVisible} onCancel={hideLogoutPopup} onLogout={handleLogout} />
+        </Container>
     );
 };
 export default AccountManagePage;
 
 const Container = styled.View`
-  background-color: white;
-  flex: 1;
+    background-color: white;
+    flex: 1;
 `;
 const MenuContainer = styled.Pressable`
-  flex-direction: row;
-  padding: 0 16px;
-  height: 53px;
-  align-items: center;
-  border-bottom-width: 1px;
-  border-bottom-color: #ebebeb;
+    flex-direction: row;
+    padding: 0 16px;
+    height: 53px;
+    align-items: center;
+    border-bottom-width: 1px;
+    border-bottom-color: #ebebeb;
 `;
 const HeaderLeft = styled.View`
-  margin-left: 10px;
-  flex-direction: row;
+    margin-left: 10px;
+    flex-direction: row;
 `;

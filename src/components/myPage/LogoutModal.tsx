@@ -4,10 +4,11 @@ import { FontText } from '@/components/common/atoms';
 import { COLOR } from '@/constants';
 
 interface ModalProps {
-    isVisible: boolean,
-    onCancel: undefined,
-    onLogout: undefined,
+    isVisible: boolean;
+    onCancel: () => void;
+    onLogout: () => void;
 }
+
 const LogoutModal = ({ isVisible, onCancel, onLogout }: ModalProps) => {
     return (
         <Modal

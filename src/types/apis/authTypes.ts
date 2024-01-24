@@ -17,3 +17,8 @@ export interface LoginFetchResponse {
   notificationByLike: boolean;
   firebaseToken: boolean;
 }
+
+export interface LogoutFetchData {
+  accessToken: string;
+  refreshToken: string;
+}
