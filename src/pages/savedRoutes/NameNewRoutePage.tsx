@@ -139,7 +139,7 @@ const BottomBtn = styled.Pressable`
   padding-vertical: 11px;
   border-radius: 5px;
   align-items: center;
-  bottom: 41;
+  bottom: 41px;
   ${({ disabled }) =>
     disabled ?
       `background-color : #dddddd`

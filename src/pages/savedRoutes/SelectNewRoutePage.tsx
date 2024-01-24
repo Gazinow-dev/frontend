@@ -95,7 +95,7 @@ const SelectNewRoutePage = ({
 export default SelectNewRoutePage;
 
 const SubwayRouteContainer = styled.View`
-  marginTop: 40;
+  marginTop: 40px;
   flexDirection: row;
   justifyContent: space-between;
 `;
@@ -145,7 +145,7 @@ const BottomBtn = styled.Pressable`
   margin-horizontal: 16px;
   border-radius: 5px;
   align-items: center;
-  bottom: 41;
+  bottom: 41px;
   ${({ disabled }) =>
     disabled ?
       `background-color : #dddddd`
