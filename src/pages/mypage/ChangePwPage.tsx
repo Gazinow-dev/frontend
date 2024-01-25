@@ -8,7 +8,7 @@ import { iconPath } from '@/assets/icons/iconPath';
 import { COLOR } from '@/constants';
 import { useCallback, useState } from 'react';
 import { debounce } from 'lodash';
-import { ChangePwModal } from '@/components/myPage';
+import { CustomModal } from '@/components/common/modals';
 
 const ChangePwPage = () => {
     const navigation = useRootNavigation();
@@ -158,9 +158,12 @@ const ChangePwPage = () => {
                     textColor={COLOR.GRAY_999}
                 />
             </ConfirmContainer>
-            <ChangePwModal
+            <CustomModal
                 isVisible={popupVisible}
-                onConfirm={handleConfirm}
+                onCancel={handleConfirm}
+                title="비밀번호가 변경되었습니다"
+                cancelText="확인"
+                btnColor={COLOR.LIGHT_GRAY}
             />
         </Container>
     );

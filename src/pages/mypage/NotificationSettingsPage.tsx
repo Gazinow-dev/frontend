@@ -1,21 +1,28 @@
 import styled from '@emotion/native';
 
-import { IconButton, TextButton } from '@/components/common/molecules';
-import { FontText } from '@/components/common/atoms';
+import { TextButton } from '@/components/common/molecules';
 import { useRootNavigation } from '@/navigation/RootNavigation';
-import { CHANGE_NICKNAME_PAGE, MY_PAGE_NAVIGATION } from '@/constants/navigation';
-import { Image } from 'react-native';
-import { iconPath } from '@/assets/icons/iconPath';
+import { COLOR } from '@/constants';
 
-const AlertSettingsPage = () => {
-    // const nickName = '사용자17349245'
-    // const userEmail = 'abcdef@naver.com'
-    // const versionInfo = '0.0.0'
-    // const navigation = useRootNavigation();
+const NotificationSettingsPage = () => {
+    const navigation = useRootNavigation();
 
-    //     const changeNickName() => {
-    // nickName= 
-    //     }
+    const submitNotificationSettings = () => {
+
+    }
+    navigation.setOptions({
+        headerRight: () => (
+            <TextButton
+                value="완료    "
+                textSize="16px"
+                textColor={COLOR.GRAY_999}
+                textWeight="Medium"
+                lineHeight="21px"
+                onPress={() => submitNotificationSettings()}
+            />
+        ),
+    })
+
     return (
         <Container>
             {/* <NickNameContainer onPress={() => { navigation.push(MY_PAGE_NAVIGATION, { screen: 'ChangeNicknamePage' }) }}>
@@ -79,7 +86,7 @@ const AlertSettingsPage = () => {
         </Container >
     );
 };
-export default AlertSettingsPage;
+export default NotificationSettingsPage;
 
 const Container = styled.View`
   background-color: white;

@@ -33,7 +33,7 @@ export type MyPageStackParamList = {
   MyPage: undefined;
   ChangeNicknamePage: undefined;
   AccountManagePage: undefined;
-  AlertSettingsPage: undefined;
+  NotificationSettingsPage: undefined;
   ChangePwPage: undefined;
   ConfirmQuitPage: undefined;
   ContractPage: undefined;

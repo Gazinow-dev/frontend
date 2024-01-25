@@ -1,10 +1,11 @@
 import styled from '@emotion/native';
 import { IconButton, TextButton } from '@/components/common/molecules';
-import { FontText } from '@/components/common/atoms';
+import { FontText, Space } from '@/components/common/atoms';
 import { useRootNavigation } from '@/navigation/RootNavigation';
-import { ACCOUNT_MANAGE_PAGE, CHANGE_NICKNAME_PAGE, CONTRACT_PAGE, MY_PAGE_NAVIGATION } from '@/constants/navigation';
+import { ACCOUNT_MANAGE_PAGE, NOTIFICATION_SETTINGS_PAGE, CHANGE_NICKNAME_PAGE, CONTRACT_PAGE, MY_PAGE_NAVIGATION } from '@/constants/navigation';
 import { Image } from 'react-native';
 import { iconPath } from '@/assets/icons/iconPath';
+import { COLOR } from '@/constants';
 interface RenderMenuProps {
     text: string;
     onPress?: () => void;
@@ -36,28 +37,34 @@ const MyPage = () => {
 
     return (
         <Container>
-            <NickNameContainer onPress={() => { navigation.push(MY_PAGE_NAVIGATION, { screen: CHANGE_NICKNAME_PAGE }) }}>
+            <ProfileContainer>
+                <NickNameContainer onPress={() => { navigation.push(MY_PAGE_NAVIGATION, { screen: CHANGE_NICKNAME_PAGE }) }}>
+                    <FontText
+                        value={nickName}
+                        textSize="16px"
+                        textWeight="Medium"
+                        lineHeight="21px"
+                    />
+                    <Space width='5px' />
+                    <IconButton
+                        iconType="Ionicons"
+                        isFontIcon
+                        iconName="pencil"
+                        iconWidth="15"
+                        iconColor={COLOR.GRAY_999}
+                        onPress={() => { navigation.push(MY_PAGE_NAVIGATION, { screen: CHANGE_NICKNAME_PAGE }) }}
+                    />
+                </NickNameContainer>
                 <FontText
-                    value={nickName}
-                    textSize="16px"
+                    value={userEmail}
+                    textSize="12px"
                     textWeight="Regular"
-                    lineHeight="21px"
+                    lineHeight="15px"
+                    textColor={COLOR.GRAY_999}
                 />
-                <IconButton
-                    iconType="Ionicons"
-                    isFontIcon
-                    iconName="pencil"
-                    iconWidth="13"
-                    iconColor="#49454F"
-                />
-            </NickNameContainer>
-            <FontText
-                value={userEmail}
-                textSize="12px"
-                textWeight="Regular"
-                lineHeight="15px"
-            />
-            {renderMenu({ text: '계정관리', onPress: () => navigation.push(MY_PAGE_NAVIGATION, { screen: ACCOUNT_MANAGE_PAGE }) })}
+            </ProfileContainer>
+            {renderMenu({ text: '계정 관리', onPress: () => navigation.push(MY_PAGE_NAVIGATION, { screen: ACCOUNT_MANAGE_PAGE }) })}
+            {renderMenu({ text: '알림 설정', onPress: () => navigation.push(MY_PAGE_NAVIGATION, { screen: NOTIFICATION_SETTINGS_PAGE }) })}
             {renderMenu({ text: '약관 및 정책', onPress: () => navigation.push(MY_PAGE_NAVIGATION, { screen: CONTRACT_PAGE }) })}
             {renderMenu({ text: '버전', versionInfo })}
         </Container>
@@ -72,6 +79,11 @@ const Container = styled.View`
 `;
 const NickNameContainer = styled.Pressable`
   flex-direction: row;
+  align-items: center;
+`;
+const ProfileContainer = styled.Pressable`
+  padding: 45px 16px;
+  background-color: ${COLOR.LIGHT_GRAY}
 `;
 const MenuContainer = styled.Pressable`
   flex-direction: row;

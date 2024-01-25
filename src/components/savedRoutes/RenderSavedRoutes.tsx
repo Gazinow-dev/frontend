@@ -3,10 +3,10 @@ import { View, StyleSheet } from 'react-native';
 import { FontText } from '@/components/common/atoms';
 import { COLOR } from '@/constants';
 import { SubwayRoute } from '@/components/savedRoutes';
-import { DeleteModal } from '@/components/savedRoutes';
 import { TextButton } from '../common/molecules';
 import { AddRouteTypes } from '@/types/apis';
 import { useDeleteQuery, useGetSavedRoutesQuery } from '@/hooks';
+import { CustomModal } from '@/components/common/modals';
 
 interface RenderSavedRoutesProps {
     id: number;
@@ -50,26 +50,27 @@ const RenderSavedRoutes = () => {
     );
 
     const showDeletePopup = (id: number) => {
-        // console.log(id);
         setRouteToDelete(id);
         setPopupVisible(true);
     };
 
-    const hideDeletePopup = () => setPopupVisible(false);
+    const hideModal = () => setPopupVisible(false);
 
-
-    const handleDelete = async () => {
+    const handleConfirm = async () => {
         await useDeleteQuery(routeToDelete);
-        hideDeletePopup();
+        hideModal();
     };
 
     return (
         <View>
             {renderSavedRoutes()}
-            <DeleteModal
+            <CustomModal
                 isVisible={popupVisible}
-                onCancel={hideDeletePopup}
-                onDelete={handleDelete}
+                onCancel={hideModal}
+                onConfirm={handleConfirm}
+                title="경로를 삭제하시겠습니까?"
+                confirmText="삭제"
+                cancelText="취소"
             />
         </View>
     );

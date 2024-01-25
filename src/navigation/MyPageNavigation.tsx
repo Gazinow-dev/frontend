@@ -3,8 +3,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import type { StackNavigationProp } from '@react-navigation/stack';
 
 import { EditRouteStackParamList, MyPageStackParamList } from '@/types/navigation';
-import { MY_PAGE, CHANGE_NICKNAME_PAGE, ACCOUNT_MANAGE_PAGE, ALERT_SETTINGS_PAGE, CHANGE_PW_PAGE, CONFIRM_QUIT_PAGE, CONTRACT_PAGE } from '@/constants/navigation';
-import { AccountManagePage, AlertSettingsPage, ChangePwPage, ConfirmQuitPage, ContractPage, MyPage, ChangeNickNamePage } from '@/pages/mypage';
+import { MY_PAGE, CHANGE_NICKNAME_PAGE, ACCOUNT_MANAGE_PAGE, CHANGE_PW_PAGE, CONFIRM_QUIT_PAGE, CONTRACT_PAGE, NOTIFICATION_SETTINGS_PAGE } from '@/constants/navigation';
+import { AccountManagePage, ChangePwPage, ConfirmQuitPage, ContractPage, MyPage, ChangeNickNamePage, NotificationSettingsPage } from '@/pages/mypage';
 import styled from '@emotion/native';
 import { IconButton } from '@/components/common/molecules';
 
@@ -62,9 +62,9 @@ const MyPageNavigation = () => {
                 renderHeaderNickname(navigation)
             } />
             <Stack.Screen name={ACCOUNT_MANAGE_PAGE} component={AccountManagePage} options={({ navigation }) => ({
-                title: '계정관리', ...renderHeaderLeft(navigation)
+                title: '계정 관리', ...renderHeaderLeft(navigation)
             })} />
-            <Stack.Screen name={ALERT_SETTINGS_PAGE} component={AlertSettingsPage} options={({ navigation }) => ({
+            <Stack.Screen name={NOTIFICATION_SETTINGS_PAGE} component={NotificationSettingsPage} options={({ navigation }) => ({
                 title: '알림 설정', ...renderHeaderLeft(navigation)
             })} />
             <Stack.Screen name={CHANGE_PW_PAGE} component={ChangePwPage} options={({ navigation }) => 

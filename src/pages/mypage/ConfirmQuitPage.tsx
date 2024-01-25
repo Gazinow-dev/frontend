@@ -6,25 +6,32 @@ import COLOR from '@/constants/color';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { AxiosError } from 'axios';
 import { axiosInstance } from '@/apis/axiosInstance';
+import { CustomModal } from '@/components/common/modals';
+import { useState } from 'react';
 
 const ConfirmQuitPage = () => {
     const nickName = '사용자17349245'
     const navigation = useRootNavigation();
+    const [popupVisible, setPopupVisible] = useState(false);
 
-    const onPressQuit = async () => {
+    const handleConfirm = async () => {
         console.log('탈퇴 버튼 클릭');
-    
+
         try {
             await axiosInstance.delete('/api/v1/member/delete_member', {
-                data: {}
+                data: true
             });
             console.log('탈퇴 요청 성공');
         } catch (err) {
             const error = err as AxiosError;
             console.error('탈퇴 요청 실패:', error.response?.data);
         }
+        hideModal();
     };
-    
+
+    const showLogoutPopup = () => setPopupVisible(true);
+    const hideModal = () => setPopupVisible(false);
+
     return (
         <Container>
             <AlertContainer>
@@ -42,27 +49,35 @@ const ConfirmQuitPage = () => {
                     lineHeight="21px"
                 />
             </AlertContainer>
-            <MenuContainer>
-                <QuitBtn>
+            <BottomBtn onPress={() => navigation.goBack()}>
+                <TextButton
+                    value="이전으로 돌아가기"
+                    textSize="17px"
+                    textWeight="Regular"
+                    lineHeight="26px"
+                    textColor={COLOR.WHITE}
+                />
+            </BottomBtn>
+            <QuitBtn>
+                <UnderLine>
                     <TextButton
-                        value="탈퇴할래요"
+                        value="탈퇴하기"
                         textSize="13px"
                         textWeight="Regular"
                         lineHeight="18px"
                         textColor={COLOR.GRAY_999}
-                        onPress={() => onPressQuit()}
+                        onPress={() => showLogoutPopup()}
                     />
-                </QuitBtn>
-                <BottomBtn onPress={() => navigation.goBack()}>
-                    <TextButton
-                        value="취소"
-                        textSize="17px"
-                        textWeight="Regular"
-                        lineHeight="26px"
-                        textColor={COLOR.WHITE}
-                    />
-                </BottomBtn>
-            </MenuContainer>
+                </UnderLine>
+            </QuitBtn>
+            <CustomModal
+                isVisible={popupVisible}
+                onCancel={hideModal}
+                onConfirm={handleConfirm}
+                title="정말 탈퇴할까요?"
+                confirmText="탈퇴할래요"
+                cancelText="아니요"
+            />
         </Container >
     );
 };
@@ -77,22 +92,18 @@ const AlertContainer = styled.Pressable`
   flex:1;
   margin-top: 29px;
 `;
-const MenuContainer = styled.Pressable`
-  flex-direction: row;
-  justify-content: space-between;
-  padding-bottom: 76px;
-  align-items: center;
-`;
-const QuitBtn = styled.Pressable`
-  margin-left: 17px;
-  border-bottom-width: 1px;
-  border-bottom-color: ${COLOR.GRAY_999};
-`;
 const BottomBtn = styled.Pressable`
   padding-vertical: 11px;
-  margin-left: 28px;
+  margin-bottom: 24px;
   border-radius: 5px;
   align-items: center;
-  flex: 1;
   background-color : ${COLOR.BASIC_BLACK};
+`;
+const QuitBtn = styled.Pressable`
+  align-items: center;
+  margin-bottom: 79px;
+`;
+const UnderLine = styled.Pressable`
+  border-bottom-width: 1px;
+  border-bottom-color: ${COLOR.GRAY_999};
 `;
