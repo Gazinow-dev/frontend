@@ -53,7 +53,7 @@ const ChangeNickNamePage = () => {
             case 400:
                 return '7글자 이하의 한글, 알파벳, 숫자를 입력해주세요.\n한글 자모음 단독으로 입력 불가';
             default:
-                return '';
+                return '닉네임 변경에 실패하였습니다. 다시 시도해주세요.';
         }
     };
 
