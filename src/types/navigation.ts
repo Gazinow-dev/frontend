@@ -3,7 +3,7 @@ export type RootStackParamList = {
   Login: undefined;
   MainBottomTab: undefined;
   SearchNavigation: { screen: 'SubwaySearch', route: undefined };
-  EditRouteNavigation: { screen: string, params: { pathId: number } };
+  EditRouteNavigation: { screen: string, params?: { pathId: number } };
   MyPageNavigation: { screen: string };
 };
 
@@ -34,6 +34,7 @@ export type MyPageStackParamList = {
   ChangeNicknamePage: undefined;
   AccountManagePage: undefined;
   NotificationSettingsPage: undefined;
+  NotificationOnPage: undefined;
   ChangePwPage: undefined;
   ConfirmQuitPage: undefined;
   ContractPage: undefined;

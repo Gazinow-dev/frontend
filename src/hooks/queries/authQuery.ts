@@ -1,6 +1,6 @@
 import { useMutation } from 'react-query';
 
-import { loginFetch, logoutFetch } from '@/apis/auth';
+import { loginFetch, logoutFetch, quitFetch } from '@/apis/auth';
 import { LoginFetchResponse } from '@/types/apis';
 
 export const useLoginMutation = ({
@@ -19,4 +19,13 @@ export const useLogoutMutation = ({
 }) => {
   const { mutate: logoutMutate } = useMutation(logoutFetch, { onSuccess });
   return { logoutMutate };
+};
+
+export const useQuitMutation = ({
+  onSuccess,
+}: {
+  onSuccess: () => void;
+}) => {
+  const { mutate: quitMutate } = useMutation(quitFetch, { onSuccess });
+  return { quitMutate };
 };

@@ -1,31 +1,24 @@
 import styled from '@emotion/native';
-
-import { IconButton, TextButton } from '@/components/common/molecules';
+import { TextButton } from '@/components/common/molecules';
 import { FontText, Space } from '@/components/common/atoms';
 import COLOR from '@/constants/color';
 import { useRootNavigation } from '@/navigation/RootNavigation';
-import { AxiosError } from 'axios';
-import { axiosInstance } from '@/apis/axiosInstance';
 import { CustomModal } from '@/components/common/modals';
 import { useState } from 'react';
+import { useQuitMutation } from '@/hooks/queries/authQuery';
+import { LOGIN } from '@/constants';
 
 const ConfirmQuitPage = () => {
     const nickName = '사용자17349245'
     const navigation = useRootNavigation();
     const [popupVisible, setPopupVisible] = useState(false);
 
-    const handleConfirm = async () => {
-        console.log('탈퇴 버튼 클릭');
+    const { quitMutate } = useQuitMutation({
+        onSuccess: () => navigation.reset({ routes: [{ name: LOGIN }] }),
+    });
 
-        try {
-            await axiosInstance.delete('/api/v1/member/delete_member', {
-                data: true
-            });
-            console.log('탈퇴 요청 성공');
-        } catch (err) {
-            const error = err as AxiosError;
-            console.error('탈퇴 요청 실패:', error.response?.data);
-        }
+    const handleConfirm = async () => {
+        quitMutate();
         hideModal();
     };
 
@@ -56,6 +49,7 @@ const ConfirmQuitPage = () => {
                     textWeight="Regular"
                     lineHeight="26px"
                     textColor={COLOR.WHITE}
+                    onPress={() => navigation.goBack()}
                 />
             </BottomBtn>
             <QuitBtn>

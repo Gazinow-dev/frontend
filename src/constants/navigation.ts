@@ -14,6 +14,7 @@ export const MY_PAGE = 'MyPage' as const;
 export const CHANGE_NICKNAME_PAGE = 'ChangeNicknamePage' as const;
 export const ACCOUNT_MANAGE_PAGE = 'AccountManagePage' as const;
 export const NOTIFICATION_SETTINGS_PAGE = 'NotificationSettingsPage' as const;
+export const NOTIFICATION_ON_PAGE = 'NotificationOnPage' as const;
 export const CHANGE_PW_PAGE = 'ChangePwPage' as const;
 export const CONFIRM_QUIT_PAGE = 'ConfirmQuitPage' as const;
 export const CONTRACT_PAGE = 'ContractPage' as const;

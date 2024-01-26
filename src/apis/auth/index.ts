@@ -55,3 +55,15 @@ export const logoutFetch = async ({ accessToken, refreshToken }: LogoutFetchData
     throw er;
   }
 };
+
+export const quitFetch = async () => {
+  try {
+    await axiosInstance.delete(
+      '/api/v1/member/delete_member',
+      { data: {} },
+    );
+  } catch (err) {
+    const er = err as AxiosError;
+    throw er;
+  }
+};

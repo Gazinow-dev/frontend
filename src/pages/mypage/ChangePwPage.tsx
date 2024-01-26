@@ -36,10 +36,6 @@ const ChangePwPage = () => {
 
     const [newNickname, setNewNickname] = useState<string>('');
 
-    const backToScreen = () => {
-        navigation.goBack();
-    };
-
     const changeNickname = (text: string) => {
         setNewNickname(text);
         sendSearchText(text);
