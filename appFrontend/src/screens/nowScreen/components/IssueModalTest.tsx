@@ -4,11 +4,12 @@ import { Modal } from 'react-native';
 
 interface IssueDetailProps {
   id: number;
+  onRequestClose: () => void;
 }
 
-const IssueModalTest = ({ id }: IssueDetailProps) => {
+const IssueModalTest = ({ id, onRequestClose }: IssueDetailProps) => {
   return (
-    <Modal>
+    <Modal onRequestClose={onRequestClose}>
       <FontText value={id} textSize="16px" textWeight="SemiBold" lineHeight="21px" />
     </Modal>
   );

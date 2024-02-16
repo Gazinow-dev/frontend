@@ -1,46 +1,56 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { IconButton, FontText } from '@/global/ui';
+import { IconButton, FontText, Space } from '@/global/ui';
 import { COLOR } from '@/global/constants';
+import styled from '@emotion/native';
+import { RenderSavedRoutesType } from '@/global/apis/entity';
+import MoreBtn from '@/assets/icons/moreBtn.svg';
 
-const IssuesBanner = () => {
+interface IssuesBannerProps {
+  pathData: RenderSavedRoutesType;
+}
+
+const IssuesBanner = ({ pathData }: IssuesBannerProps) => {
+  const IssueDetail = () => {
+    console.log('dddd');
+    //TODO: 이슈 상세 페이지로 이동
+  };
+
   return (
-    <View style={styles.issuesBanner}>
-      {/* <IconButton
-        isFontIcon={false}
-        imagePath="issue_rain_circle"
-        iconWidth="23px"
-        iconHeight="23px"
-      /> */}
-      <FontText
-        style={styles.buttonIssues}
-        value="폭우로 인한 4호선 운행정지"
-        textSize="13px"
-        textWeight="SemiBold"
-        lineHeight="19px"
-        textColor={COLOR.BASIC_BLACK}
-      />
-      <IconButton isFontIcon={false} imagePath="more_gray" iconWidth="4.5px" iconHeight="8px" />
-    </View>
+    <Container onPress={IssueDetail}>
+      <Issue>
+        {/* TODO: 이슈에 따라 아이콘, 타이틀 바꾸기 */}
+        <IconButton
+          isFontIcon={false}
+          imagePath='walk_human_gray'
+          iconWidth="15px"
+          iconHeight="15px"
+          onPress={IssueDetail}
+        />
+        <Space width="10px" />
+        <FontText
+          value={pathData.lastEndStation}
+          textSize="13px"
+          textWeight="SemiBold"
+          lineHeight="19px"
+          textColor={COLOR.BASIC_BLACK}
+        />
+      </Issue>
+      <MoreBtn onPress={IssueDetail} />
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  issuesBanner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: COLOR.GRAY_EB,
-    borderRadius: 40,
-    marginTop: 25,
-    marginBottom: 30,
-    paddingHorizontal: 12.5,
-    paddingVertical: 6,
-  },
-  buttonIssues: {
-    flex: 1,
-    marginLeft: 10,
-  },
-});
-
 export default IssuesBanner;
+
+const Container = styled.Pressable`
+  padding: 8px 12.5px 7px 16px;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  border-color: ${COLOR.GRAY_EB};
+  border-width: 1px;
+  border-radius: 999px;
+`;
+const Issue = styled.View`
+  align-items: center;
+  flex-direction: row;
+`;

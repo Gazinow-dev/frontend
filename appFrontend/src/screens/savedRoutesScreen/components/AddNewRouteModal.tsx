@@ -24,56 +24,46 @@ const AddNewRouteModal = ({ isVisible, onCancel }: ModalProps) => {
       stationLine: null,
     },
   });
-  const [isNewSearchSwapStationOpened, setIsNewSearchSwapStationOpened] = useState<boolean>(true);
-  const [isOpenSelectNewRouteModal, setIsOpenSelectNewRouteModal] = useState<boolean>(false);
-  const [seletedRoutePath, setSeletedRoutePath] = useState<Path | null>(null);
-  const [isNewRouteDetailModalOpened, setIsNewRouteDetailModalOpened] = useState<boolean>(false);
-  const [isNameNewRouteModalOpened, setIsNameNewRouteModalOpened] = useState<boolean>(false);
+  const [selectedRoutePath, setSelectedRoutePath] = useState<Path | null>(null);
+
+  const [depth, setDepth] = useState<'search' | 'pathList' | 'detail' | 'name'>('search');
+  const onBackBtnPress = () => {
+    switch (depth) {
+      case 'search':
+        return onCancel();
+      case 'pathList':
+        setDepth('search');
+        return onCancel();
+      case 'detail':
+        return setDepth('pathList');
+      case 'name':
+        return setDepth('pathList');
+    }
+  };
+  const onCloseBtnPress = () => {
+    onCancel();
+    setDepth('search');
+  };
 
   return (
-    <Modal visible={isVisible} onRequestClose={onCancel}>
-      <AddNewRouteHeader
-        onCancel={onCancel}
-        isNewSearchSwapStationOpened={isNewSearchSwapStationOpened}
-        setIsNewSearchSwapStationOpened={setIsNewSearchSwapStationOpened}
-        isOpenSelectNewRouteModal={isOpenSelectNewRouteModal}
-        setIsOpenSelectNewRouteModal={setIsOpenSelectNewRouteModal}
-        isNameNewRouteModalOpened={isNameNewRouteModalOpened}
-        setIsNameNewRouteModalOpened={setIsNameNewRouteModalOpened}
-      />
-      {/* TODO: 경로 이름 입력 컴포넌트에서 뒤로가기하면 지하철역 입력값 초기화되는 현상 수정*/}
-      {isNewSearchSwapStationOpened && (
-        <NewSearchSwapStation
-          setSeletedStation={setSeletedStation}
-          setIsOpenSelectNewRouteModal={setIsOpenSelectNewRouteModal}
-        />
+    <Modal visible={isVisible} onRequestClose={onBackBtnPress}>
+      <AddNewRouteHeader onBackBtnPress={onBackBtnPress} onCloseBtnPress={onCloseBtnPress} />
+      {(depth === 'search' || depth === 'pathList') && (
+        <NewSearchSwapStation setDepth={setDepth} setSeletedStation={setSeletedStation} />
       )}
-      {isOpenSelectNewRouteModal && (
+      {depth === 'pathList' && (
         <SelectNewRouteModal
-          onCancel={onCancel}
+          setDepth={setDepth}
           seletedStation={seletedStation}
-          setSeletedRoutePath={setSeletedRoutePath}
-          setIsOpenSelectNewRouteModal={setIsOpenSelectNewRouteModal}
-          setIsNewRouteDetailModalOpened={setIsNewRouteDetailModalOpened}
-          setIsNameNewRouteModalOpened={setIsNameNewRouteModalOpened}
-          setIsNewSearchSwapStationOpened={setIsNewSearchSwapStationOpened}
+          selectedRoutePath={selectedRoutePath}
+          setSelectedRoutePath={setSelectedRoutePath}
         />
       )}
-      {isNewRouteDetailModalOpened && seletedRoutePath && (
-        <NewRouteDetailModal
-          item={seletedRoutePath}
-          setIsNewRouteDetailModalOpened={setIsNewRouteDetailModalOpened}
-        />
+      {selectedRoutePath && depth === 'detail' && (
+        <NewRouteDetailModal item={selectedRoutePath} setDepth={setDepth} />
       )}
-      {isNameNewRouteModalOpened && seletedRoutePath && (
-        <NameNewRouteModal
-          onCancel={onCancel}
-          item={seletedRoutePath}
-          isOpenSelectNewRouteModal={isOpenSelectNewRouteModal}
-          setIsOpenSelectNewRouteModal={setIsOpenSelectNewRouteModal}
-          isNameNewRouteModalOpened={isNameNewRouteModalOpened}
-          setIsNameNewRouteModalOpened={setIsNameNewRouteModalOpened}
-        />
+      {selectedRoutePath && depth === 'name' && (
+        <NameNewRouteModal onCancel={onCancel} setDepth={setDepth} item={selectedRoutePath} />
       )}
     </Modal>
   );

@@ -1,17 +1,23 @@
 import styled from '@emotion/native';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { useState } from 'react';
-import { FontText, IconButton, Space, TextButton } from '@/global/ui';
+import { FontText, Space, TextButton } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import MyTabModal from '../../../global/components/MyTabModal';
 import { useCheckPasswordQuery, useDeleteAccountMutation } from '@/global/apis/hook';
-import { Modal } from 'react-native';
+import { Modal, Platform, StatusBar } from 'react-native';
+import { removeEncryptedStorage } from '@/global/utils';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import BackBtn from '@assets/icons/backBtn.svg';
 
 interface ConfirmQuitModalProps {
   onCancel: () => void;
 }
 
 const ConfirmQuitModal = ({ onCancel }: ConfirmQuitModalProps) => {
+  const StatusBarHeight =
+    Platform.OS === 'ios' ? getStatusBarHeight(true) + 4 : (StatusBar.currentHeight as number) - 4;
+
   const nickName = '사용자17349245';
   const navigation = useRootNavigation();
   const [popupVisible, setPopupVisible] = useState(false);
@@ -19,7 +25,11 @@ const ConfirmQuitModal = ({ onCancel }: ConfirmQuitModalProps) => {
   const [passwordInput, setPasswordInput] = useState('');
 
   const { deleteAccountMutate } = useDeleteAccountMutation({
-    onSuccess: () => navigation.reset({ routes: [{ name: 'AuthStack' }] }),
+    onSuccess: () => {
+      removeEncryptedStorage('access_token');
+      removeEncryptedStorage('refresh_token');
+      navigation.reset({ routes: [{ name: 'AuthStack' }] });
+    },
   });
 
   const { checkPasswordMutate } = useCheckPasswordQuery({
@@ -52,14 +62,12 @@ const ConfirmQuitModal = ({ onCancel }: ConfirmQuitModalProps) => {
   return (
     <Modal visible onRequestClose={onCancel}>
       {/* TODO: 헤더 버튼 svg로 수정, 크기 조정 */}
-      <Header>
-        <IconButton
-          isFontIcon={false}
-          imagePath="backBtn"
-          iconHeight="16px"
-          iconWidth="9px"
-          onPress={onCancel}
-        />
+      <Header
+        style={{
+          paddingTop: StatusBarHeight,
+        }}
+      >
+        <BackBtn width="24px" onPress={onCancel} />
       </Header>
       <Container>
         <AlertContainer>

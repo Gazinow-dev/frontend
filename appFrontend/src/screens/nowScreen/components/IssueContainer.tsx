@@ -10,8 +10,8 @@ interface IssueDetailProps {
   location: string;
   time: string;
   body: string;
-  isLastItemOfType: boolean;
-  isLastItem: boolean;
+  isLastItemOfType?: boolean;
+  isLastItem?: boolean;
 }
 
 const IssueContainer = ({
@@ -41,7 +41,9 @@ const IssueContainer = ({
 
   return (
     <>
-      {isIssueDetailOpened && <IssueModalTest id={id} />}
+      {isIssueDetailOpened && (
+        <IssueModalTest id={id} onRequestClose={() => setIsIssueDetailOpened(false)} />
+      )}
       <IssueList onPress={() => setIsIssueDetailOpened(true)}>
         <TextContainer>
           <FontText

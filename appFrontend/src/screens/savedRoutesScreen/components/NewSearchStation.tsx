@@ -1,8 +1,7 @@
 import styled from '@emotion/native';
 import Icon from 'react-native-vector-icons/Feather';
-
 import { iconPath } from '@/assets/icons/iconPath';
-import { FontText, Input, IconButton } from '@/global/ui';
+import { FontText, Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { useAppDispatch } from '@/store';
 import { getSearchText } from '@/store/modules/subwaySearchModule';
@@ -10,6 +9,7 @@ import { useAddRecentSearch, useGetSearchHistory, useSearchStationName } from '@
 import { useCallback, useState } from 'react';
 import { debounce } from 'lodash';
 import { SelectedStationTypes } from './NewSearchSwapStation';
+import DeleteInputIcon from '@assets/icons/deleteInput.svg';
 
 interface SearchStationProps {
   searchType: '출발역' | '도착역';
@@ -36,10 +36,6 @@ const NewSearchStation = ({ searchType, closeModal, setSubwayStation }: SearchSt
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-
-  const deleteInputText = () => {
-    setSearchTextValue('');
-  };
 
   const { searchResultData } = useSearchStationName(searchTextValue);
   const { addRecentMutate } = useAddRecentSearch({
@@ -73,14 +69,7 @@ const NewSearchStation = ({ searchType, closeModal, setSubwayStation }: SearchSt
           autoFocus
           isSavingNewRoute
         />
-        <IconButton
-          iconType="Ionicons"
-          isFontIcon
-          iconName="close-circle"
-          iconWidth="19.5"
-          iconColor="rgba(0, 0, 0, 0.46)"
-          onPress={deleteInputText}
-        />
+        <DeleteInputIcon width={19.5} onPress={() => setSearchTextValue('')} />
       </Container>
       {!searchTextValue ? (
         <ResultContainer>
@@ -167,7 +156,7 @@ const Container = styled.View`
   border-radius: 28px;
   border: 1px solid #d4d4d4;
   padding: 4px 16px 4px 18.25px;
-  margin: 16px 16px 0;
+  margin: 20px 16px 0;
 `;
 const SearchInput = styled(Input)<{ isSavingNewRoute?: boolean }>`
   height: 36px;

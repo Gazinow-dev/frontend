@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { FontText, TextButton } from '@/global/ui';
+import { TouchableOpacity, StyleSheet } from 'react-native';
+import { FontText, Space, TextButton } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import SavedRouteBox from './SavedRouteBox';
-import RecentSearchBox from './RecentSearchBox';
 import IssueBox from './IssueBox';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
+import styled from '@emotion/native';
 
-const categoryName: ['저장경로', '최근검색', '이슈'] = ['저장경로', '최근검색', '이슈'];
+const categoryName: ['저장경로', '이슈'] = ['저장경로', '이슈'];
 
 const SavedRouteIssues = () => {
   const homeNavigation = useHomeNavigation();
-  const [activeButton, setActiveButton] = useState<'저장경로' | '최근검색' | '이슈'>('저장경로');
+  const [activeButton, setActiveButton] = useState<'저장경로' | '이슈'>('저장경로');
 
   const handleButtonClick = (buttonText: typeof activeButton) => setActiveButton(buttonText);
 
@@ -30,18 +30,17 @@ const SavedRouteIssues = () => {
       <FontText
         value={text}
         textSize="13px"
-        textWeight="Medium"
+        textWeight={activeButton === text ? 'SemiBold' : 'Regular'}
         lineHeight="19px"
-        textColor={activeButton === text ? 'white' : 'black'}
+        textColor={activeButton === text ? 'white' : COLOR.GRAY_999}
       />
     </TouchableOpacity>
   );
 
   return (
-    <View style={styles.container}>
-      {/* 이슈/저장경로/최근검색 버튼 */}
-      <View style={styles.navContainer}>
-        <View style={styles.textContainer}>{categoryName.map(renderButton)}</View>
+    <Container>
+      <CategoryContainer>
+        <Category>{categoryName.map(renderButton)}</Category>
         <TextButton
           value="저장경로 편집"
           textSize="12px"
@@ -50,37 +49,24 @@ const SavedRouteIssues = () => {
           onPress={() => homeNavigation.navigate('SavedRoutes')}
           lineHeight="15px"
         />
-      </View>
+      </CategoryContainer>
 
-      {/* 중앙선 */}
-      <View style={styles.borderLine}></View>
+      <Space height="1px" backgroundColor={COLOR.GRAY_EB} />
 
-      {/* 버튼에 따라 다른 컴포넌트를 렌더링 */}
-      {
+      {/* 최근검색: <RecentSearchBox />, TODO: MVP에서 제외*/}
+      <ContentsBox>
         {
-          저장경로: <SavedRouteBox />,
-          최근검색: <RecentSearchBox />,
-          이슈: <IssueBox />,
-        }[activeButton]
-      }
-    </View>
+          {
+            저장경로: <SavedRouteBox />,
+            이슈: <IssueBox />,
+          }[activeButton]
+        }
+      </ContentsBox>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 20,
-    marginBottom: 16,
-    padding: 16,
-    backgroundColor: 'white',
-    borderRadius: 15,
-  },
-  navContainer: {
-    paddingBottom: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
   navButton: {
     backgroundColor: 'white',
     borderWidth: 1,
@@ -90,16 +76,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginRight: 8,
   },
-  borderLine: {
-    borderWidth: 1,
-    borderColor: '#F2F2F2',
-    flex: 1,
-    marginHorizontal: -17,
-  },
-  textContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
 });
 
 export default SavedRouteIssues;
+const Container = styled.View`
+  margin: 16px 0 0;
+  border-radius: 14px;
+  background-color: ${COLOR.WHITE};
+  flex: 1;
+`;
+const Category = styled.View`
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+`;
+const CategoryContainer = styled.View`
+  margin: 16px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: ${COLOR.WHITE};
+  flex: 1;
+`;
+const ContentsBox = styled.View`
+  padding: 0px 16px 4px;
+`;

@@ -2,7 +2,8 @@ import styled from '@emotion/native';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { Linking, Modal } from 'react-native';
 import { COLOR } from '@/global/constants';
-import { FontText, IconButton, Space, TextButton } from '@/global/ui';
+import { FontText, Space, TextButton } from '@/global/ui';
+import BackBtn from '@assets/icons/backBtn.svg';
 
 interface ModalProps {
   onCancel: () => void;
@@ -31,13 +32,7 @@ const NotiOnModal = ({ onCancel }: ModalProps) => {
     <Modal visible onRequestClose={onCancel}>
       <Header>
         <TitleContainer>
-          <IconButton
-            isFontIcon={false}
-            imagePath="backBtn"
-            iconHeight="24px"
-            iconWidth="24px"
-            onPress={onCancel}
-          />
+          <BackBtn width="24px" onPress={onCancel} />
           <Space width="12px" />
           <FontText value="알림 설정" textSize="18px" lineHeight="23px" textWeight="Medium" />
         </TitleContainer>
