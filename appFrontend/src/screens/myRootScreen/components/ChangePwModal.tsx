@@ -1,19 +1,25 @@
 import styled from '@emotion/native';
 import { useCallback, useState } from 'react';
-import { Image, Modal } from 'react-native';
-import { iconPath } from '@/assets/icons/iconPath';
-import { FontText, IconButton, Input, Space, TextButton } from '@/global/ui';
+import { Alert, Modal, Platform, StatusBar } from 'react-native';
+import { FontText, Input, Space, TextButton } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { useChangePasswordQuery, useCheckPasswordQuery } from '@/global/apis/hook';
 import MyTabModal from '@/global/components/MyTabModal';
 import { debounce } from 'lodash';
-import CheckIcon from 'react-native-vector-icons/Feather';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import XCircle from '@assets/icons/x-circle.svg';
+import Check from '@assets/icons/check.svg';
+import DeleteInputIcon from '@assets/icons/deleteInput.svg';
+import CloseBtn from '@assets/icons/closeBtn.svg';
 
 interface ModalProps {
   onCancel: () => void;
 }
 
 const ChangePwModal = ({ onCancel }: ModalProps) => {
+  const StatusBarHeight =
+    Platform.OS === 'ios' ? getStatusBarHeight(true) + 4 : (StatusBar.currentHeight as number) - 4;
+
   const [popupVisible, setPopupVisible] = useState<boolean>(false);
 
   const [curPassword, setCurPassword] = useState<string>('');
@@ -22,9 +28,6 @@ const ChangePwModal = ({ onCancel }: ModalProps) => {
 
   const [isPwRight, setIsPwRight] = useState<boolean>(false);
   const [isNewPwValid, setIsNewPwValid] = useState<boolean>(false);
-
-  // TODO: 기획 나오면 수정
-  // const [errorMessage, setErrorMessage] = useState<string>('');
 
   const [isValueCombination, setIsValidCombination] = useState<boolean>(false);
   const [isValidLength, setIsValidLength] = useState<boolean>(false);
@@ -49,6 +52,8 @@ const ChangePwModal = ({ onCancel }: ModalProps) => {
   const lengValidColor = isValidLength ? COLOR.LIGHT_GREEN : COLOR.GRAY_999;
   const comValidColor = isValueCombination ? COLOR.LIGHT_GREEN : COLOR.GRAY_999;
 
+  const isNewEqualsToOld = curPassword === changePassword;
+
   const checkPasswordDebounce = useCallback(
     debounce((curPassword: string) => {
       checkPasswordMutate(curPassword);
@@ -68,32 +73,19 @@ const ChangePwModal = ({ onCancel }: ModalProps) => {
     onError: (error: any) => {
       console.log(error);
       setIsPwRight(false);
-      // setErrorMessage(getErrorMessage(error.response?.status));
     },
   });
 
   const { changePasswordMutate } = useChangePasswordQuery({
     onSuccess: () => {
       setPopupVisible(true);
+      // TODO: 성공 토스트 띄우기
     },
     onError: (error: any) => {
       setIsNewPwValid(false);
-      // setErrorMessage(getErrorMessage(error.response?.status));
+      Alert.alert('비밀번호 변경 오류', '비밀번호 변경에 실패했습니다\n다시 시도해주세요');
     },
   });
-
-  // TODO: 현재 비번과 새 비번이 일치할 때의 기획 없음
-  // TODO: 기획 나오면 수정
-  // const getErrorMessage = (status: number | undefined) => {
-  //   switch (status) {
-  //     case 404:
-  //       return '비밀번호가 틀립니다.';
-  //     // case 400:
-  //     //   return '7글자 이하의 한글, 알파벳, 숫자를 입력해주세요.\n한글 자모음 단독으로 입력 불가';
-  //     default:
-  //       return '비밀번호가 틀립니다. 다시 시도해주세요.';
-  //   }
-  // };
 
   const onPressDone = () => {
     const data = { curPassword, changePassword, confirmPassword };
@@ -103,22 +95,17 @@ const ChangePwModal = ({ onCancel }: ModalProps) => {
   const handleOnCancel = () => {
     setPopupVisible(false);
     onCancel();
-    // TODO: 성공 토스트 띄우기
   };
 
-  // TODO: 기획 나오면 css 수정. 일단 임시로 함.
-  // TODO: 에러 아이콘 svg로 수정
   return (
     <Modal visible onRequestClose={onCancel}>
-      <Header>
+      <Header
+        style={{
+          paddingTop: StatusBarHeight,
+        }}
+      >
         <TitleContainer>
-          <IconButton
-            isFontIcon={false}
-            imagePath="x"
-            iconHeight="24px"
-            iconWidth="24px"
-            onPress={onCancel}
-          />
+          <CloseBtn width="24px" onPress={onCancel} />
           <Space width="12px" />
           <FontText value="비밀번호 변경" textSize="18px" lineHeight="23px" textWeight="Medium" />
         </TitleContainer>
@@ -126,14 +113,26 @@ const ChangePwModal = ({ onCancel }: ModalProps) => {
           value="완료"
           textSize="16px"
           textColor={
-            !isPwRight || !isNewPwValid || confirmPassword !== changePassword
+            !isPwRight ||
+            !isNewPwValid ||
+            !isValidLength ||
+            !isValueCombination ||
+            isNewEqualsToOld ||
+            confirmPassword !== changePassword
               ? COLOR.GRAY_999
               : COLOR.BASIC_BLACK
           }
           textWeight="Medium"
           lineHeight="21px"
           onPress={onPressDone}
-          disabled={!isPwRight || !isNewPwValid || confirmPassword !== changePassword}
+          disabled={
+            !isPwRight ||
+            !isNewPwValid ||
+            !isValidLength ||
+            !isValueCombination ||
+            isNewEqualsToOld ||
+            confirmPassword !== changePassword
+          }
         />
       </Header>
 
@@ -158,22 +157,11 @@ const ChangePwModal = ({ onCancel }: ModalProps) => {
             autoFocus
             secureTextEntry
           />
-          <IconButton
-            iconType="Ionicons"
-            isFontIcon
-            iconName="close-circle"
-            iconWidth="19.5"
-            iconColor="rgba(0, 0, 0, 0.46)"
-            onPress={() => setCurPassword('')}
-          />
+          <DeleteInputIcon width={19.5} onPress={() => setCurPassword('')} />
         </InputContainer>
         {curPassword !== '' && (
           <MessageContainer>
-            {isPwRight ? (
-              <CheckIcon name="check" size={12} color={lengValidColor} />
-            ) : (
-              <Image source={iconPath.x_circle} style={{ width: 14, height: 14 }} />
-            )}
+            {isPwRight ? <Check width={12} color={lengValidColor} /> : <XCircle width={14} />}
             <FontText
               value={isPwRight ? ' 비밀번호가 확인되었습니다' : ' 비밀번호가 틀립니다'}
               textSize="12px"
@@ -201,35 +189,41 @@ const ChangePwModal = ({ onCancel }: ModalProps) => {
             onChangeText={(text) => checkInputValid(text)}
             secureTextEntry
           />
-          <IconButton
-            iconType="Ionicons"
-            isFontIcon
-            iconName="close-circle"
-            iconWidth="19.5"
-            iconColor="rgba(0, 0, 0, 0.46)"
-            onPress={() => setChangePassword('')}
-          />
+          <DeleteInputIcon width={19.5} onPress={() => setChangePassword('')} />
         </InputContainer>
+        {isNewEqualsToOld ? (
+          <MessageContainer>
+            <XCircle width={14} />
+            <FontText
+              value=" 이전과 동일한 비밀번호로 변경할 수 없습니다"
+              textSize="12px"
+              textWeight="Medium"
+              lineHeight="14px"
+              textColor={COLOR.LIGHT_RED}
+            />
+          </MessageContainer>
+        ) : (
+          <MessageContainer>
+            <Check width={12} color={lengValidColor} />
+            <Space width="4px" />
+            <FontText
+              value="8자-20자 이내"
+              textSize="12px"
+              textWeight="Medium"
+              textColor={lengValidColor}
+            />
+            <Space width="12px" />
+            <Check width={12} color={comValidColor} />
+            <Space width="4px" />
+            <FontText
+              value="영어, 숫자, 특수문자 포함"
+              textSize="12px"
+              textWeight="Medium"
+              textColor={comValidColor}
+            />
+          </MessageContainer>
+        )}
 
-        <MessageContainer>
-          <CheckIcon name="check" size={12} color={lengValidColor} />
-          <Space width="4px" />
-          <FontText
-            value="8자-20자 이내"
-            textSize="12px"
-            textWeight="Medium"
-            textColor={lengValidColor}
-          />
-          <Space width="12px" />
-          <CheckIcon name="check" size={12} color={comValidColor} />
-          <Space width="4px" />
-          <FontText
-            value="영어, 숫자, 특수문자 포함"
-            textSize="12px"
-            textWeight="Medium"
-            textColor={comValidColor}
-          />
-        </MessageContainer>
         <InputContainer>
           <PwInput
             value={confirmPassword}
@@ -239,18 +233,11 @@ const ChangePwModal = ({ onCancel }: ModalProps) => {
             onChangeText={setConfirmPassword}
             secureTextEntry
           />
-          <IconButton
-            iconType="Ionicons"
-            isFontIcon
-            iconName="close-circle"
-            iconWidth="19.5"
-            iconColor="rgba(0, 0, 0, 0.46)"
-            onPress={() => setConfirmPassword('')}
-          />
+          <DeleteInputIcon width={19.5} onPress={() => setConfirmPassword('')} />
         </InputContainer>
         {confirmPassword !== '' && confirmPassword !== changePassword && (
           <MessageContainer>
-            <Image source={iconPath.x_circle} style={{ width: 14, height: 14 }} />
+            <XCircle width={14} />
             <FontText
               value={` 비밀번호가 일치하지 않습니다`}
               textSize="12px"

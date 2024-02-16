@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import styled from '@emotion/native';
 import { useRootNavigation } from '@/navigation/RootNavigation';
-import { getEncryptedStorage } from '@/global/utils';
-import { FontText, IconButton, Space, TextButton } from '@/global/ui';
-import { CONFIRM_QUIT } from '@/global/constants/navigation';
+import { getEncryptedStorage, removeEncryptedStorage } from '@/global/utils';
+import { FontText, Space, TextButton } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { useLogoutMutation } from '@/screens/signInScreen/apis/hook';
 import ChangePwModal from './ChangePwModal';
 import MyTabModal from '@/global/components/MyTabModal';
-import { Modal } from 'react-native';
+import { Modal, Platform, StatusBar } from 'react-native';
 import ConfirmQuitModal from './ConfirmQuitModal';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import BackBtn from '@assets/icons/backBtn.svg';
 
 interface RenderMenuProps {
   text: string;
@@ -20,13 +21,20 @@ interface ManageAccountModalProps {
 }
 
 const ManageAccountModal = ({ onCancel }: ManageAccountModalProps) => {
+  const StatusBarHeight =
+    Platform.OS === 'ios' ? getStatusBarHeight(true) + 4 : (StatusBar.currentHeight as number) - 4;
+
   const navigation = useRootNavigation();
   const [popupVisible, setPopupVisible] = useState(false);
   const [isChangePwModalOpened, setIsChangePwModalOpened] = useState(false);
   const [isConfirmQuitModalOpen, setIsConfirmQuitModalOpen] = useState<boolean>(false);
 
   const { logoutMutate } = useLogoutMutation({
-    onSuccess: () => navigation.reset({ routes: [{ name: 'AuthStack' }] }),
+    onSuccess: () => {
+      removeEncryptedStorage('access_token');
+      removeEncryptedStorage('refresh_token');
+      navigation.reset({ routes: [{ name: 'AuthStack' }] });
+    },
   });
 
   const handleConfirm = async () => {
@@ -54,14 +62,12 @@ const ManageAccountModal = ({ onCancel }: ManageAccountModalProps) => {
   return (
     <Modal visible onRequestClose={onCancel}>
       {/* TODO: 헤더 버튼 svg로 수정, 크기 조정 */}
-      <Header>
-        <IconButton
-          isFontIcon={false}
-          imagePath="backBtn"
-          iconHeight="16px"
-          iconWidth="9px"
-          onPress={onCancel}
-        />
+      <Header
+        style={{
+          paddingTop: StatusBarHeight,
+        }}
+      >
+        <BackBtn width="24px" onPress={onCancel} />
         <Space width="20px" />
         <FontText value="계정 관리" textSize="18px" lineHeight="23px" textWeight="Medium" />
       </Header>

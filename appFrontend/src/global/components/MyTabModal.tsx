@@ -45,8 +45,10 @@ const MyTabModal = ({
                 onChangeText={setInputValue}
                 fontSize="20px"
                 placeholder="비밀번호를 입력하세요"
+                placeholderTextColor={COLOR.GRAY_999}
                 inputMode="email"
                 maxLength={20}
+                secureTextEntry
               />
             </InputBox>
           )}

@@ -1,12 +1,13 @@
 import styled from '@emotion/native';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
-import { IconButton, TextButton } from '@/global/ui';
+import { TextButton } from '@/global/ui';
 import { COLOR, ARRIVAL_STATION, DEPARTURE_STATION } from '@/global/constants';
 import { useAppDispatch } from '@/store';
 import { getSeletedStation } from '@/store/modules';
 import type { StationDataTypes } from '@/store/modules';
 import SearchStation from './NewSearchStation';
+import SwapIcon from '@assets/icons/icon_change.svg';
 
 export interface SelectedStationTypes {
   departure: StationDataTypes;
@@ -17,13 +18,10 @@ type StationTypes = typeof DEPARTURE_STATION | typeof ARRIVAL_STATION;
 
 interface NewSearchSwapStationProps {
   setSeletedStation: React.Dispatch<React.SetStateAction<SelectedStationTypes>>;
-  setIsOpenSelectNewRouteModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setDepth: Dispatch<SetStateAction<'search' | 'pathList' | 'detail' | 'name'>>;
 }
 
-const NewSearchSwapStation = ({
-  setSeletedStation,
-  setIsOpenSelectNewRouteModal,
-}: NewSearchSwapStationProps) => {
+const NewSearchSwapStation = ({ setSeletedStation, setDepth }: NewSearchSwapStationProps) => {
   const dispatch = useAppDispatch();
 
   const [searchType, setSearchType] = useState<StationTypes>('출발역');
@@ -42,6 +40,7 @@ const NewSearchSwapStation = ({
   const closeSearchModal = () => setIsOpenSearchStation(false);
 
   const openSearchModal = (type: StationTypes) => {
+    setDepth('search');
     setSearchType(type);
     setIsOpenSearchStation(true);
   };
@@ -69,7 +68,7 @@ const NewSearchSwapStation = ({
         arrival: selectedStation.arrival,
         departure: selectedStation.departure,
       });
-      setIsOpenSelectNewRouteModal(true);
+      setDepth('pathList');
     }
   }, [selectedStation]);
 
@@ -110,13 +109,7 @@ const NewSearchSwapStation = ({
           onPress={() => openSearchModal(ARRIVAL_STATION)}
         />
       </InnerBox>
-      <IconButton
-        isFontIcon={false}
-        imagePath="exchange_gray"
-        iconWidth="20px"
-        iconHeight="20px"
-        onPress={swapStation}
-      />
+      <SwapIcon width={20} onPress={swapStation} />
     </Container>
   );
 };
@@ -126,8 +119,6 @@ export default NewSearchSwapStation;
 const Container = styled.View`
   padding: 20px 16px 45px;
   background-color: ${COLOR.WHITE};
-  border-bottom-width: 1px;
-  border-bottom-color: ${COLOR.GRAY_EB};
   flex-direction: row;
   align-items: center;
 `;

@@ -1,23 +1,25 @@
 import styled from '@emotion/native';
 import { useState } from 'react';
-import { Image, Modal } from 'react-native';
-import { iconPath } from '@/assets/icons/iconPath';
-import { FontText, IconButton, Input, Space, TextButton } from '@/global/ui';
+import { Modal, Platform, StatusBar } from 'react-native';
+import { FontText, Input, Space, TextButton } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { useChangeNicknameQuery } from '@/global/apis/hook';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import XCircle from '@assets/icons/x-circle.svg';
+import DeleteInputIcon from '@assets/icons/deleteInput.svg';
+import CloseBtn from '@assets/icons/closeBtn.svg';
 
 interface ModalProps {
   onCancel: () => void;
 }
 
 const ChangeNickNameModal = ({ onCancel }: ModalProps) => {
+  const StatusBarHeight =
+    Platform.OS === 'ios' ? getStatusBarHeight(true) + 4 : (StatusBar.currentHeight as number) - 4;
+
   const [newNickname, setNewNickname] = useState<string>('');
   const [isNicknameValid, setIsNicknameValid] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
-
-  const deleteInputText = () => {
-    setNewNickname('');
-  };
 
   const { mutate } = useChangeNicknameQuery({
     onSuccess: () => {
@@ -46,15 +48,13 @@ const ChangeNickNameModal = ({ onCancel }: ModalProps) => {
 
   return (
     <Modal visible onRequestClose={onCancel}>
-      <Header>
+      <Header
+        style={{
+          paddingTop: StatusBarHeight,
+        }}
+      >
         <TitleContainer>
-          <IconButton
-            isFontIcon={false}
-            imagePath="x"
-            iconHeight="24px"
-            iconWidth="24px"
-            onPress={onCancel}
-          />
+          <CloseBtn width="24px" onPress={onCancel} />
           <Space width="12px" />
           <FontText value="닉네임 수정" textSize="18px" lineHeight="23px" textWeight="Medium" />
         </TitleContainer>
@@ -72,24 +72,17 @@ const ChangeNickNameModal = ({ onCancel }: ModalProps) => {
           <SearchInput
             value={newNickname}
             placeholder={`새 닉네임을 입력하세요`}
-            placeholderTextColor={COLOR.GRAY_BE}
+            placeholderTextColor={COLOR.GRAY_999}
             inputMode="search"
             onChangeText={setNewNickname}
             autoFocus
           />
-          <IconButton
-            iconType="Ionicons"
-            isFontIcon
-            iconName="close-circle"
-            iconWidth="19.5"
-            iconColor="rgba(0, 0, 0, 0.46)"
-            onPress={deleteInputText}
-          />
+          <DeleteInputIcon width={19.5} onPress={() => setNewNickname('')} />
         </InputContainer>
 
         {!isNicknameValid && (
           <MessageContainer>
-            <Image source={iconPath.x_circle} style={{ width: 14, height: 14 }} />
+            <XCircle width={14} />
             <Space width="5px" />
             <FontText
               value={errorMessage}

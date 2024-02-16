@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { IconButton, TextButton, FontText } from '@/global/ui';
+import { TextButton, FontText, Space } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { useGetSearchRoutesQuery } from '@/global/apis/hook';
+import MoreBtn from '@/assets/icons/moreBtn.svg';
 
 const RecentSearchBox = () => {
   const routeDetail = () => {
@@ -33,22 +34,17 @@ const RecentSearchBox = () => {
           </View>
           <View style={styles.textContainer}>
             <TextButton
-              value="세부정보  "
+              value="세부정보"
               textSize="13px"
               textWeight="Regular"
               lineHeight="19px"
               textColor={COLOR.GRAY_999}
               onPress={routeDetail}
             />
-            <IconButton
-              isFontIcon={false}
-              imagePath="more_gray"
-              iconWidth="4.5px"
-              iconHeight="8px"
-            />
+            <Space width="4px" />
+            <MoreBtn onPress={routeDetail} />
           </View>
         </View>
-
       </View>
     );
   } else {

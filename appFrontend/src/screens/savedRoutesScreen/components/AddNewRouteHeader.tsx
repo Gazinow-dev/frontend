@@ -1,64 +1,30 @@
 import React from 'react';
 import styled from '@emotion/native';
-import { FontText, IconButton, Space } from '@/global/ui';
+import { FontText, Space } from '@/global/ui';
+import { Platform, StatusBar } from 'react-native';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import BackBtn from '@assets/icons/backBtn.svg';
+import CloseBtn from '@assets/icons/closeBtn.svg';
 
 interface HeaderProps {
-  onCancel: () => void;
-  isNewSearchSwapStationOpened: boolean;
-  setIsNewSearchSwapStationOpened: React.Dispatch<React.SetStateAction<boolean>>;
-  isOpenSelectNewRouteModal: boolean;
-  setIsOpenSelectNewRouteModal: React.Dispatch<React.SetStateAction<boolean>>;
-  isNameNewRouteModalOpened: boolean;
-  setIsNameNewRouteModalOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  onBackBtnPress: () => void;
+  onCloseBtnPress: () => void;
 }
 
-const AddNewRouteHeader = ({
-  onCancel,
-  isNewSearchSwapStationOpened,
-  setIsNewSearchSwapStationOpened,
-  isOpenSelectNewRouteModal,
-  setIsOpenSelectNewRouteModal,
-  isNameNewRouteModalOpened,
-  setIsNameNewRouteModalOpened,
-}: HeaderProps) => {
-  const onBackBtnPress = () => {
-    if (isNewSearchSwapStationOpened || isOpenSelectNewRouteModal) {
-      onCancel();
-      setIsOpenSelectNewRouteModal(false);
-    } else if (isNameNewRouteModalOpened) {
-      setIsNameNewRouteModalOpened(false);
-      setIsNewSearchSwapStationOpened(true);
-      setIsOpenSelectNewRouteModal(true);
-    }
-  };
-
-  const onCloseBtnPress = () => {
-    if (isNameNewRouteModalOpened) {
-      setIsNameNewRouteModalOpened(false);
-      setIsNewSearchSwapStationOpened(true);
-    }
-    setIsOpenSelectNewRouteModal(false);
-    onCancel();
-  };
+const AddNewRouteHeader = ({ onBackBtnPress, onCloseBtnPress }: HeaderProps) => {
+  const StatusBarHeight =
+    Platform.OS === 'ios' ? getStatusBarHeight(true) + 6 : (StatusBar.currentHeight as number) - 8;
 
   return (
     <>
-      <Header>
-        <IconButton
-          isFontIcon={false}
-          imagePath="backBtn"
-          iconHeight="24px"
-          iconWidth="24px"
-          onPress={onBackBtnPress}
-        />
-        <FontText value="새 경로 저장" textSize="18px" textWeight="Medium" />
-        <IconButton
-          isFontIcon={false}
-          imagePath="x"
-          iconHeight="24px"
-          iconWidth="24px"
-          onPress={onCloseBtnPress}
-        />
+      <Header
+        style={{
+          paddingTop: StatusBarHeight,
+        }}
+      >
+        <BackBtn width="24px" onPress={onBackBtnPress} />
+        <FontText value="새 경로 저장" textSize="18px" textWeight="Medium" lineHeight="23px" />
+        <CloseBtn width="24px" onPress={onCloseBtnPress} />
       </Header>
       <Space height="8px" />
     </>
@@ -69,6 +35,7 @@ const Header = styled.View`
   padding: 16px;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 `;
 
 export default AddNewRouteHeader;

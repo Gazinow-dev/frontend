@@ -4,7 +4,7 @@ import { FontText, Space } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { SubwaySimplePath } from '@/global/components';
 import { useGetSearchPaths } from '@/global/apis/hook';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { Path } from '@/global/apis/entity';
 import { StationDataTypes } from '@/store/modules';
 
@@ -13,33 +13,24 @@ interface SelectedStationTypes {
   arrival: StationDataTypes;
 }
 interface SelectNewRouteProps {
+  setDepth: Dispatch<SetStateAction<'search' | 'pathList' | 'detail' | 'name'>>;
   seletedStation: SelectedStationTypes;
-  onCancel: () => void;
-  setSeletedRoutePath: Dispatch<SetStateAction<Path | null>>;
-  setIsNewSearchSwapStationOpened: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsOpenSelectNewRouteModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsNewRouteDetailModalOpened: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsNameNewRouteModalOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedRoutePath: Path | null;
+  setSelectedRoutePath: Dispatch<SetStateAction<Path | null>>;
 }
 
 const SelectNewRouteModal = ({
+  setDepth,
   seletedStation,
-  setSeletedRoutePath,
-  setIsNewSearchSwapStationOpened,
-  setIsOpenSelectNewRouteModal,
-  setIsNewRouteDetailModalOpened,
-  setIsNameNewRouteModalOpened,
+  selectedRoutePath,
+  setSelectedRoutePath,
 }: SelectNewRouteProps) => {
-  const [selectedRoutePath, setSelectedRoutePath] = useState<Path | null>(null);
-
   const { data } = useGetSearchPaths({
     strStationName: seletedStation.departure.stationName,
     strStationLine: seletedStation.departure.stationLine,
     endStationName: seletedStation.arrival.stationName,
     endStationLine: seletedStation.arrival.stationLine,
   });
-
-  setSeletedRoutePath(selectedRoutePath);
 
   return (
     <Container>
@@ -51,7 +42,7 @@ const SelectNewRouteModal = ({
                 key={item.firstStartStation + item.totalTime}
                 onPress={() => {
                   setSelectedRoutePath(item);
-                  setIsNewRouteDetailModalOpened(true);
+                  setDepth('detail');
                 }}
               >
                 <PathTitleInfoBox>
@@ -74,7 +65,9 @@ const SelectNewRouteModal = ({
                   </View>
                   <RadioButtonContainer
                     selected={selectedRoutePath === item}
-                    onPress={() => setSelectedRoutePath(item)}
+                    onPress={() => {
+                      setSelectedRoutePath(item);
+                    }}
                   >
                     {selectedRoutePath === item && <InnerCircle />}
                   </RadioButtonContainer>
@@ -87,17 +80,11 @@ const SelectNewRouteModal = ({
               </PathInner>
             );
           })}
+          <Space height="1px" backgroundColor={COLOR.GRAY_EB} />
         </ScrollView>
       </SubPathContainer>
 
-      <BottomBtn
-        onPress={() => {
-          setIsOpenSelectNewRouteModal(false);
-          setIsNameNewRouteModalOpened(true);
-          setIsNewSearchSwapStationOpened(false);
-        }}
-        disabled={selectedRoutePath === null}
-      >
+      <BottomBtn onPress={() => setDepth('name')} disabled={selectedRoutePath === null}>
         <FontText
           value="다음"
           textSize="17px"
@@ -124,11 +111,12 @@ const PathTitleInfoBox = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  margin: 0 0 8px;
 `;
 const PathInner = styled.Pressable`
-  padding: 20px 16px 24px;
-  border-bottom-color: ${COLOR.GRAY_EB};
-  border-bottom-width: 1px;
+  padding: 20px 16px 8px;
+  border-top-color: ${COLOR.GRAY_EB};
+  border-top-width: 1px;
 `;
 const RadioButtonContainer = styled(Pressable)<{ selected?: boolean }>`
   width: 24px;
