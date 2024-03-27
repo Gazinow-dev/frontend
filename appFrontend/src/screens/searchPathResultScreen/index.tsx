@@ -63,6 +63,7 @@ const SearchPathResultScreen = () => {
 
   useEffect(() => {
     console.log(low.fast);
+    let a = [low.slow];
   }, [low]);
 
   return (
