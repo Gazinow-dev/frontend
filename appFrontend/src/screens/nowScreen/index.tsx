@@ -16,7 +16,7 @@ const NowScreen = () => {
 
   return (
     <Container>
-      <PopularIssues activeButton={activeButton} setActiveButton={setActiveButton} />
+      {/* <PopularIssues activeButton={activeButton} setActiveButton={setActiveButton} /> */}
     </Container>
   );
 };
