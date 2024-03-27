@@ -13,7 +13,8 @@ const NowScreen = () => {
     queryClient.invalidateQueries('getAllIssues');
     queryClient.invalidateQueries('getPopularIssues');
   }, [activeButton]);
-
+  const someArr = [];
+  someArr.push('hihi');
   return (
     <Container>
       {/* <PopularIssues activeButton={activeButton} setActiveButton={setActiveButton} /> */}
