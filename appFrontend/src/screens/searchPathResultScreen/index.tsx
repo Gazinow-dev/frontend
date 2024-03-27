@@ -9,7 +9,7 @@ import { SubwaySimplePath } from '@/global/components';
 import { useGetSearchPaths } from '@/global/apis/hooks';
 import { useAppDispatch, useAppSelect } from '@/store';
 import { StationDataTypes, getIssueId } from '@/store/modules';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
 import SwapStation from './components/SwapStation';
 import IconRightArrowHead from '@assets/icons/right_arrow_head.svg';
@@ -55,6 +55,15 @@ const SearchPathResultScreen = () => {
       ? Math.floor(item.totalTime / 60) + '시간 ' + (item.totalTime % 60) + minute
       : item.totalTime + minute;
   };
+
+  const low = {
+    fast: 40,
+    slow: 10,
+  };
+
+  useEffect(() => {
+    console.log(low.fast);
+  }, [low]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLOR.WHITE }}>
