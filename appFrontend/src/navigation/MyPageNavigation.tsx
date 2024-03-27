@@ -3,15 +3,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import type { StackNavigationProp } from '@react-navigation/stack';
 import { MyPageStackParamList } from '@/navigation/types/navigation';
 import MyRootScreen from '@/screens/myRootScreen';
-import ChangeNickNameModal from '@/screens/myRootScreen/components/ChangeNickNameModal';
-import ChangePwModal from '@/screens/myRootScreen/components/ChangePwModal';
-import ConfirmPwModal from '@/screens/myRootScreen/components/ConfirmPwModal';
-import ConfirmQuitModal from '@/screens/myRootScreen/components/ConfirmQuitModal';
-import ManageAccountModal from '@/screens/myRootScreen/components/ManageAccountModal';
-import NotiOnModal from '@/screens/myRootScreen/components/NotiOnModal';
-import NotiSettingsModal from '@/screens/myRootScreen/components/NotiSettingsModal';
-import SubscribeTermsModal from '@/screens/myRootScreen/components/SubscribeTermsModal';
-import PersonalTermsModal from '@/screens/myRootScreen/components/PersonalTermsModal';
+import ChangeNickNameScreen from '@/screens/myRootScreen/components/ChangeNickNameScreen';
+import ChangePwScreen from '@/screens/myRootScreen/components/ChangePwScreen';
+import ConfirmPwScreen from '@/screens/myRootScreen/components/ConfirmPwScreen';
+import ConfirmQuitScreen from '@/screens/myRootScreen/components/ConfirmQuitScreen';
+import ManageAccountScreen from '@/screens/myRootScreen/components/ManageAccountScreen';
+import NotiOnScreen from '@/screens/myRootScreen/components/NotiOnScreen';
+import NotiSettingsScreen from '@/screens/myRootScreen/components/NotiSettingsScreen';
+import SubscribeTermsScreen from '@/screens/myRootScreen/components/SubscribeTermsScreen';
+import PersonalTermsScreen from '@/screens/myRootScreen/components/PersonalTermsScreen';
 
 const Stack = createStackNavigator<MyPageStackParamList>();
 
@@ -23,15 +23,15 @@ const MyPageNavigation = () => {
   return (
     <Stack.Navigator initialRouteName="MyRootScreen" screenOptions={screenOption}>
       <Stack.Screen name="MyRootScreen" component={MyRootScreen} />
-      <Stack.Screen name="ChangeNickNameModal" component={ChangeNickNameModal} />
-      <Stack.Screen name="ChangePwModal" component={ChangePwModal} />
-      <Stack.Screen name="ConfirmPwModal" component={ConfirmPwModal} />
-      <Stack.Screen name="ConfirmQuitModal" component={ConfirmQuitModal} />
-      <Stack.Screen name="ManageAccountModal" component={ManageAccountModal} />
-      <Stack.Screen name="NotiOnModal" component={NotiOnModal} />
-      <Stack.Screen name="NotiSettingsModal" component={NotiSettingsModal} />
-      <Stack.Screen name="SubscribeTermsModal" component={SubscribeTermsModal} />
-      <Stack.Screen name="PersonalTermsModal" component={PersonalTermsModal} />
+      <Stack.Screen name="ChangeNickNameScreen" component={ChangeNickNameScreen} />
+      <Stack.Screen name="ChangePwScreen" component={ChangePwScreen} />
+      <Stack.Screen name="ConfirmPwScreen" component={ConfirmPwScreen} />
+      <Stack.Screen name="ConfirmQuitScreen" component={ConfirmQuitScreen} />
+      <Stack.Screen name="ManageAccountScreen" component={ManageAccountScreen} />
+      <Stack.Screen name="NotiOnScreen" component={NotiOnScreen} />
+      <Stack.Screen name="NotiSettingsScreen" component={NotiSettingsScreen} />
+      <Stack.Screen name="SubscribeTermsScreen" component={SubscribeTermsScreen} />
+      <Stack.Screen name="PersonalTermsScreen" component={PersonalTermsScreen} />
     </Stack.Navigator>
   );
 };

@@ -4,7 +4,7 @@ import { WebView } from 'react-native-webview';
 import IconCrossX from '@assets/icons/cross_x.svg';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 
-const PersonalTermsModal = () => {
+const PersonalTermsScreen = () => {
   const myPageNavigation = useMyPageNavigation();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLOR.WHITE }}>
@@ -31,4 +31,4 @@ const PersonalTermsModal = () => {
   );
 };
 
-export default PersonalTermsModal;
+export default PersonalTermsScreen;

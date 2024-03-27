@@ -15,7 +15,7 @@ export const useEmailConfirm = ({
   onError: (error: AxiosError) => void;
 }) => {
   const [authNumber, setAuthNumber] = useState<string>('');
-  const { isError, mutate } = useMutation(emailConfirmFetch, {
+  const { isError, mutate, isLoading } = useMutation(emailConfirmFetch, {
     onSuccess: (data) => {
       setAuthNumber(data);
       onSuccess();
@@ -27,7 +27,7 @@ export const useEmailConfirm = ({
     setAuthNumber('');
   };
 
-  return { authNumber, isError, resetAuthNumber, emailConfirmMutate: mutate };
+  return { authNumber, isError, resetAuthNumber, emailConfirmMutate: mutate, isLoading };
 };
 
 /**

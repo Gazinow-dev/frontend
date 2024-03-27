@@ -1,0 +1,23 @@
+name: Code Master
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: anc95/ChatGPT-CodeReview@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          LANGUAGE: Korean
+          PROMPT: Evaluate the provided TypeScript code's quality based on clean code and algorithm standards comprehensively on a scale of 1 to 5 in increments of 0.5 and summarize the suggestions for improvement.
+          MODEL: gpt-3.5-turbo

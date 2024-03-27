@@ -2,6 +2,8 @@ const COLOR = {
   WHITE: '#ffffff' as const,
   REAL_BLACK: '#000' as const,
   BASIC_BLACK: '#171717' as const,
+  RGB_WHITE: [255, 255, 255] as number[],
+  RGB_GRAY_999: [153, 153, 153] as number[],
   GRAY_F9: '#F9F9F9' as const,
   GRAY_F8: '#F8F8F8' as const,
   GRAY_F2: '#f2f2f2' as const,

@@ -18,7 +18,7 @@ import { debounce } from 'lodash';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import { showToast } from '@/global/utils/toast';
 
-const ConfirmPwModal = () => {
+const ConfirmPwScreen = () => {
   const myPageNavigation = useMyPageNavigation();
   const navigation = useRootNavigation();
   const [passwordInput, setPasswordInput] = useState<string>('');
@@ -130,7 +130,7 @@ const ConfirmPwModal = () => {
     </KeyboardAvoidingView>
   );
 };
-export default ConfirmPwModal;
+export default ConfirmPwScreen;
 
 const Header = styled.View`
   padding: 0 0 0 22px;

@@ -28,7 +28,7 @@ interface EmailStepProps {
 const EmailStep = ({ emailValue, setStep, changeEmailValue }: EmailStepProps) => {
   const inputRef = useRef<TextInput>(null);
 
-  const { authNumber, resetAuthNumber, emailConfirmMutate } = useEmailConfirm({
+  const { authNumber, resetAuthNumber, emailConfirmMutate, isLoading } = useEmailConfirm({
     onSuccess: () => {
       setIsOpenConfirmModal(true);
     },
@@ -65,7 +65,7 @@ const EmailStep = ({ emailValue, setStep, changeEmailValue }: EmailStepProps) =>
   };
 
   const emailConfirmMutateHandler = () => emailConfirmMutate(emailValue);
-
+  
   const resetTimer = () => {
     setTimer({
       minutes: 5,
@@ -99,6 +99,7 @@ const EmailStep = ({ emailValue, setStep, changeEmailValue }: EmailStepProps) =>
           closeModal={closeModal}
           setStep={setStep}
           emailConfirmMutateHandler={emailConfirmMutateHandler}
+          isLoading={isLoading}
         />
       )}
 
@@ -187,7 +188,8 @@ const EmailStep = ({ emailValue, setStep, changeEmailValue }: EmailStepProps) =>
           value="인증메일 전송"
           backgroundCondition={isValidEmail}
           onPress={emailConfirmMutateHandler}
-          disabled={!isValidEmail}
+          disabled={!isValidEmail || isLoading}
+          isLoading={isLoading}
         />
       </View>
     </>

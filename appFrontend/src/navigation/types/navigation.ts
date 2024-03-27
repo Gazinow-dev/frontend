@@ -35,15 +35,15 @@ export type NewRouteStackParamList = {
 
 export type MyPageStackParamList = {
   MyRootScreen: undefined;
-  ChangeNickNameModal: undefined;
-  ChangePwModal: undefined;
-  ConfirmPwModal: undefined;
-  ConfirmQuitModal: undefined;
-  ManageAccountModal: undefined;
-  NotiOnModal: undefined;
-  NotiSettingsModal: undefined;
-  SubscribeTermsModal: undefined;
-  PersonalTermsModal: undefined;
+  ChangeNickNameScreen: undefined;
+  ChangePwScreen: undefined;
+  ConfirmPwScreen: undefined;
+  ConfirmQuitScreen: undefined;
+  ManageAccountScreen: undefined;
+  NotiOnScreen: undefined;
+  NotiSettingsScreen: undefined;
+  SubscribeTermsScreen: undefined;
+  PersonalTermsScreen: undefined;
 };
 
 export type IssueStackParamList = {

@@ -18,7 +18,7 @@ interface RenderMenuProps {
   onPress: () => void;
 }
 
-const ManageAccountModal = () => {
+const ManageAccountScreen = () => {
   const myPageNavigation = useMyPageNavigation();
   const navigation = useRootNavigation();
   const [popupVisible, setPopupVisible] = useState(false);
@@ -65,12 +65,12 @@ const ManageAccountModal = () => {
       <Container>
         {renderMenu({
           text: '비밀번호 변경',
-          onPress: () => myPageNavigation.navigate('ChangePwModal'),
+          onPress: () => myPageNavigation.navigate('ChangePwScreen'),
         })}
         {renderMenu({ text: '로그아웃', onPress: () => setPopupVisible(true) })}
         {renderMenu({
           text: '회원 탈퇴',
-          onPress: () => myPageNavigation.navigate('ConfirmQuitModal'),
+          onPress: () => myPageNavigation.navigate('ConfirmQuitScreen'),
         })}
         <MyTabModal
           isVisible={popupVisible}
@@ -84,7 +84,7 @@ const ManageAccountModal = () => {
     </SafeAreaView>
   );
 };
-export default ManageAccountModal;
+export default ManageAccountScreen;
 
 const Header = styled.View`
   padding: 0 0 0 22px;
