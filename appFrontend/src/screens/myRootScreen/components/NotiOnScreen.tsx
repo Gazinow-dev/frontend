@@ -6,7 +6,7 @@ import { FontText, Space, TextButton } from '@/global/ui';
 import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 
-const NotiOnModal = () => {
+const NotiOnScreen = () => {
   const navigation = useRootNavigation();
   const myPageNavigation = useMyPageNavigation();
 
@@ -79,7 +79,7 @@ const NotiOnModal = () => {
     </SafeAreaView>
   );
 };
-export default NotiOnModal;
+export default NotiOnScreen;
 
 const Header = styled.View`
   padding: 16px;

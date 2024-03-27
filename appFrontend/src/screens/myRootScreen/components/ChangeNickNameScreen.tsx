@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/configureStore';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 
-const ChangeNickNameModal = () => {
+const ChangeNickNameScreen = () => {
   const myPageNavigation = useMyPageNavigation();
   const { email } = useSelector((state: RootState) => state.auth);
   const [newNickname, setNewNickname] = useState<string>('');
@@ -101,7 +101,7 @@ const ChangeNickNameModal = () => {
     </SafeAreaView>
   );
 };
-export default ChangeNickNameModal;
+export default ChangeNickNameScreen;
 
 const Header = styled.View`
   padding: 0 22px;

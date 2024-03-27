@@ -40,9 +40,9 @@ const MyRootScreen = () => {
   const confirmUserNotificationOn = async () => {
     // const result = await requestNotificationPermission();
     // if (!result) {
-    //   setIsNotiOnModalOpen(true);
+    //   setIsNotiOnScreenOpen(true);
     // } else {
-    //   setIsNotiSettingsModalOpen(true);
+    //   setIsNotiSettingsScreenOpen(true);
     // }
   };
 
@@ -101,7 +101,7 @@ const MyRootScreen = () => {
               <Pressable
                 hitSlop={20}
                 onPress={() =>
-                  rootNavigation.navigate('MyPageNavigation', { screen: 'ChangeNickNameModal' })
+                  rootNavigation.navigate('MyPageNavigation', { screen: 'ChangeNickNameScreen' })
                 }
               >
                 <IconPencil width={15} />
@@ -122,7 +122,7 @@ const MyRootScreen = () => {
           renderMenu({
             text: '계정 관리',
             onPress: () =>
-              rootNavigation.navigate('MyPageNavigation', { screen: 'ManageAccountModal' }),
+              rootNavigation.navigate('MyPageNavigation', { screen: 'ManageAccountScreen' }),
           })}
         {/* TODO: 페이지 들어가서 퍼미션 컨펌창 띄우는 로직으로 수정하기 */}
         {/* {renderMenu({ text: '알림 설정', onPress: () => confirmUserNotificationOn() })} */}
@@ -130,14 +130,14 @@ const MyRootScreen = () => {
           text: '약관 및 정책',
           onPress: () =>
             rootNavigation.navigate('MyPageNavigation', {
-              screen: 'SubscribeTermsModal',
+              screen: 'SubscribeTermsScreen',
             }),
         })}
         {renderMenu({
           text: '개인정보처리방침',
           onPress: () =>
             rootNavigation.navigate('MyPageNavigation', {
-              screen: 'PersonalTermsModal',
+              screen: 'PersonalTermsScreen',
             }),
         })}
         {renderMenu({ text: '버전', versionInfo: versionText })}

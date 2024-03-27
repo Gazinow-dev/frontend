@@ -14,6 +14,7 @@ import IconXCircle from '@assets/icons/x-circle-standard.svg';
 import StepButton from '../ui/StepButton';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import IconLeftArrow from '@assets/icons/left_arrow_round.svg';
+import LoadingAnimations from '@/global/components/animations/LoadingAnimations';
 
 interface ConfirmEmailModalProps {
   authNumber: string;
@@ -21,6 +22,7 @@ interface ConfirmEmailModalProps {
   closeModal: () => void;
   setStep: () => void;
   emailConfirmMutateHandler: () => void;
+  isLoading: boolean;
 }
 
 const ConfirmEmailModal = ({
@@ -29,6 +31,7 @@ const ConfirmEmailModal = ({
   closeModal,
   setStep,
   emailConfirmMutateHandler,
+  isLoading,
 }: ConfirmEmailModalProps) => {
   const StatusBarHeight = Platform.OS === 'ios' ? getStatusBarHeight(true) + 30 : 30;
 
@@ -157,7 +160,14 @@ const ConfirmEmailModal = ({
                 />
               </View>
 
-              <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 34 }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  marginTop: 34,
+                  alignItems: 'flex-start',
+                }}
+              >
                 <FontText
                   value="메일을 받지 못하셨나요?"
                   textSize="13px"
@@ -165,14 +175,18 @@ const ConfirmEmailModal = ({
                   textColor={COLOR.GRAY_999}
                 />
                 <Space width="8px" />
-                <TextButton
-                  value="재전송"
-                  textSize="13px"
-                  textWeight="Bold"
-                  textColor={COLOR.GRAY_999}
-                  isTextUnderline
-                  onPress={emailConfirmMutateHandler}
-                />
+                {isLoading ? (
+                  <LoadingAnimations color="gray" width={34} height={27} />
+                ) : (
+                  <TextButton
+                    value="재전송"
+                    textSize="13px"
+                    textWeight="Bold"
+                    textColor={COLOR.GRAY_999}
+                    isTextUnderline
+                    onPress={emailConfirmMutateHandler}
+                  />
+                )}
               </View>
             </View>
 

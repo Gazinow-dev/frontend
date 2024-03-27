@@ -44,10 +44,15 @@ const SavedRouteIssues = ({ isVerifiedUser }: SavedRouteIssuesProps) => {
       onPress={() => handleButtonClick(text)}
       style={[
         styles.navButton,
-        {
-          backgroundColor: activeButton === text ? '#474747' : 'white',
-          borderColor: activeButton === text ? 'transparent' : COLOR.GRAY_EB,
-        },
+        isVerifiedUser === 'success auth'
+          ? {
+              backgroundColor: activeButton === text ? '#474747' : 'white',
+              borderColor: activeButton === text ? 'transparent' : COLOR.GRAY_EB,
+            }
+          : {
+              backgroundColor: activeButton === text ? 'white' : '#EAEAEA',
+              borderColor: activeButton === text ? COLOR.GRAY_EB : 'transparent',
+            },
       ]}
       disabled={isVerifiedUser !== 'success auth'}
     >
@@ -56,7 +61,9 @@ const SavedRouteIssues = ({ isVerifiedUser }: SavedRouteIssuesProps) => {
         textSize="13px"
         textWeight={activeButton === text ? 'SemiBold' : 'Regular'}
         lineHeight="19px"
-        textColor={activeButton === text ? 'white' : COLOR.GRAY_999}
+        textColor={
+          isVerifiedUser === 'success auth' && activeButton === text ? 'white' : COLOR.GRAY_999
+        }
       />
     </TouchableOpacity>
   );

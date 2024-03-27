@@ -243,9 +243,11 @@ export const changePasswordFetch = async (data: object) => {
 /**
  * 이슈 전체 조회 axios
  */
-export const getAllIssuesFetch = async () => {
+export const getAllIssuesFetch = async (params: { page: number }) => {
   try {
-    const res = await publicServiceAPI.get<{ data: AllIssues }>(`/api/v1/issue/get_all`);
+    const res = await publicServiceAPI.get<{ data: AllIssues }>(`/api/v1/issue/get_all`, {
+      params,
+    });
     return res.data.data;
   } catch (err) {
     Sentry.captureException(err);
@@ -257,7 +259,7 @@ export const getAllIssuesFetch = async () => {
 /**
  * 이슈 노선별 조회 axios
  */
-export const getIssuesByLaneFetch = async (params: { line: string }) => {
+export const getIssuesByLaneFetch = async (params: { page: number; line: string }) => {
   try {
     const res = await publicServiceAPI.get<{ data: AllIssues }>('/api/v1/issue/get_line', {
       params,

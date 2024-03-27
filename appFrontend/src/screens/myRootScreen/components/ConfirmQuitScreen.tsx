@@ -9,14 +9,14 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/configureStore';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 
-const ConfirmQuitModal = () => {
+const ConfirmQuitScreen = () => {
   const myPageNavigation = useMyPageNavigation();
   const { nickname } = useSelector((state: RootState) => state.auth);
   const [popupVisible, setPopupVisible] = useState(false);
 
   const handleConfirm = () => {
     setPopupVisible(false);
-    myPageNavigation.navigate('ConfirmPwModal');
+    myPageNavigation.navigate('ConfirmPwScreen');
   };
 
   return (
@@ -75,11 +75,10 @@ const ConfirmQuitModal = () => {
           cancelText="아니요"
         />
       </Container>
-      {/* <ConfirmPwModal isVisible={confirmPwModalVisible} onCancel={hideModal} /> */}
     </SafeAreaView>
   );
 };
-export default ConfirmQuitModal;
+export default ConfirmQuitScreen;
 
 const Header = styled.View`
   padding: 0 0 0 22px;

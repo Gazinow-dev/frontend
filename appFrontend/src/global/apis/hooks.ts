@@ -19,7 +19,7 @@ import {
   getAllIssuesFetch,
   getIssuesByLaneFetch,
 } from '@/global/apis/func';
-import { IssueContent, RawSubwayLineName, SubwayStrEnd } from './entity';
+import { AllIssues, IssueContent, RawSubwayLineName, SubwayStrEnd } from './entity';
 import { AxiosError } from 'axios';
 import { subwayFreshLineName } from '@/global/utils';
 import { useAppSelect } from '@/store';
@@ -228,17 +228,43 @@ export const useChangePasswordQuery = ({
 /**
  * 이슈 전체 조회 훅
  */
-export const useGetAllIssuesQuery = () => {
-  const { data } = useQuery(['getAllIssues'], getAllIssuesFetch);
-  return { data };
+export const useGetAllIssuesQuery = (
+  page: number,
+  {
+    onSuccess,
+    onError,
+  }: {
+    onSuccess: (data: AllIssues) => void;
+    onError: (error: AxiosError) => void;
+  },
+) => {
+  const { data, refetch } = useQuery(['getAllIssues', page], () => getAllIssuesFetch({ page }), {
+    onSuccess,
+    onError,
+  });
+  return { allIssues: data, allIssuesRefetch: refetch };
 };
 
 /**
  * 이슈 노선별 조회 훅
  */
-export const useGetIssuesByLaneQuery = (line: string) => {
-  const { data } = useQuery(['getIssuesByLane'], () => getIssuesByLaneFetch({ line }));
-  return { data };
+export const useGetIssuesByLaneQuery = (
+  page: number,
+  line: string,
+  {
+    onSuccess,
+    onError,
+  }: {
+    onSuccess: (data: AllIssues) => void;
+    onError: (error: AxiosError) => void;
+  },
+) => {
+  const { data, refetch } = useQuery(
+    ['getIssuesByLane', page, line],
+    () => getIssuesByLaneFetch({ page, line }),
+    { onSuccess, onError },
+  );
+  return { laneIssues: data, laneIssuesRefetch: refetch };
 };
 
 /**
@@ -246,11 +272,14 @@ export const useGetIssuesByLaneQuery = (line: string) => {
  */
 export const useGetPopularIssuesQuery = ({
   onSuccess,
+  onError,
 }: {
   onSuccess: (data: IssueContent[]) => void;
+  onError: (error: AxiosError) => void;
 }) => {
   const { data, refetch } = useQuery(['getPopularIssues'], getPopularIssuesFetch, {
     onSuccess,
+    onError,
   });
   return { popularIssues: data, popularIssuesRefetch: refetch };
 };

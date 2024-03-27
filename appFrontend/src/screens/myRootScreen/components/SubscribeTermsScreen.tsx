@@ -4,7 +4,7 @@ import { WebView } from 'react-native-webview';
 import IconCrossX from '@assets/icons/cross_x.svg';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 
-const SubscribeTermsModal = () => {
+const SubscribeTermsScreen = () => {
   const myPageNavigation = useMyPageNavigation();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLOR.WHITE }}>
@@ -31,4 +31,4 @@ const SubscribeTermsModal = () => {
   );
 };
 
-export default SubscribeTermsModal;
+export default SubscribeTermsScreen;

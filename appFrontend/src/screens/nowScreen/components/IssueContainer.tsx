@@ -13,10 +13,19 @@ interface IssueDetailProps {
   location?: string;
   time: string;
   body: string;
-  isLastItem?: boolean;
+  isLastItem: boolean;
+  isHeader: boolean;
 }
 
-const IssueContainer = ({ id, title, location, time, body, isLastItem }: IssueDetailProps) => {
+const IssueContainer = ({
+  id,
+  title,
+  location,
+  time,
+  body,
+  isLastItem,
+  isHeader,
+}: IssueDetailProps) => {
   const dispatch = useAppDispatch();
   const navigation = useRootNavigation();
 
@@ -61,6 +70,13 @@ const IssueContainer = ({ id, title, location, time, body, isLastItem }: IssueDe
         </MapContainer> */}
       </IssueList>
       {!isLastItem && <Space height="1px" width="999px" backgroundColor={COLOR.GRAY_F8} />}
+      {isHeader && isLastItem && (
+        <>
+          <Space height="12px" width="999px" backgroundColor={COLOR.WHITE} />
+          <Space height="8px" width="999px" backgroundColor={COLOR.GRAY_F8} />
+          <Space height="12px" width="999px" backgroundColor={COLOR.WHITE} />
+        </>
+      )}
     </>
   );
 };

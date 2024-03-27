@@ -1,6 +1,6 @@
 import styled from '@emotion/native';
 import React, { useCallback, useState } from 'react';
-import { Alert, Modal, Pressable, SafeAreaView, View } from 'react-native';
+import { Alert, Pressable, SafeAreaView, View } from 'react-native';
 import { FontText, Input, Space, TextButton } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { useChangePasswordQuery, useCheckPasswordQuery } from '@/global/apis/hooks';
@@ -11,7 +11,7 @@ import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
 import IconCheck from '@assets/icons/check_standard.svg';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 
-const ChangePwModal = () => {
+const ChangePwScreen = () => {
   const myPageNavigation = useMyPageNavigation();
   const [popupVisible, setPopupVisible] = useState<boolean>(false);
 
@@ -264,7 +264,7 @@ const ChangePwModal = () => {
     </SafeAreaView>
   );
 };
-export default ChangePwModal;
+export default ChangePwScreen;
 
 const Header = styled.View`
   padding: 0 22px;

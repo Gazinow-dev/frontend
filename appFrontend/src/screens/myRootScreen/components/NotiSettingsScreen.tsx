@@ -8,7 +8,7 @@ import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 
 //TODO: 토글 디자인, 기능 구현
 
-const NotiSettingsModal = () => {
+const NotiSettingsScreen = () => {
   const myPageNavigation = useMyPageNavigation();
   const [pushNotification, setPushNotification] = useState(false);
   const [savedPathNotification, setSavedPathNotification] = useState(true);
@@ -84,7 +84,7 @@ const NotiSettingsModal = () => {
     </SafeAreaView>
   );
 };
-export default NotiSettingsModal;
+export default NotiSettingsScreen;
 
 const Header = styled.View`
   padding: 16px;

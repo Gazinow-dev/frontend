@@ -115,8 +115,7 @@ const NameNewRouteModal = () => {
           onPress={() => {
             mutate({
               roadName: roadName,
-              lastEndStation: resultData.lastEndStation,
-              totalTime: resultData.totalTime,
+              ...resultData,
               subPaths: freshSubPathData,
             });
           }}
