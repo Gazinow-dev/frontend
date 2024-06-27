@@ -181,7 +181,7 @@ const ChangePwScreen = () => {
               value=" 기존 비밀번호는 사용할 수 없어요"
               textSize="12px"
               textWeight="Medium"
-              lineHeight="14px"
+              lineHeight={14}
               textColor={COLOR.LIGHT_RED}
             />
           </View>

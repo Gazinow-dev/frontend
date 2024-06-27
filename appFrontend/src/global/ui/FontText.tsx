@@ -15,7 +15,7 @@ const FontText = ({
   lineHeight,
   textAlign,
   textSize,
-  textColor,
+  textColor = '#171717',
   ...props
 }: NormalTextProps) => {
   const { value } = props;

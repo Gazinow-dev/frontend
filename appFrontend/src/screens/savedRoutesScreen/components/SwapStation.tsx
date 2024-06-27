@@ -51,7 +51,7 @@ const SwapStation = ({ setSelectedStation }: SwapStationProps) => {
         value={station.stationName || type}
         textSize="16px"
         textWeight="Regular"
-        lineHeight="21px"
+        lineHeight={21}
         textColor={station.stationName ? COLOR.BASIC_BLACK : COLOR.GRAY_999}
       />
     </TouchableOpacity>

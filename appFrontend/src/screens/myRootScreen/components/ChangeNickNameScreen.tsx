@@ -98,7 +98,7 @@ const ChangeNickNameScreen = () => {
             textSize="16px"
             textColor={isNicknameValid ? COLOR.BASIC_BLACK : COLOR.GRAY_999}
             textWeight="SemiBold"
-            lineHeight="21px"
+            lineHeight={21}
           />
         </TouchableOpacity>
       </View>
@@ -130,7 +130,7 @@ const ChangeNickNameScreen = () => {
               value={isNicknameValid ? '사용 가능한 닉네임입니다' : errorMessage}
               textSize="14px"
               textWeight="Medium"
-              lineHeight="16px"
+              lineHeight={16}
               textColor={isNicknameValid ? COLOR.LIGHT_GREEN : COLOR.LIGHT_RED}
             />
           </View>

@@ -55,7 +55,7 @@ const ManageAccountScreen = () => {
         onPress={() => myPageNavigation.goBack()}
       >
         <IconLeftArrowHead color="#3F3F46" />
-        <FontText value="계정 관리" textSize="18px" lineHeight="23px" textWeight="Medium" />
+        <FontText value="계정 관리" textSize="18px" lineHeight={23} textWeight="Medium" />
       </TouchableOpacity>
       <View className="h-1 bg-gray-eb" />
       {renderMenu({

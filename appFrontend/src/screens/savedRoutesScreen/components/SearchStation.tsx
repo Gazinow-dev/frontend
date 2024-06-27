@@ -147,14 +147,14 @@ const SearchStation = () => {
                         value={stationName}
                         textSize="16px"
                         textWeight="Medium"
-                        lineHeight="21px"
+                        lineHeight={21}
                         textColor="#000"
                       />
                       <FontText
                         value={stationLine!}
                         textSize="14px"
                         textWeight="Regular"
-                        lineHeight="21px"
+                        lineHeight={21}
                         textColor={COLOR.GRAY_999}
                       />
                     </View>

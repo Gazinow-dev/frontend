@@ -43,7 +43,7 @@ const SavedRoutesList = () => {
               value={item.roadName}
               textSize="18px"
               textWeight="SemiBold"
-              lineHeight="23px"
+              lineHeight={23}
               textColor={COLOR.BASIC_BLACK}
             />
             <TouchableOpacity onPress={() => showDeletePopup(item.id)} hitSlop={20}>
@@ -52,7 +52,7 @@ const SavedRoutesList = () => {
                 textSize="13px"
                 textColor={COLOR.GRAY_999}
                 textWeight="Regular"
-                lineHeight="19px"
+                lineHeight={19}
               />
             </TouchableOpacity>
           </View>
