@@ -67,7 +67,7 @@ const ChangePwScreen = () => {
     onSuccess: () => {
       setIsPwRight(true);
     },
-    onError: (error: any) => {
+    onError: () => {
       setIsPwRight(false);
     },
   });
@@ -76,7 +76,7 @@ const ChangePwScreen = () => {
     onSuccess: () => {
       setPopupVisible(true);
     },
-    onError: (error: any) => {
+    onError: () => {
       setIsNewPwValid(false);
       Alert.alert('비밀번호 변경 오류', '비밀번호 변경에 실패했습니다\n다시 시도해주세요');
     },
@@ -87,7 +87,7 @@ const ChangePwScreen = () => {
     changePasswordMutate(data);
   };
 
-  const handleOnCancel = () => {
+  const handleOnConfirm = () => {
     setPopupVisible(false);
     myPageNavigation.goBack();
   };
@@ -123,18 +123,13 @@ const ChangePwScreen = () => {
               text="완료"
               className={cn('leading-21', {
                 'text-gray-999': isDoneBtnDisabled,
-                'text-black-717': !isDoneBtnDisabled,
               })}
               fontWeight="600"
             />
           </TouchableOpacity>
         </View>
 
-        <FontText
-          text="현재 비밀번호"
-          className="text-14 leading-21 text-black-717"
-          fontWeight="500"
-        />
+        <FontText text="현재 비밀번호" className="text-14 leading-21" fontWeight="500" />
         <Input
           className="py-12 mt-6 mb-2 px-18 rounded-5 bg-gray-f2"
           value={curPassword}
@@ -233,12 +228,9 @@ const ChangePwScreen = () => {
 
         <MyTabModal
           isVisible={popupVisible}
-          onCancel={() => {
-            handleOnCancel();
-          }}
+          onConfirm={handleOnConfirm}
           title="비밀번호가 변경되었습니다"
-          cancelText="확인"
-          isSingleBtn
+          confirmText="확인"
         />
       </View>
     </SafeAreaView>

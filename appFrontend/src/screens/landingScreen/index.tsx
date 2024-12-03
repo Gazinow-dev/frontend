@@ -43,6 +43,7 @@ const LandingScreen = () => {
             margin: 16,
           }}
           onPress={() => navigation.goBack()}
+          hitSlop={20}
         >
           <IconLeftArrow color={COLOR.WHITE} />
         </TouchableOpacity>

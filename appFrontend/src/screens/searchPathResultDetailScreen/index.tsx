@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FlatList, Modal, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { FontText, Space } from '@/global/ui';
 import { useRoute } from '@react-navigation/native';
@@ -8,12 +8,13 @@ import { useDeleteSavedSubwayRoute } from '@/global/apis/hooks';
 import { Path, SubPath } from '@/global/apis/entity';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
 import { COLOR } from '@/global/constants';
-import { useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import IconBookmark from '@assets/icons/bookmark.svg';
 import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
 import { useAppSelect } from '@/store';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { showToast } from '@/global/utils/toast';
+import { updateNotiReadStatus } from '@/global/apis/func';
 
 interface DetailData extends Path {
   id: number;
@@ -23,7 +24,18 @@ const SearchPathResultDetailScreen = () => {
   const queryClient = useQueryClient();
   const navigation = useHomeNavigation();
   const rootNavigation = useRootNavigation();
-  const { state: resultData } = useRoute().params as { state: DetailData };
+  const { state: resultData, notificationId } = useRoute().params as {
+    state: DetailData;
+    notificationId: number;
+  };
+  const { mutate } = useMutation(updateNotiReadStatus);
+
+  useEffect(() => {
+    if (notificationId) {
+      mutate(notificationId);
+    }
+  }, []);
+
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
 
   const { isLoading, deleteMutate } = useDeleteSavedSubwayRoute({
@@ -64,10 +76,10 @@ const SearchPathResultDetailScreen = () => {
       <View className="flex-1 px-16">
         {/* header */}
         <View className="flex-row items-center justify-between py-16">
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity hitSlop={20} onPress={() => navigation.goBack()}>
             <IconLeftArrowHead color="#3F3F46" width={18} height={18} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={bookmarkHandler} disabled={isLoading}>
+          <TouchableOpacity hitSlop={20} onPress={bookmarkHandler} disabled={isLoading}>
             <IconBookmark
               width={24}
               height={24}

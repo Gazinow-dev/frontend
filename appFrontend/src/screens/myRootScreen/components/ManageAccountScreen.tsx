@@ -76,13 +76,12 @@ const ManageAccountScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <TouchableOpacity
-        className="flex-row items-center p-16"
-        onPress={() => myPageNavigation.goBack()}
-      >
-        <IconLeftArrowHead width={24} color="#3F3F46" className="mr-12" />
+      <View className="flex-row items-center gap-12 p-16">
+        <TouchableOpacity onPress={() => myPageNavigation.goBack()} hitSlop={20}>
+          <IconLeftArrowHead width={24} color="#3F3F46" />
+        </TouchableOpacity>
         <FontText text="계정 관리" className="text-18 leading-23" fontWeight="500" />
-      </TouchableOpacity>
+      </View>
       <View className="h-1 bg-gray-beb" />
       {isSocialLoggedIn !== 'true' &&
         renderMenu({

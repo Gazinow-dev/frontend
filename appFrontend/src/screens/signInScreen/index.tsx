@@ -3,7 +3,6 @@ import cn from 'classname';
 import {
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
@@ -67,14 +66,14 @@ const SignInScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLOR.GRAY_F9 }}>
+    <SafeAreaView className="flex-1 bg-gray-9f9">
       <KeyboardAvoidingView
-        style={{ paddingHorizontal: 16, flex: 1 }}
+        className="flex-1 px-16"
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <TouchableOpacity
-          hitSlop={10}
-          style={{ marginBottom: 43, marginTop: 30 }}
+          hitSlop={20}
+          className="mb-43 mt-30 w-30"
           onPress={() => navigation.goBack()}
         >
           <IconLeftArrow color={COLOR.BASIC_BLACK} />
@@ -86,16 +85,7 @@ const SignInScreen = () => {
 
         <ScrollView style={{ flex: 1 }}>
           <FontText text="Email" className="text-14 text-gray-183" fontWeight="500" />
-          <View
-            style={{
-              backgroundColor: COLOR.GRAY_F2,
-              marginTop: 6,
-              paddingVertical: 13,
-              justifyContent: 'center',
-              paddingLeft: 16,
-              borderRadius: 5,
-            }}
-          >
+          <View className="justify-center pl-16 mt-6 bg-gray-f2 py-13 rounded-15">
             <Input
               value={formData.email}
               placeholder="이메일을 입력해주세요"
@@ -105,23 +95,14 @@ const SignInScreen = () => {
               keyboardType="email-address"
               isBlur={isLoading}
               textContentType="oneTimeCode"
-              style={{ height: 25 }}
+              className="h-25"
             />
           </View>
 
           <Space height={20} />
 
           <FontText text="Password" className="text-14 text-gray-183" fontWeight="500" />
-          <View
-            style={{
-              backgroundColor: COLOR.GRAY_F2,
-              marginTop: 6,
-              paddingVertical: 13,
-              justifyContent: 'center',
-              paddingLeft: 16,
-              borderRadius: 5,
-            }}
-          >
+          <View className="justify-center pl-16 mt-6 bg-gray-f2 py-13 rounded-15">
             <Input
               placeholder="비밀번호를 입력해주세요"
               value={formData.password}
@@ -130,21 +111,19 @@ const SignInScreen = () => {
               onChangeText={(text) => changeFormText('password', text)}
               secureTextEntry
               isBlur={isLoading}
-              style={{ height: 25 }}
+              className="h-25"
             />
           </View>
 
           {!!errorMessage && (
-            <View
-              style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8, marginLeft: 9 }}
-            >
+            <View className="flex-row items-center mt-8 ml-9">
               <IconXCircle width={14} height={14} />
               <Space width={3} />
               <FontText text={errorMessage} className="text-12 text-light-red" fontWeight="500" />
             </View>
           )}
         </ScrollView>
-        <Pressable
+        <TouchableOpacity
           className={cn('rounded-5 justify-center items-center h-48 mb-20 bg-black-717', {
             'bg-gray-ddd': !(isValidEmail && !!formData.password),
           })}
@@ -152,7 +131,7 @@ const SignInScreen = () => {
           disabled={!isValidEmail || !formData.password}
         >
           <FontText text="로그인" className="text-white" fontWeight="600" />
-        </Pressable>
+        </TouchableOpacity>
       </KeyboardAvoidingView>
 
       <Space height={20} />

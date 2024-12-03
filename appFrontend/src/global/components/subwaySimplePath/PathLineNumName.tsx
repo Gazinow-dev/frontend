@@ -1,6 +1,6 @@
 import { Dimensions, View } from 'react-native';
 import cn from 'classname';
-import { FontText, Space } from '@/global/ui';
+import { FontText } from '@/global/ui';
 import { subwayLineColor, pathSubwayLineName, subwayNameCutting } from '@/global/utils';
 import { StationCode } from '@/global/apis/entity';
 
@@ -30,16 +30,14 @@ const PathLineNumName = ({ stationCode, direct, stationName }: PathLineNumNamePr
           alignItems: 'center',
         }}
       >
-        {stationCode > 9 && <Space height={1} />}
         <FontText
           text={pathSubwayLineName(stationCode)}
           fontWeight={stationCode <= 9 ? '600' : '700'}
-          className={cn('text-6 text-white', {
+          className={cn('text-6 leading-15 text-white', {
             'text-13': stationCode <= 9,
-            'leading-[6px] -tracking-[0.3]': stationCode > 9,
+            'leading-6 tracking-[-0.3px] mt-1': stationCode > 9,
           })}
         />
-        {stationCode <= 9 && <Space height={1} />}
       </View>
 
       <View
@@ -51,7 +49,7 @@ const PathLineNumName = ({ stationCode, direct, stationName }: PathLineNumNamePr
         <FontText
           text={subwayNameCutting(stationName.split('(')[0])}
           className="text-xs text-center"
-          fontWeight="500"
+          fontWeight="600"
           style={{ color: subwayLineColor(stationCode) }}
         />
         {direct && <FontText text="급행" className="text-xs text-center text-light-red" />}
