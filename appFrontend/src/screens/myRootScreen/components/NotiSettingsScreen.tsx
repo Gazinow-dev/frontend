@@ -34,14 +34,11 @@ const NotiSettingsScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-row items-center justify-between px-16">
-        <TouchableOpacity
-          className="flex-row items-center py-16"
-          onPress={() => myPageNavigation.goBack()}
-        >
-          <IconLeftArrowHead color="#3F3F46" className="ml-6 mr-21" />
-          <FontText text="알림 설정" className="text-18 leading-23" fontWeight="500" />
+      <View className="flex-row items-center gap-12 p-16">
+        <TouchableOpacity onPress={() => myPageNavigation.goBack()} hitSlop={20}>
+          <IconLeftArrowHead width={24} color="#3F3F46" />
         </TouchableOpacity>
+        <FontText text="알림 설정" className="text-18 leading-23" fontWeight="500" />
       </View>
       {isNotiPermissionOn ? <NotiSettings /> : <RequestNotiOn />}
     </SafeAreaView>

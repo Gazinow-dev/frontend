@@ -40,19 +40,17 @@ const SwapStation = () => {
       distance={34}
       startColor="rgba(0,0,0,0.05)"
       style={{
-        paddingBottom: 21,
-        paddingLeft: 14,
-        paddingRight: 17,
-        paddingTop: 19,
+        paddingHorizontal: 16,
+        paddingVertical: 20,
         backgroundColor: COLOR.WHITE,
         borderRadius: 14,
         flexDirection: 'row',
         alignItems: 'center',
       }}
     >
-      <View className="flex-1 gap-8 mr-15">
+      <View className="flex-1 gap-12">
         <TouchableOpacity
-          className="justify-center w-full pl-10 bg-gray-9f9 h-41 rounded-8 pr-15"
+          className="justify-center pl-10 bg-gray-9f9 h-49 rounded-8"
           onPress={() => navigateSearchStation(DEPARTURE_STATION)}
         >
           <FontText
@@ -67,7 +65,7 @@ const SwapStation = () => {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          className="justify-center w-full pl-10 bg-gray-9f9 h-41 rounded-8 pr-15"
+          className="justify-center pl-10 bg-gray-9f9 h-49 rounded-8"
           onPress={() => navigateSearchStation(ARRIVAL_STATION)}
         >
           <FontText
@@ -82,7 +80,7 @@ const SwapStation = () => {
           />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => dispatch(swapStation(selectedStation))}>
+      <TouchableOpacity className="ml-15" onPress={() => dispatch(swapStation(selectedStation))}>
         <IconSwapChange />
       </TouchableOpacity>
     </Shadow>

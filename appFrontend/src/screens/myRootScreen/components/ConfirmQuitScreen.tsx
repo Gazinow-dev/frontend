@@ -22,8 +22,9 @@ const ConfirmQuitScreen = () => {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 px-16">
         <TouchableOpacity
-          className="flex-row items-center h-56"
+          className="flex-row items-center h-56 w-30"
           onPress={() => myPageNavigation.goBack()}
+          hitSlop={20}
         >
           <IconLeftArrowHead width={24} color="#3F3F46" />
         </TouchableOpacity>

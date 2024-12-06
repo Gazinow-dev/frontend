@@ -7,9 +7,9 @@ export type RootStackParamList = {
     params?: { searchType: '출발역' | '도착역' };
   };
   MainBottomTab: { screen: 'homeStack' };
-  NewRouteNavigation: { screen: 'SavedRoutes' };
+  NewRouteNavigation: { screen: 'SavedRoutes' | 'Swap' };
   MyPageNavigation: { screen: unknown };
-  SubwayPathDetail: { state?: Path | SubPath[]; pathId?: number | null };
+  SubwayPathDetail: { state?: Path | SubPath[]; notificationId?: number | null };
 };
 
 export type AuthStackStackParamList = {
@@ -23,7 +23,7 @@ export type HomeStackParamList = {
   Home: undefined;
   NotiHistory: undefined;
   SubwayPathResult: undefined;
-  SubwayPathDetail: { state?: Path | SubPath[]; pathId?: number | null };
+  SubwayPathDetail: { state?: Path | SubPath[]; notificationId?: number | null };
   SavedRoutes: undefined;
 };
 

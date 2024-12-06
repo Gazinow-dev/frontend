@@ -22,7 +22,7 @@ const IssuesBanner = ({ subPaths }: IssuesBannerProps) => {
   if (issues.length < 1) return null;
   return (
     <>
-      {issues.map(({ issueSummary, stationCode }, index: number) =>
+      {issues.map(({ issueSummary }, index: number) =>
         issueSummary.map((issue: IssueSummary, issueIndex: number) => (
           <TouchableOpacity
             key={`${index}-${issueIndex}`}
@@ -30,16 +30,10 @@ const IssuesBanner = ({ subPaths }: IssuesBannerProps) => {
               dispatch(getIssueId(issue.id));
               navigation.navigate('IssueStack', { screen: 'IssueDetail' });
             }}
-            className="flex-row items-center justify-between px-12 py-8 mb-8 overflow-hidden rounded-full border-gray-beb border-1"
+            className="flex-row items-center justify-between px-16 py-12 overflow-hidden bg-white rounded-full border-gray-beb border-1"
           >
-            <IssueKeywordIcon
-              width={16}
-              height={16}
-              keyword={issue.keyword}
-              color={subwayLineColor(stationCode)}
-            />
             <FontText
-              className="flex-1 ml-10 mr-30 text-13"
+              className="mr-10 text-14 leading-21"
               text={issue.title}
               fontWeight="600"
               numberOfLines={1}

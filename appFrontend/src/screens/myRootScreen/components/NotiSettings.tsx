@@ -11,10 +11,8 @@ import { RootState } from '@/store/configureStore';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
   getDetailPushNotiOnStatusFetch,
-  getMyPathPushNotiOnStatusFetch,
   getPushNotiOnStatusFetch,
   setDetailPushNotiOnFetch,
-  setMyPathPushNotiOnFetch,
   setPushNotiOnFetch,
 } from '../apis/func';
 import { COLOR } from '@/global/constants';
@@ -31,9 +29,6 @@ const NotiSettings = () => {
   const { data: isPushNotiOn } = useQuery(['getPushNotiOnStatus'], () =>
     getPushNotiOnStatusFetch(email),
   );
-  const { data: isMyPathPushNotiOn } = useQuery(['getMyPathPushNotiOnStatus'], () =>
-    getMyPathPushNotiOnStatusFetch(email),
-  );
   const { data: isDetailPushNotiOn } = useQuery(['getDetailPushNotiOnStatus'], () =>
     getDetailPushNotiOnStatusFetch(email),
   );
@@ -42,12 +37,6 @@ const NotiSettings = () => {
   const { mutate: setPushNotiOnMutate } = useMutation(setPushNotiOnFetch, {
     onSuccess: async () => {
       await queryClient.invalidateQueries(['getPushNotiOnStatus']);
-      await queryClient.invalidateQueries(['getMyPathPushNotiOnStatus']);
-      await queryClient.invalidateQueries(['getDetailPushNotiOnStatus']);
-    },
-  });
-  const { mutate: setMyPathPushNotiOnMutate } = useMutation(setMyPathPushNotiOnFetch, {
-    onSuccess: async () => {
       await queryClient.invalidateQueries(['getMyPathPushNotiOnStatus']);
       await queryClient.invalidateQueries(['getDetailPushNotiOnStatus']);
     },
@@ -75,51 +64,34 @@ const NotiSettings = () => {
         />
       </View>
       <View className="h-20 bg-gray-9f9" />
-      <View className="flex-row items-center justify-between mx-16 h-53">
-        <FontText
-          text="내가 저장한 경로 알림"
-          className={cn({
-            'text-gray-ebe': !isMyPathPushNotiOn,
-          })}
-          fontWeight="600"
-        />
-        <Toggle
-          isOn={isMyPathPushNotiOn!}
-          onToggle={() => setMyPathPushNotiOnMutate({ email, alertAgree: !isMyPathPushNotiOn })}
-          disabled={!isPushNotiOn}
-        />
-      </View>
-      <View className="h-1 bg-gray-beb" />
-      {myRoutes && myRoutes.length > 0 && (
-        <>
-          <View className="flex-row items-center justify-between mx-16 h-72">
-            <View className="gap-6">
-              <FontText
-                text="경로 상세 설정"
-                className={cn({
-                  'text-gray-ebe': !isDetailPushNotiOn,
-                })}
-                fontWeight="600"
-              />
+      <>
+        <View className="flex-row items-center justify-between mx-16 h-72">
+          <View className="gap-6">
+            <FontText
+              text="내가 저장한 경로 알림 설정"
+              className={cn({
+                'text-gray-ebe': !isDetailPushNotiOn,
+              })}
+              fontWeight="600"
+            />
 
-              <FontText
-                text="개별 경로의 알림이 활성화되는 시간을 설정해요"
-                className={cn('text-12 leading-14', {
-                  'text-gray-ebe': !isDetailPushNotiOn,
-                })}
-                fontWeight="600"
-              />
-            </View>
-            <Toggle
-              isOn={isDetailPushNotiOn!}
-              onToggle={() => setDetailPushNotiOnMutate({ email, alertAgree: !isDetailPushNotiOn })}
-              disabled={!isPushNotiOn || !isMyPathPushNotiOn}
+            <FontText
+              text="개별 경로의 알림을 각각 다르게 설정할 수 있어요"
+              className={cn('text-12 leading-14', {
+                'text-gray-ebe': !isDetailPushNotiOn,
+              })}
+              fontWeight="400"
             />
           </View>
-          <View className="h-1 bg-gray-beb" />
-        </>
-      )}
-      {isMyPathPushNotiOn && isDetailPushNotiOn && myRoutes && myRoutes.length > 0 && (
+          <Toggle
+            isOn={isDetailPushNotiOn!}
+            onToggle={() => setDetailPushNotiOnMutate({ email, alertAgree: !isDetailPushNotiOn })}
+            disabled={!isPushNotiOn}
+          />
+        </View>
+        <View className="h-1 bg-gray-beb" />
+      </>
+      {isDetailPushNotiOn && myRoutes && myRoutes.length > 0 && (
         <ScrollView>
           {myRoutes.map((myRoutes, index) => (
             <View key={myRoutes.roadName + index}>
@@ -146,7 +118,7 @@ const NotiSettings = () => {
           ))}
         </ScrollView>
       )}
-      {isMyPathPushNotiOn && myRoutes && myRoutes.length < 1 && (
+      {isDetailPushNotiOn && myRoutes && myRoutes.length < 1 && (
         <View className="items-center py-16 mx-16 mt-20 bg-gray-9f9 rounded-12">
           <View className="flex-row items-center">
             <IconExclamation />

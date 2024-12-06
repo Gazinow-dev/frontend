@@ -2,6 +2,11 @@
 #
 .DS_Store
 
+# Sentry
+#
+ios/sentry.properties
+android/sentry.properties
+
 # Xcode
 #
 ios/tmp.xcconfig
@@ -22,6 +27,8 @@ DerivedData
 *.ipa
 *.xcuserstate
 ios/.xcode.env.local
+ios/AppCenter-Config.plist
+ios/GoogleService-Info.plist
 
 # Android/IntelliJ
 #
@@ -32,7 +39,10 @@ local.properties
 *.iml
 *.hprof
 .cxx/
-!debug.keystore
+*.keystore
+*.aab
+android/gradle.properties
+android/app/google-services.json
 
 # node.js
 #

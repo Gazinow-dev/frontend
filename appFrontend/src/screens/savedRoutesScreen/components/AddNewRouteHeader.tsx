@@ -18,7 +18,13 @@ const AddNewRouteHeader = () => {
 
       <FontText text="새 경로 저장" className="text-18" fontWeight="500" />
 
-      <TouchableOpacity hitSlop={20} onPress={() => homeNavigation.popToTop()}>
+      <TouchableOpacity
+        hitSlop={20}
+        onPress={() => {
+          homeNavigation.popToTop();
+          homeNavigation.popToTop();
+        }}
+      >
         <IconCrossX />
       </TouchableOpacity>
     </View>

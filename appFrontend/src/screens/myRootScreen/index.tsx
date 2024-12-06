@@ -28,41 +28,41 @@ const MyRootScreen = () => {
     VersionCheck.getLatestVersion({
       provider: Platform.OS === 'ios' ? 'appStore' : 'playStore',
     }).then((latestVersion) => {
-      if (currentVersionInfo === latestVersion) setVersionText(`v.${latestVersion} 최신버전 입니다`);
+      if (currentVersionInfo === latestVersion)
+        setVersionText(`v.${latestVersion} 최신버전 입니다`);
       else setVersionText(`v.${currentVersionInfo}`);
     });
   }, []);
 
   const renderMenu = ({ text, onPress, versionText }: RenderMenuProps) => (
-    <>
-      <Pressable
-        style={({ pressed }) => ({
-          backgroundColor: pressed ? COLOR.GRAY_E5 : 'transparent',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingHorizontal: 16,
-          height: 53,
-        })}
-        onPress={onPress}
-        disabled={versionText ? true : false}
-      >
-        <FontText text={text} className="leading-21" />
-        {versionText ? (
-          <FontText text={versionText} className="text-12 leading-17" />
-        ) : (
-          <IconRightArrowHead width={14} color={COLOR.GRAY_999} />
-        )}
-      </Pressable>
-      <View className="h-1 bg-gray-beb" />
-    </>
+    <Pressable
+      style={({ pressed }) => ({
+        backgroundColor: pressed ? COLOR.GRAY_E5 : 'transparent',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
+        height: 53,
+        borderBottomColor: COLOR.GRAY_EB,
+        borderBottomWidth: 1,
+      })}
+      onPress={onPress}
+      disabled={versionText ? true : false}
+    >
+      <FontText text={text} className="leading-21" />
+      {versionText ? (
+        <FontText text={versionText} className="text-12 leading-17" />
+      ) : (
+        <IconRightArrowHead width={14} color={COLOR.GRAY_999} />
+      )}
+    </Pressable>
   );
 
   return (
     <SafeAreaView className="flex-1 bg-gray-9f9">
       <View className="pl-16 pt-45 pb-37">
         {isVerifiedUser !== 'success auth' ? (
-          <Pressable
+          <TouchableOpacity
             className="flex-row items-center space-x-6"
             onPress={() => rootNavigation.navigate('AuthStack', { screen: 'Landing' })}
           >
@@ -73,7 +73,7 @@ const MyRootScreen = () => {
               strokeWidth={1.2}
               color={COLOR.BASIC_BLACK}
             />
-          </Pressable>
+          </TouchableOpacity>
         ) : (
           <>
             <TouchableOpacity

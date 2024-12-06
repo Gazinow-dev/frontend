@@ -45,8 +45,11 @@ const SaveNewRoute = () => {
   const { mutate, isLoading } = useSavedSubwayRoute({
     onSuccess: async () => {
       await queryClient.invalidateQueries('getRoads');
-      homeNavigation.navigate('SavedRoutes');
-      showToast('saveRoute');
+      homeNavigation.popToTop();
+      homeNavigation.popToTop();
+      setTimeout(() => {
+        showToast('saveRoute');
+      }, 500);
     },
     onError: async ({ response }) => {
       setIsDuplicatedName(true);

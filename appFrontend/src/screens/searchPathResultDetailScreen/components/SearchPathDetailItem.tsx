@@ -111,7 +111,7 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: SearchPathDetail
 
           <TouchableOpacity
             activeOpacity={0.5}
-            className="flex-row items-center mt-8"
+            className="flex-row items-center mt-8 w-140"
             onPress={() => setIsOpenPathList((prev) => !prev)}
             disabled={data.stations.length < 3}
             hitSlop={20}
@@ -130,10 +130,12 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: SearchPathDetail
               className="text-13 text-[#49454f]"
             />
             {data.stations.length > 2 && (
-              <>
-                <Space width={4} />
-                <IconDownArrowHead width={10} height={10} rotation={isOpenPathList ? 180 : 0} />
-              </>
+              <IconDownArrowHead
+                className="ml-4"
+                width={10}
+                height={10}
+                rotation={isOpenPathList ? 180 : 0}
+              />
             )}
           </TouchableOpacity>
 
