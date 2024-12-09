@@ -10,13 +10,13 @@ import { KeyboardAvoidingView, Platform } from 'react-native';
 import XCircle from '@assets/icons/x-circle-standard.svg';
 import AddNewRouteHeader from './AddNewRouteHeader';
 import { useRoute } from '@react-navigation/native';
-import { useHomeNavigation } from '@/navigation/HomeNavigation';
 import { showToast } from '@/global/utils/toast';
 import cn from 'classname';
+import { useRootNavigation } from '@/navigation/RootNavigation';
 
 const SaveNewRoute = () => {
   const { state: resultData } = useRoute().params as { state: Path };
-  const homeNavigation = useHomeNavigation();
+  const navigation = useRootNavigation();
   const queryClient = useQueryClient();
 
   const [roadName, setRoadName] = useState<string>('');
@@ -43,9 +43,12 @@ const SaveNewRoute = () => {
   }, [resultData]);
 
   const { mutate, isLoading } = useSavedSubwayRoute({
-    onSuccess: async () => {
+    onSuccess: async (id) => {
       await queryClient.invalidateQueries('getRoads');
-      homeNavigation.navigate('SavedRoutes');
+      navigation.navigate('MyPageNavigation', {
+        screen: 'NotiSettingsDetailScreen',
+        params: { myRoutes: { ...resultData, id, roadName }, isRightAfterAddingNewPath: true },
+      });
       showToast('saveRoute');
     },
     onError: async ({ response }) => {

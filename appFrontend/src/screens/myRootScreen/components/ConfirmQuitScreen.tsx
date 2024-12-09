@@ -1,29 +1,67 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FontText } from '@/global/ui';
-import { COLOR } from '@/global/constants';
 import MyTabModal from '@/global/components/MyTabModal';
-import { SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Alert, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/configureStore';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDeleteAccountMutation } from '../apis/hooks';
+import * as Sentry from '@sentry/react-native';
+import { removeEncryptedStorage } from '@/global/utils';
+import { useRootNavigation } from '@/navigation/RootNavigation';
+import { showToast } from '@/global/utils/toast';
 
 const ConfirmQuitScreen = () => {
   const myPageNavigation = useMyPageNavigation();
   const { nickname } = useSelector((state: RootState) => state.auth);
   const [popupVisible, setPopupVisible] = useState(false);
+  const [isSocialLoggedIn, setIsSocialLoggedIn] = useState<string | null>(null);
+  const navigation = useRootNavigation();
+
+  useEffect(() => {
+    const checkSocialLogin = async () => {
+      try {
+        const isSocialLoggedIn = await AsyncStorage.getItem('isSocialLoggedIn');
+        setIsSocialLoggedIn(isSocialLoggedIn);
+      } catch (error) {
+        console.error('AsyncStorage 읽기 실패:', error);
+      }
+    };
+
+    checkSocialLogin();
+  }, []);
+
+  const { deleteAccountMutate } = useDeleteAccountMutation({
+    onSuccess: () => {
+      Sentry.captureMessage('유저가 탈퇴했어요');
+      removeEncryptedStorage('access_token');
+      removeEncryptedStorage('refresh_token');
+      navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
+      showToast('quit');
+    },
+    onError: () => {
+      Alert.alert('회원 탈퇴 오류', '탈퇴에 실패했습니다\n다시 시도해주세요');
+    },
+  });
 
   const handleConfirm = () => {
-    setPopupVisible(false);
-    myPageNavigation.navigate('ConfirmPwScreen');
+    if (isSocialLoggedIn) {
+      deleteAccountMutate();
+    } else {
+      setPopupVisible(false);
+      myPageNavigation.navigate('ConfirmPwScreen');
+    }
   };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 px-16">
         <TouchableOpacity
-          className="flex-row items-center h-56"
+          className="flex-row items-center h-56 w-30"
           onPress={() => myPageNavigation.goBack()}
+          hitSlop={20}
         >
           <IconLeftArrowHead width={24} color="#3F3F46" />
         </TouchableOpacity>

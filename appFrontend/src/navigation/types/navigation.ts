@@ -7,9 +7,23 @@ export type RootStackParamList = {
     params?: { searchType: '출발역' | '도착역' };
   };
   MainBottomTab: { screen: 'homeStack' };
-  NewRouteNavigation: { screen: 'SavedRoutes' };
-  MyPageNavigation: { screen: unknown };
-  SubwayPathDetail: { state?: Path | SubPath[]; pathId?: number | null };
+  NewRouteNavigation: { screen: 'SavedRoutes' | 'Swap' };
+  MyPageNavigation: {
+    screen:
+      | 'NotiSettingsDetailScreen'
+      | 'MyRootScreen'
+      | 'ChangeNickNameScreen'
+      | 'ChangePwScreen'
+      | 'ConfirmPwScreen'
+      | 'ConfirmQuitScreen'
+      | 'ManageAccountScreen'
+      | 'NotiOnScreen'
+      | 'NotiSettingsScreen'
+      | 'SubscribeTermsScreen'
+      | 'PersonalTermsScreen';
+    params?: { myRoutes?: MyRoutesType; isRightAfterAddingNewPath?: boolean };
+  };
+  SubwayPathDetail: { state?: Path | SubPath[]; notificationId?: number | null };
 };
 
 export type AuthStackStackParamList = {
@@ -23,7 +37,7 @@ export type HomeStackParamList = {
   Home: undefined;
   NotiHistory: undefined;
   SubwayPathResult: undefined;
-  SubwayPathDetail: { state?: Path | SubPath[]; pathId?: number | null };
+  SubwayPathDetail: { state?: Path | SubPath[]; notificationId?: number | null };
   SavedRoutes: undefined;
 };
 

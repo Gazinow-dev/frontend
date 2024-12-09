@@ -1,6 +1,6 @@
 import LoadingDots from '@/global/components/animations/LoadingDots';
 import { FontText } from '@/global/ui';
-import { Pressable, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import cn from 'classname';
 
 interface StepButtonProps {
@@ -25,7 +25,7 @@ const StepButton = ({
           <LoadingDots width={160} height={72} />
         </View>
       ) : (
-        <Pressable
+        <TouchableOpacity
           className={cn('rounded-5 items-center justify-center h-48 mb-41', {
             'bg-black-717': backgroundCondition,
             'bg-gray-ddd': !backgroundCondition,
@@ -34,7 +34,7 @@ const StepButton = ({
           disabled={disabled}
         >
           <FontText text={value} className="text-white text-17" fontWeight="600" />
-        </Pressable>
+        </TouchableOpacity>
       )}
     </>
   );

@@ -5,15 +5,15 @@ import { FontText } from '@/global/ui';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
 import { Pressable, View } from 'react-native';
 import IssuesBanner from './IssuesBanner';
-import IconRightArrowHead from '@/assets/icons/right_arrow_head.svg';
 import cn from 'classname';
 
 interface RouteItemProps {
   route: MyRoutesType;
   hasIssues: boolean;
+  isLastItem: boolean;
 }
 
-const RouteItem = ({ route, hasIssues }: RouteItemProps) => {
+const RouteItem = ({ route, hasIssues, isLastItem }: RouteItemProps) => {
   const homeNavigation = useHomeNavigation();
 
   const filteredTotalTime =
@@ -25,38 +25,40 @@ const RouteItem = ({ route, hasIssues }: RouteItemProps) => {
     <Pressable
       style={({ pressed }) => ({
         backgroundColor: pressed ? COLOR.GRAY_E5 : 'transparent',
+        paddingVertical: 28,
         paddingHorizontal: 16,
-        paddingTop: 20,
-        paddingBottom: 23,
         borderTopColor: COLOR.GRAY_EB,
         borderTopWidth: 1,
+        borderBottomLeftRadius: isLastItem ? 15 : 0,
+        borderBottomRightRadius: isLastItem ? 15 : 0,
       })}
       onPress={() => homeNavigation.push('SubwayPathDetail', { state: route })}
     >
-      <View className="flex-row items-center justify-between mb-24">
-        <FontText text={route.roadName} className="text-18 text-black-717" fontWeight="700" />
-        <View
-          className={cn('px-6 py-4 ml-8 rounded-16', {
-            'bg-[#FBDCDA]': hasIssues,
-            'bg-transparent': !hasIssues,
-          })}
-        >
-          <FontText
-            text={hasIssues ? `${filteredTotalTime} 이상 예상` : `평균 ${filteredTotalTime}`}
-            className={cn('text-12 leading-14', {
-              'text-light-red': hasIssues,
-              'text-gray-999': !hasIssues,
+      <View className="gap-6 mb-20">
+        <View className="flex-row">
+          <View
+            className={cn('rounded-16 px-6 py-4 bg-gray-beb', {
+              'bg-[#FBDCDA] mb-2': hasIssues,
             })}
-            fontWeight="500"
-          />
+          >
+            <FontText
+              text={hasIssues ? `${filteredTotalTime} 이상 예상` : `평균 ${filteredTotalTime}`}
+              className={cn('text-12 text-gray-999 leading-14 text-center', {
+                'text-light-red': hasIssues,
+              })}
+              fontWeight="500"
+            />
+          </View>
         </View>
-        <View className="flex-1" />
-
-        <View className="flex-row items-center">
-          <FontText text="세부정보" className="text-13 leading-19 text-gray-999" />
-          <View className="w-4" />
-          <IconRightArrowHead color={COLOR.GRAY_999} />
-        </View>
+        <FontText
+          text={route.roadName}
+          numberOfLines={1}
+          className="text-18 leading-23"
+          fontWeight="500"
+        />
+        {!hasIssues && (
+          <FontText text="올라온 이슈가 없어요" className="text-13 leading-19 text-gray-999" />
+        )}
       </View>
       <SubwaySimplePath
         pathData={route.subPaths}

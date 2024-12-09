@@ -81,10 +81,9 @@ const SearchStationScreen = () => {
       }}
     >
       <View className="py-4 pl-[18.25px] pr-16 mx-16 mt-16 flex-row items-center rounded-28 border border-[#d4d4d4]">
-        <TouchableOpacity hitSlop={10} onPress={() => navigation.goBack()}>
+        <TouchableOpacity hitSlop={20} onPress={() => navigation.goBack()}>
           <IconLeftArrow />
         </TouchableOpacity>
-        <Space width={16} />
         <Input
           value={searchTextValue}
           placeholder={`${stationType}을 검색해보세요`}
@@ -92,9 +91,9 @@ const SearchStationScreen = () => {
           inputMode="search"
           onChangeText={changeSearchText}
           autoFocus
-          className="ml-[18.25px] mr-[31.2px] flex-1 h-36"
+          className="ml-16 mr-[31.2px] flex-1 h-36"
         />
-        <TouchableOpacity onPress={deleteInputText}>
+        <TouchableOpacity hitSlop={20} onPress={deleteInputText}>
           <IconXCircleFill />
         </TouchableOpacity>
       </View>

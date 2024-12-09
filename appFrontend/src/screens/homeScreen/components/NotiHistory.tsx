@@ -1,5 +1,5 @@
 import { FontText } from '@/global/ui';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Pressable, RefreshControl, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
@@ -15,23 +15,29 @@ import { useGetNotiHistoriesQuery } from '@/global/apis/hooks';
 import cn from 'classname';
 import { useMutation } from 'react-query';
 import { updateNotiReadStatus } from '@/global/apis/func';
+import { useFocusEffect } from '@react-navigation/native';
 
 const NotiHistory = () => {
   const navigation = useRootNavigation();
   const dispatch = useAppDispatch();
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
-
   const { data, refetch, fetchNextPage, hasNextPage } = useGetNotiHistoriesQuery();
   const flattenedData = useMemo(() => {
     return data?.pages.flatMap((page) => page.content) ?? [];
   }, [data]);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, []),
+  );
 
   const { mutate } = useMutation(updateNotiReadStatus);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row items-center justify-between p-16">
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={20}>
           <IconLeftArrowHead color="#3F3F46" width={24} />
         </TouchableOpacity>
 
@@ -61,7 +67,7 @@ const NotiHistory = () => {
               onPress={() => {
                 dispatch(getIssueId(item.issueId));
                 navigation.navigate('IssueStack', { screen: 'IssueDetail' });
-                mutate(item.id);
+                if (!item.read) mutate(item.id);
               }}
               key={`${index}_${item.issueId}`}
             >
@@ -76,7 +82,6 @@ const NotiHistory = () => {
                   text={item.notificationBody}
                   className={cn('text-14 leading-21', {
                     'text-gray-999': item.read,
-                    'text-black-717': !item.read,
                   })}
                   numberOfLines={2}
                   fontWeight="600"

@@ -1,9 +1,7 @@
 import { SubwaySimplePath } from '@/global/components';
-import { COLOR } from '@/global/constants';
 import { FontText, Toggle } from '@/global/ui';
 import { Pressable, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
-import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import { useRoute } from '@react-navigation/native';
 import { MyRoutesType } from '@/global/apis/entity';
 import { useEffect, useState } from 'react';
@@ -17,10 +15,14 @@ import {
 } from '../apis/hooks';
 import { rawTimeToReqTimeFormat } from '../util/timeFormatChange';
 import { showToast } from '@/global/utils/toast';
+import { useRootNavigation } from '@/navigation/RootNavigation';
 
 const NotiSettingsDetailScreen = () => {
-  const myPageNavigation = useMyPageNavigation();
-  const { myRoutes } = useRoute().params as { myRoutes: MyRoutesType };
+  const navigation = useRootNavigation();
+  const { myRoutes, isRightAfterAddingNewPath } = useRoute().params as {
+    myRoutes: MyRoutesType;
+    isRightAfterAddingNewPath?: boolean;
+  };
 
   const { pathNotiData } = useGetPathNotiQuery(myRoutes.id);
   const [isPushNotificationOn, setIsPushNotificationOn] = useState<boolean>(false);
@@ -63,7 +65,7 @@ const NotiSettingsDetailScreen = () => {
 
   // 완료 버튼 클릭 시 요청 전송
   const { addPathNotiSettingsMutate } = useAddPathNotiSettingsMutation({
-    onSuccess: async () => myPageNavigation.goBack(),
+    onSuccess: async () => navigation.goBack(),
     onError: async (error) => {
       if (error.response?.status == 400) {
         showToast('saveNotiSettingsFailed');
@@ -71,7 +73,13 @@ const NotiSettingsDetailScreen = () => {
     },
   });
   const { updatePathNotiSettingsMutate } = usePathUpdateNotiSettingsMutation({
-    onSuccess: async () => myPageNavigation.goBack(),
+    onSuccess: async () => {
+      if (isRightAfterAddingNewPath) {
+        navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
+      } else {
+        navigation.goBack();
+      }
+    },
     onError: async (error) => {
       if (error.response?.status == 400) {
         showToast('saveNotiSettingsFailed');
@@ -79,7 +87,7 @@ const NotiSettingsDetailScreen = () => {
     },
   });
   const { disablePathNotiMutate } = useDisablePathNotiMutation({
-    onSuccess: async () => myPageNavigation.goBack(),
+    onSuccess: async () => navigation.goBack(),
   });
 
   const createNotiSettingsBody = (selectedDays: string[], myRoutesId: number) => {
@@ -107,7 +115,7 @@ const NotiSettingsDetailScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row items-center justify-between h-56 px-16">
-        <TouchableOpacity hitSlop={20} onPress={() => myPageNavigation.goBack()}>
+        <TouchableOpacity hitSlop={20} onPress={() => navigation.goBack()}>
           <IconLeftArrowHead color="#3F3F46" width={24} />
         </TouchableOpacity>
         <FontText

@@ -3,7 +3,7 @@ import { FontText } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { SubwaySimplePath } from '@/global/components';
 import { useGetSearchPaths } from '@/global/apis/hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Path } from '@/global/apis/entity';
 import { StationDataTypes } from '@/store/modules';
 import { useNewRouteNavigation } from '@/navigation/NewRouteNavigation';
@@ -44,6 +44,10 @@ const SelectNewRoute = () => {
       ? Math.floor(item.totalTime / 60) + '시간 ' + (item.totalTime % 60) + '분'
       : item.totalTime + '분';
   };
+
+  useEffect(() => {
+    setSelectedRoutePath(null);
+  }, [data]);
 
   return (
     <SafeAreaView className="flex-1 bg-white">

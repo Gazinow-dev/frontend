@@ -10,12 +10,6 @@ import {
   disablePathNotiFetch,
   updatePathNotiSettingsFetch,
   getPathNotiFetch,
-  setPushNotiOnFetch,
-  getPushNotiOnStatusFetch,
-  getMyPathPushNotiOnStatusFetch,
-  setMyPathPushNotiOnFetch,
-  setDetailPushNotiOnFetch,
-  getDetailPushNotiOnStatusFetch,
 } from './func';
 import { AxiosError } from 'axios';
 

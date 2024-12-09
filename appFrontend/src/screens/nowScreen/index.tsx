@@ -98,35 +98,28 @@ const NowScreen = () => {
             <FontText text="NOW" className="text-24 leading-34" fontWeight="600" />
           </View>
           <FlatList
-            ListHeaderComponent={
-              <>
-                {popularIssues && popularIssues?.length > 0 && (
-                  <>
-                    <View
-                      onLayout={(event) => {
-                        const { height } = event.nativeEvent.layout;
-                        setLayoutHeight(height);
-                      }}
-                    >
-                      <View className="pt-24 pb-12 pl-16">
-                        <FontText
-                          text="지금 인기"
-                          className="text-20 leadiing-20"
-                          fontWeight="600"
-                        />
-                      </View>
-                      {popularIssues?.map((item, index) => (
-                        <IssueContainer
-                          key={item.id}
-                          issue={item}
-                          isLastItem={index === popularIssues.length - 1}
-                          isHeader
-                        />
-                      ))}
-                    </View>
-                  </>
-                )}
-              </>
+            ListHeaderComponent={() =>
+              popularIssues &&
+              popularIssues?.length > 0 && (
+                <View
+                  onLayout={(event) => {
+                    const { height } = event.nativeEvent.layout;
+                    setLayoutHeight(height);
+                  }}
+                >
+                  <View className="pt-24 pb-12 pl-16">
+                    <FontText text="지금 인기" className="text-20 leadiing-20" fontWeight="600" />
+                  </View>
+                  {popularIssues?.map((item, index) => (
+                    <IssueContainer
+                      key={item.id}
+                      issue={item}
+                      isLastItem={index === popularIssues.length - 1}
+                      isHeader
+                    />
+                  ))}
+                </View>
+              )
             }
             ref={flatListRef}
             stickyHeaderIndices={issuesList ? [2] : [0]}

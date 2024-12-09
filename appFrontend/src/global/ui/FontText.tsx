@@ -11,7 +11,7 @@ const FontText = ({ text, fontWeight = '400', className, ...props }: FontTextPro
   return (
     <Text
       allowFontScaling
-      className={cn('text-16 text-black-717', className, {
+      className={cn('text-16 tracking-[-0.2px] text-black-717', className, {
         'font-[Pretendard-Regular]': fontWeight === '400',
         'font-[Pretendard-Medium]': fontWeight === '500',
         'font-[Pretendard-SemiBold]': fontWeight === '600',
