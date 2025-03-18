@@ -22,7 +22,15 @@ const SingleIssueContainer = ({ issue }: SingleIssueContainerProps) => {
 
   const { id, title, content, startDate, expireDate, likeCount, commentCount, lines } = issue;
 
-  const isExpired = dayjs().isAfter(dayjs(expireDate));
+  const issueStatus = (() => {
+    const now = dayjs();
+    const start = dayjs(startDate);
+    const expire = dayjs(expireDate);
+
+    if (now.isAfter(expire)) return '종료';
+    if (now.isBefore(start)) return '예정';
+    return '진행';
+  })();
 
   const relatedSubwayLines = useMemo(() => {
     const sortedLines = Array.from(new Set(lines)).sort();
@@ -51,13 +59,15 @@ const SingleIssueContainer = ({ issue }: SingleIssueContainerProps) => {
     >
       <View
         className={cn('bg-[#EB514733] rounded-6 justify-center h-32 w-32', {
-          'bg-gray-beb': isExpired,
+          'bg-gray-beb': issueStatus === '종료',
+          'bg-[#FF841F33]': issueStatus === '예정',
         })}
       >
         <FontText
-          text={isExpired ? '종료' : '진행'}
+          text={issueStatus}
           className={cn('text-12 leading-14 text-light-red text-center', {
-            'text-gray-999': isExpired,
+            'text-gray-999': issueStatus === '종료',
+            'text-[#F57F1F]': issueStatus === '예정',
           })}
           fontWeight="500"
         />
