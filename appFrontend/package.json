@@ -1,6 +1,6 @@
 {
   "name": "gazinow",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "private": true,
   "scripts": {
     "aab:android": "cd android && ./gradlew bundleRelease && cd .. && open android/app/build/outputs/bundle/release",
