@@ -32,6 +32,7 @@ const ChangeNickNameScreen = () => {
       showToast('nickNameChanged');
     },
     onError: (error: AxiosError) => {
+      if (error.response?.status === 422) showToast('postFailureByForbiddenWord');
       setIsNicknameValid(false);
       setErrorMessage(getErrorMessage(error.response?.status));
     },
@@ -73,6 +74,8 @@ const ChangeNickNameScreen = () => {
         return '회원이 존재하지 않습니다. 다시 로그인해주세요.';
       case 400:
         return '7글자 이하의 한글, 알파벳, 숫자를 입력해주세요.\n한글 자모음 단독, 공백 입력 불가';
+      case 422:
+        return '사용할 수 없는 단어가 포함되어 있습니다.';
       default:
         return '닉네임 변경에 실패하였습니다. 다시 시도해주세요.';
     }

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert, Keyboard, Pressable, TouchableOpacity, View } from 'react-native';
+import { Keyboard, Pressable, TouchableOpacity, View } from 'react-native';
 import { Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import IconArrowUp from '@assets/icons/up_arrow.svg';
@@ -8,6 +8,8 @@ import { postComment } from '../api/func';
 import { useMutation, useQueryClient } from 'react-query';
 import { IssueGet } from '@/global/apis/entity';
 import { useAppSelect } from '@/store';
+import { showToast } from '@/global/utils/toast';
+import { AxiosError } from 'axios';
 
 interface CommentInputProps {
   issueData: IssueGet;
@@ -30,8 +32,9 @@ const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: CommentInputP
       queryClient.invalidateQueries('getCommentsOnAIssue');
       queryClient.invalidateQueries('getMyComments');
     },
-    onError: () => {
-      Alert.alert('댓글 등록에 실패했습니다.', '다시 시도해주세요.');
+    onError: (error: AxiosError) => {
+      if (error.response?.status === 422) showToast('postFailureByForbiddenWord');
+      else showToast('commentPostFailed');
     },
   });
 

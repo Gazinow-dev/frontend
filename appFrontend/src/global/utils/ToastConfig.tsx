@@ -12,7 +12,10 @@ export type ToastType =
   | 'saveNotiSettingsFailed'
   | 'reportSuccess'
   | 'alreadyReported'
-  | 'commentDeleted';
+  | 'commentDeleted'
+  | 'commentPostFailed'
+  | 'postFailureByForbiddenWord'
+  | 'likeActionError';
 
 const ToastConfig = {
   logout: () => <Toast text="로그아웃 되었어요" />,
@@ -28,6 +31,13 @@ const ToastConfig = {
   reportSuccess: () => <Toast text="댓글을 신고했어요" />,
   alreadyReported: () => <Toast text="이미 신고한 댓글이에요" isWarning />,
   commentDeleted: () => <Toast text="댓글을 삭제했어요" />,
+  commentPostFailed: () => <Toast text="댓글 등록에 실패했어요. 다시 시도해 주세요." isWarning />,
+  postFailureByForbiddenWord: () => (
+    <Toast text="사용할 수 없는 단어가 포함되어 있어요." isWarning />
+  ),
+  likeActionError: () => (
+    <Toast text="‘도움돼요’를 반영할 수 없어요. 다시 시도해 주세요." isWarning />
+  ),
 };
 
 export default ToastConfig;
