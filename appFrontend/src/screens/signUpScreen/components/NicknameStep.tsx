@@ -53,6 +53,7 @@ const NicknameStep = ({
       if (!!data) setCheckMessage(data.message);
       else if (!!error) {
         if (error.response?.status === 409) setCheckMessage('중복된 닉네임입니다');
+        if (error.response?.status === 422) setCheckMessage('사용할 수 없는 단어가 포함되어 있습니다');
         if (error.response?.status === 400)
           setCheckMessage('영어(소문자,대문자), 한글, 숫자만 입력 가능합니다');
       }

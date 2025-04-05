@@ -56,7 +56,7 @@ const NotiSettings = () => {
           className={cn({
             'text-gray-ebe': !isPushNotiOn,
           })}
-          fontWeight="600"
+          fontWeight="500"
         />
         <Toggle
           isOn={isPushNotiOn!}
@@ -72,7 +72,7 @@ const NotiSettings = () => {
               className={cn({
                 'text-gray-ebe': !isDetailPushNotiOn,
               })}
-              fontWeight="600"
+              fontWeight="500"
             />
 
             <FontText
