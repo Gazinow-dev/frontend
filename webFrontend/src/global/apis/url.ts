@@ -4,7 +4,9 @@ type ApiName =
   | "member_delete_member"
   | "issue_get"
   | "member_reissue"
-  | "like";
+  | "like"
+  | "get_stations_by_line"
+  | "editIssue";
 
 const apiUrls: {
   [key in ApiName]: string;
@@ -15,6 +17,8 @@ const apiUrls: {
   issue_get: "/api/v1/issue/get",
   member_reissue: "/api/v1/member/reissue",
   like: "/api/v1/like",
+  get_stations_by_line: "/api/v1/stations",
+  editIssue: "/api/v1/issue",
 };
 
 export default apiUrls;
