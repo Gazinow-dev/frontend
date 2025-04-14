@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useDeletePostLike, useGetIssue, usePostLike } from "./api/hooks";
+import { useDeletePostLike, usePostLike } from "./api/hooks";
 
 import IconThumsUp from "@assets/icons/thumbs_up.svg?react";
 
@@ -12,6 +12,7 @@ import { debounce } from "lodash";
 import cn from "classnames";
 import localStorageFunc from "@global/utils/localStorage";
 import { STORAGE_ACCESS_KEY } from "@global/constants";
+import { useGetIssue } from "@global/apis/hooks";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);

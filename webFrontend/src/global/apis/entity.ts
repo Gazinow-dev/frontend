@@ -29,7 +29,38 @@ export type StationLine =
   | "수도권 우이신설경전철"
   | "수도권 의정부경전철"
   | "인천 1호선"
-  | "인천 2호선";
+  | "인천 2호선"
+  | null;
+
+/**
+ * 상세 이슈 조회 응답
+ */
+export interface IssueGet {
+  id: number;
+  title: string;
+  content: string;
+  agoTime: string;
+  lines: RawSubwayLineName[];
+  like: boolean;
+  likeCount: number;
+  keyword: IssueKeywords;
+  commentCount: number;
+  commentRestricted: boolean;
+  /**
+   * @format timestamp
+   */
+  startDate: string;
+  /**
+   * @format timestamp
+   */
+  expireDate: string;
+  stationDtos: [
+    {
+      line: RawSubwayLineName;
+      stationName: string;
+    }
+  ];
+}
 
 /**
  * 리프레시 토큰 재발급 응답

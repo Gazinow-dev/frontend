@@ -1,6 +1,6 @@
 import { STORAGE_ACCESS_KEY } from "@global/constants";
 import localStorageFunc from "@global/utils/localStorage";
-import { useGetIssue } from "@pages/issueDetail/api/hooks";
+import { useGetIssue } from "@global/apis/hooks";
 import dayjs from "dayjs";
 import { useNavigate, useParams } from "react-router-dom";
 
