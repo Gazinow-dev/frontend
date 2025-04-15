@@ -13,7 +13,7 @@ const AdminLoginPage = () => {
     password: "",
   });
 
-  const { mutate: loginMutate } = useMutation({
+  const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: postLogin,
     onSuccess: ({ accessToken }) => {
       localStorageFunc.set(STORAGE_ACCESS_KEY, accessToken);
@@ -69,14 +69,14 @@ const AdminLoginPage = () => {
           </div>
           <button
             type="submit"
-            disabled={!form.email || !form.password}
+            disabled={!form.email || !form.password || isPending}
             onClick={(e) => {
               e.preventDefault();
               loginMutate(form);
             }}
             className="w-full px-4 py-2 text-white transition-colors bg-indigo-600 rounded-lg hover:bg-indigo-700"
           >
-            로그인
+            {isPending ? "로그인 중..." : "로그인"}
           </button>
         </form>
       </div>
