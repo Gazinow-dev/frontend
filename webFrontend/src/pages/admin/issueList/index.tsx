@@ -5,7 +5,8 @@ import { useGetAllIssuesQuery } from "./apis/hooks";
 const AdminIssueListPage = () => {
   const navigate = useNavigate();
 
-  const { data, fetchNextPage, hasNextPage } = useGetAllIssuesQuery();
+  const { data, fetchNextPage, hasNextPage, isLoading } =
+    useGetAllIssuesQuery();
 
   const flattenedIssuesListData = useMemo(() => {
     return data?.pages.flatMap((page) => page.content) ?? [];
@@ -26,6 +27,13 @@ const AdminIssueListPage = () => {
     if (loaderRef.current) observer.observe(loaderRef.current);
     return () => observer.disconnect();
   }, [fetchNextPage, hasNextPage]);
+
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        로딩 중...
+      </div>
+    );
 
   return (
     <div className="min-h-screen px-4 py-6 bg-white sm:px-8">

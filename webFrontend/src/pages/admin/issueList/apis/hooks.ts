@@ -5,7 +5,7 @@ import { getAllIssuesFetch } from "./func";
  * 이슈 전체 조회 훅
  */
 export const useGetAllIssuesQuery = () => {
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery({
     queryKey: ["getAllIssues"],
     queryFn: ({ pageParam = 0 }) => getAllIssuesFetch({ page: pageParam }),
     initialPageParam: 0,
@@ -14,5 +14,5 @@ export const useGetAllIssuesQuery = () => {
       return allPages.length;
     },
   });
-  return { data, fetchNextPage, hasNextPage };
+  return { data, fetchNextPage, hasNextPage, isLoading };
 };
