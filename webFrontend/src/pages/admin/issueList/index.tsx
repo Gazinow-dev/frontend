@@ -1,16 +1,31 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetAllIssuesQuery } from "./apis/hooks";
 
 const AdminIssueListPage = () => {
   const navigate = useNavigate();
 
-  // TODO: 무한쿼리
-  const { data } = useGetAllIssuesQuery();
+  const { data, fetchNextPage, hasNextPage } = useGetAllIssuesQuery();
 
   const flattenedIssuesListData = useMemo(() => {
     return data?.pages.flatMap((page) => page.content) ?? [];
   }, [data]);
+
+  const loaderRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (loaderRef.current) observer.observe(loaderRef.current);
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage]);
 
   return (
     <div className="min-h-screen px-4 py-6 bg-white sm:px-8">
@@ -36,17 +51,7 @@ const AdminIssueListPage = () => {
           </li>
         ))}
       </ul>
-
-      {/* <div
-        ref={ref}
-        className="flex items-center justify-center h-12 mt-10 text-sm text-gray-400"
-      > */}
-      {/* {isFetchingNextPage
-          ? "불러오는 중..."
-          : hasNextPage
-          ? "스크롤하여 더 보기"
-          : "모든 게시글을 불러왔습니다."} */}
-      {/* </div>  */}
+      <div ref={loaderRef} className="h-10" />
     </div>
   );
 };
