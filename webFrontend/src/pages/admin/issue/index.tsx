@@ -1,6 +1,7 @@
 import { STORAGE_ACCESS_KEY } from "@global/constants";
 import localStorageFunc from "@global/utils/localStorage";
-import { useGetIssue } from "@global/apis/hooks";
+import { useQuery } from "@tanstack/react-query";
+import { getIssueDetail } from "@global/apis/func";
 import dayjs from "dayjs";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -11,8 +12,9 @@ const AdminIssueDetailPage = () => {
 
   const storageAccessToken = localStorageFunc.get<string>(STORAGE_ACCESS_KEY);
 
-  const { issueData } = useGetIssue({
-    id,
+  const { data: issueData } = useQuery({
+    queryKey: ["issue", id],
+    queryFn: () => getIssueDetail({ id }),
     enabled: !!storageAccessToken && !!id,
   });
 
