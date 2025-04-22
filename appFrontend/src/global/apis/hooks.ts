@@ -1,5 +1,6 @@
 import {
   getNotiHistoryFetch,
+  getPopularIssuesAtMainFetch,
   getPopularIssuesFetch,
   getSavedRoutesFetch,
   getSearchRoutesFetch,
@@ -219,7 +220,7 @@ export const useGetIssuesByLaneQuery = (line: string) => {
 };
 
 /**
- * 이슈 추천순 조회 훅
+ * now탭 인기 이슈 조회 훅
  */
 export const useGetPopularIssuesQuery = () => {
   const { data, refetch, isLoading } = useQuery(['getPopularIssues'], getPopularIssuesFetch);
@@ -227,6 +228,17 @@ export const useGetPopularIssuesQuery = () => {
     popularIssues: data,
     popularIssuesRefetch: refetch,
     isPopularIssuesLoading: isLoading,
+  };
+};
+
+/**
+ * 홈화면 캐러셀 인기 이슈 조회 훅
+ */
+export const useGetPopularIssuesAtMain = () => {
+  const { data, refetch } = useQuery(['getPopularIssuesAtMain'], getPopularIssuesAtMainFetch);
+  return {
+    popularIssues: data,
+    popularIssuesRefetch: refetch,
   };
 };
 

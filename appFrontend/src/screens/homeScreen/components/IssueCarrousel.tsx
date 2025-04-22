@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NativeScrollEvent, NativeSyntheticEvent, Pressable, ScrollView, View } from 'react-native';
-import { useGetPopularIssuesQuery } from '@/global/apis/hooks';
+import { useGetPopularIssuesAtMain } from '@/global/apis/hooks';
 import { FontText } from '@/global/ui';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { useAppDispatch } from '@/store';
@@ -19,8 +19,7 @@ const IssueCarrousel = ({ isRefreshing, setIsRefreshing }: IssueCarrouselProps) 
   const navigation = useRootNavigation();
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
-  const { popularIssues, popularIssuesRefetch, isPopularIssuesLoading } =
-    useGetPopularIssuesQuery();
+  const { popularIssues, popularIssuesRefetch } = useGetPopularIssuesAtMain();
   const [itemWidth, setItemWidth] = useState<number>(0);
   const scrollViewRef = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
