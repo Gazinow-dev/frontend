@@ -3,7 +3,7 @@ import cn from 'classname';
 import { FontText, Input } from '@/global/ui';
 import { useCallback, useState } from 'react';
 import { View } from 'react-native';
-import { useCheckNickname, useSighUp } from '../apis/hooks';
+import { useCheckNickname, useSignUp } from '../apis/hooks';
 import { debounce } from 'lodash';
 import { useAppDispatch } from '@/store';
 import { getAuthorizationState, saveUserInfo } from '@/store/modules';
@@ -36,7 +36,7 @@ const NicknameStep = ({
 
   const { mutate: sendFirebaseTokenMutate } = useMutation(sendFirebaseTokenFetch);
 
-  const { signUpMutate } = useSighUp({
+  const { signUpMutate } = useSignUp({
     onSuccess: async ({ email, nickName, accessToken, refreshToken }) => {
       dispatch(saveUserInfo({ email, nickname: nickName }));
       dispatch(getAuthorizationState('success auth'));
@@ -53,7 +53,8 @@ const NicknameStep = ({
       if (!!data) setCheckMessage(data.message);
       else if (!!error) {
         if (error.response?.status === 409) setCheckMessage('중복된 닉네임입니다');
-        if (error.response?.status === 422) setCheckMessage('사용할 수 없는 단어가 포함되어 있습니다');
+        if (error.response?.status === 422)
+          setCheckMessage('사용할 수 없는 단어가 포함되어 있습니다');
         if (error.response?.status === 400)
           setCheckMessage('영어(소문자,대문자), 한글, 숫자만 입력 가능합니다');
       }

@@ -50,9 +50,9 @@ export const useCheckNickname = ({
 };
 
 /**
- * 닉네임 중복 확인 axios
+ * 회원가입 axios
  */
-export const useSighUp = ({ onSuccess }: { onSuccess: (data: SignUpResponse) => void }) => {
+export const useSignUp = ({ onSuccess }: { onSuccess: (data: SignUpResponse) => void }) => {
   const { mutate: signUpMutate } = useMutation(signUpFetch, {
     onSuccess,
   });
