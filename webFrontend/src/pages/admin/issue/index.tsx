@@ -25,6 +25,8 @@ const AdminIssueDetailPage = () => {
     "YYYY.MM.DD HH:mm"
   );
 
+  const sortedIssueDataLines = issueData?.lines.sort();
+
   const goToIssueList = () => navigate("/admin/issueList");
 
   if (!issueData) return null;
@@ -64,9 +66,8 @@ const AdminIssueDetailPage = () => {
 
       <section className="py-4 border-b">
         <h2 className="mb-1 text-sm font-semibold text-gray-700">노선</h2>
-        {issueData.lines && issueData.lines.length > 0 ? (
           <ul className="flex flex-wrap gap-2">
-            {issueData.lines.sort().map((line) => (
+          {sortedIssueDataLines?.map((line) => (
               <li
                 key={line}
                 className="px-2 py-1 text-sm text-gray-800 bg-gray-100 rounded-full"
@@ -75,9 +76,6 @@ const AdminIssueDetailPage = () => {
               </li>
             ))}
           </ul>
-        ) : (
-          <p className="text-sm text-gray-500">노선 정보 없음</p>
-        )}
       </section>
 
       <section className="py-4">
