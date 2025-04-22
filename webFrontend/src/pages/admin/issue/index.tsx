@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getIssueDetail } from "@global/apis/func";
 import dayjs from "dayjs";
 import { useNavigate, useParams } from "react-router-dom";
+import { useMemo } from "react";
 
 const AdminIssueDetailPage = () => {
   const navigate = useNavigate();
@@ -18,11 +19,14 @@ const AdminIssueDetailPage = () => {
     enabled: !!storageAccessToken && !!id,
   });
 
-  const formatedStartDate = dayjs(issueData?.startDate).format(
-    "YYYY.MM.DD HH:mm"
+  const formattedStartDate = useMemo(
+    () => dayjs(issueData?.startDate).format("YYYY.MM.DD HH:mm"),
+    [issueData?.startDate]
   );
-  const formatedExpireDate = dayjs(issueData?.expireDate).format(
-    "YYYY.MM.DD HH:mm"
+
+  const formattedExpireDate = useMemo(
+    () => dayjs(issueData?.expireDate).format("YYYY.MM.DD HH:mm"),
+    [issueData?.expireDate]
   );
 
   const sortedIssueDataLines = issueData?.lines.sort();
@@ -53,7 +57,7 @@ const AdminIssueDetailPage = () => {
       <section className="py-4 border-b">
         <h2 className="mb-1 text-sm font-semibold text-gray-700">기간</h2>
         <p className="text-sm text-gray-800">
-          {formatedStartDate} ~ {formatedExpireDate}
+          {formattedStartDate} ~ {formattedExpireDate}
         </p>
       </section>
 
@@ -66,16 +70,16 @@ const AdminIssueDetailPage = () => {
 
       <section className="py-4 border-b">
         <h2 className="mb-1 text-sm font-semibold text-gray-700">노선</h2>
-          <ul className="flex flex-wrap gap-2">
+        <ul className="flex flex-wrap gap-2">
           {sortedIssueDataLines?.map((line) => (
-              <li
-                key={line}
-                className="px-2 py-1 text-sm text-gray-800 bg-gray-100 rounded-full"
-              >
-                {line}
-              </li>
-            ))}
-          </ul>
+            <li
+              key={line}
+              className="px-2 py-1 text-sm text-gray-800 bg-gray-100 rounded-full"
+            >
+              {line}
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="py-4">
