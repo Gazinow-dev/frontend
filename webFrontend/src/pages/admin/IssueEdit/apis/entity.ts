@@ -10,14 +10,7 @@ export type EditIssueBody = {
   startDate: string;
   expireDate: string;
   keyword: string;
-  issueUpdateStationList: [
-    {
-      line: string;
-      startStationCode: number;
-      endStationCode: number;
-      direction?: string;
-    }
-  ];
+  issueUpdateStationList: IssueLineAndStations[];
 };
 
 /**
@@ -38,6 +31,7 @@ export type GetStationsByLineType = {
  */
 export type IssueLineAndStations = {
   line: RawSubwayLineName;
-  startStation: number;
-  endStation: number;
+  startStationCode: number;
+  endStationCode: number;
+  direction?: string;
 };

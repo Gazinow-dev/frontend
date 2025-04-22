@@ -76,6 +76,7 @@ export interface IssueGet {
     {
       line: RawSubwayLineName;
       stationName: string;
+      issueStationCode: number;
     }
   ];
 }
