@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getIssueDetail } from "@global/apis/func";
 import dayjs from "dayjs";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 const AdminIssueDetailPage = () => {
   const navigate = useNavigate();
@@ -12,6 +12,15 @@ const AdminIssueDetailPage = () => {
   const { id } = useParams() as { id: string };
 
   const storageAccessToken = localStorageFunc.get<string>(STORAGE_ACCESS_KEY);
+
+  useEffect(() => {
+    if (!storageAccessToken) {
+      const confirmed = window.confirm("로그인이 필요합니다.");
+      if (confirmed) {
+        navigate("/admin/login");
+      }
+    }
+  }, [storageAccessToken, navigate]);
 
   const { data: issueData } = useQuery({
     queryKey: ["issue", id],
@@ -31,7 +40,7 @@ const AdminIssueDetailPage = () => {
 
   const sortedIssueDataLines = issueData?.lines.sort();
 
-  const goToIssueList = () => navigate("/admin/issueList");
+  const goBackToIssueList = () => navigate("/admin/issueList");
 
   if (!issueData) return null;
 
@@ -39,7 +48,7 @@ const AdminIssueDetailPage = () => {
     <div className="max-w-2xl min-h-screen px-4 pb-24 mx-auto bg-white sm:px-8">
       <button
         className="sticky top-0 w-full py-4 mb-4 text-indigo-600 bg-white text-start hover:underline"
-        onClick={goToIssueList}
+        onClick={goBackToIssueList}
       >
         ← 목록으로
       </button>

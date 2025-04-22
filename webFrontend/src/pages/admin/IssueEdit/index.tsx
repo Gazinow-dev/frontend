@@ -7,7 +7,7 @@ import {
 import { STORAGE_ACCESS_KEY } from "@global/constants";
 import localStorageFunc from "@global/utils/localStorage";
 import dayjs from "dayjs";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetStationsByLine } from "./apis/hooks";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -21,6 +21,15 @@ const AdminIssueEditPage = () => {
   const { id } = useParams() as { id: string };
 
   const storageAccessToken = localStorageFunc.get<string>(STORAGE_ACCESS_KEY);
+
+  useEffect(() => {
+    if (!storageAccessToken) {
+      const confirmed = window.confirm("로그인이 필요합니다.");
+      if (confirmed) {
+        navigate("/admin/login");
+      }
+    }
+  }, [storageAccessToken, navigate]);
 
   const { data: issueData } = useQuery({
     queryKey: ["issue", id],
