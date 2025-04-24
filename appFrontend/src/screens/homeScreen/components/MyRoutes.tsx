@@ -8,6 +8,7 @@ import { NonLoggedIn, RouteItem, NoRoutes } from '.';
 import { useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
+import RetryLoad from '@/global/components/RetryLoad';
 
 interface MyRoutesProps {
   isVerifiedUser: 'success auth' | 'fail auth' | 'yet';
@@ -19,7 +20,7 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: MyRoutesPro
   const navigation = useRootNavigation();
   const homeNavigation = useHomeNavigation();
 
-  const { myRoutes, getSavedRoutesRefetch } = useGetSavedRoutesQuery();
+  const { myRoutes, getSavedRoutesRefetch, isSavedRoutesError } = useGetSavedRoutesQuery();
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -41,6 +42,13 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: MyRoutesPro
     }
     if (myRoutes && myRoutes.length < 1) {
       return <NoRoutes />;
+    }
+    if (isSavedRoutesError) {
+      return (
+        <View className="border-t-1 border-gray-beb">
+          <RetryLoad retryFn={getSavedRoutesRefetch} />
+        </View>
+      );
     }
     return myRoutes?.map((myRoute, index) => {
       const hasIssues = myRoute.subPaths.some((subPath) => !!subPath.issueSummary.length);
