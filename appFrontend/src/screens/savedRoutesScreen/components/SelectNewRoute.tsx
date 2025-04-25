@@ -58,62 +58,69 @@ const SelectNewRoute = () => {
             <LoadingCircle width={40} height={40} />
           </View>
         )}
-        <ScrollView>
-          {data?.paths.map((item) => (
-            <View key={item.firstStartStation + item.totalTime}>
-              <View className="h-1 bg-gray-beb" />
-              <Pressable
-                style={({ pressed }) => ({
-                  backgroundColor: pressed ? COLOR.GRAY_E5 : 'transparent',
-                  paddingHorizontal: 16,
-                  paddingTop: 20,
-                  paddingBottom: 8,
-                })}
-                onPress={() => {
-                  setSelectedRoutePath(item);
-                  newRouteNavigation.push('Detail', {
-                    state: item,
-                  });
-                }}
-              >
-                <View className="flex-row items-center justify-between mb-8">
-                  <View className="gap-4">
-                    <FontText
-                      text="평균 소요시간"
-                      className="text-11 text-gray-999"
-                      fontWeight="600"
-                    />
-                    <FontText text={pathTime(item)} className="text-20" fontWeight="600" />
-                  </View>
+        {!data && !isLoading && (
+          <View className="items-center justify-center flex-1 bg-white">
+            <FontText text="검색 결과가 없어요" className="text-gray-999" />
+          </View>
+        )}
+        {data && (
+          <ScrollView>
+            {data.paths.map((item) => (
+              <View key={item.firstStartStation + item.totalTime}>
+                <View className="h-1 bg-gray-beb" />
+                <Pressable
+                  style={({ pressed }) => ({
+                    backgroundColor: pressed ? COLOR.GRAY_E5 : 'transparent',
+                    paddingHorizontal: 16,
+                    paddingTop: 20,
+                    paddingBottom: 8,
+                  })}
+                  onPress={() => {
+                    setSelectedRoutePath(item);
+                    newRouteNavigation.push('Detail', {
+                      state: item,
+                    });
+                  }}
+                >
+                  <View className="flex-row items-center justify-between mb-8">
+                    <View className="gap-4">
+                      <FontText
+                        text="평균 소요시간"
+                        className="text-11 text-gray-999"
+                        fontWeight="600"
+                      />
+                      <FontText text={pathTime(item)} className="text-20" fontWeight="600" />
+                    </View>
 
-                  <TouchableOpacity
-                    className={cn(
-                      'w-24 h-24 rounded-full border-1 items-center justify-center border-gray-ebe',
-                      {
-                        'border-light-blue': selectedRoutePath === item,
-                      },
-                    )}
-                    onPress={() => {
-                      setSelectedRoutePath(item);
-                    }}
-                    hitSlop={20}
-                  >
-                    {selectedRoutePath === item && (
-                      <View className="rounded-full w-11 h-11 bg-light-blue" />
-                    )}
-                  </TouchableOpacity>
-                </View>
-                <SubwaySimplePath
-                  pathData={item.subPaths}
-                  arriveStationName={item.lastEndStation}
-                  betweenPathMargin={24}
-                  isHideIsuue
-                />
-              </Pressable>
-            </View>
-          ))}
-          {!isLoading && <View className="h-1 bg-gray-beb" />}
-        </ScrollView>
+                    <TouchableOpacity
+                      className={cn(
+                        'w-24 h-24 rounded-full border-1 items-center justify-center border-gray-ebe',
+                        {
+                          'border-light-blue': selectedRoutePath === item,
+                        },
+                      )}
+                      onPress={() => {
+                        setSelectedRoutePath(item);
+                      }}
+                      hitSlop={20}
+                    >
+                      {selectedRoutePath === item && (
+                        <View className="rounded-full w-11 h-11 bg-light-blue" />
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                  <SubwaySimplePath
+                    pathData={item.subPaths}
+                    arriveStationName={item.lastEndStation}
+                    betweenPathMargin={24}
+                    isHideIsuue
+                  />
+                </Pressable>
+              </View>
+            ))}
+            {!isLoading && <View className="h-1 bg-gray-beb" />}
+          </ScrollView>
+        )}
       </View>
 
       <TouchableOpacity
