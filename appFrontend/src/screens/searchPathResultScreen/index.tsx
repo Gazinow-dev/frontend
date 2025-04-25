@@ -57,52 +57,62 @@ const SearchPathResultScreen = () => {
         </TouchableOpacity>
         <SwapStation selectedStation={selectedStationRedux} />
       </View>
-
-      <View className="px-16 bg-white py-14 border-b-1 border-gray-beb">
-        <FontText
-          text={'오늘 ' + dayjs().format('A HH시 mm분') + ' 기준'}
-          className="text-purple-54f"
-        />
-      </View>
-      <ScrollView style={!isLoading && { backgroundColor: COLOR.GRAY_F2 }}>
-        {isLoading && (
-          <View className="items-center justify-center h-full">
-            <LoadingCircle width={40} height={40} />
+      {isLoading && (
+        <View className="items-center justify-center flex-1">
+          <LoadingCircle width={40} height={40} />
+        </View>
+      )}
+      {!data && !isLoading && (
+        <View className="items-center justify-center flex-1 bg-white">
+          <FontText text="검색 결과가 없어요" className="text-gray-999" />
+        </View>
+      )}
+      {data && (
+        <>
+          <View className="px-16 bg-white py-14 border-b-1 border-gray-beb">
+            <FontText
+              text={'오늘 ' + dayjs().format('A HH시 mm분') + ' 기준'}
+              className="text-purple-54f"
+            />
           </View>
-        )}
-        {data &&
-          data.paths.map((item, idx) => (
-            <Pressable
-              key={item.firstStartStation + item.subPaths.length + idx}
-              style={({ pressed }) => ({
-                backgroundColor: pressed ? COLOR.GRAY_E5 : 'white',
-                paddingHorizontal: 18,
-                paddingBottom: 24,
-                paddingTop: 20,
-                borderBottomColor: COLOR.GRAY_EB,
-                borderBottomWidth: 1,
-              })}
-              onPress={() => homeNavigation.push('SubwayPathDetail', { state: item })}
-            >
-              <View className="flex-row items-center justify-between">
-                <FontText text="평균 소요시간" className="text-11 text-gray-999" fontWeight="600" />
-                <View className="flex-row items-center">
-                  <FontText text="세부정보" className="mr-4 text-13 text-gray-999" />
-                  <IconRightArrowHead color={COLOR.GRAY_999} />
+          <ScrollView style={!isLoading && { backgroundColor: COLOR.GRAY_F2 }}>
+            {data.paths.map((item, idx) => (
+              <Pressable
+                key={item.firstStartStation + item.subPaths.length + idx}
+                style={({ pressed }) => ({
+                  backgroundColor: pressed ? COLOR.GRAY_E5 : 'white',
+                  paddingHorizontal: 18,
+                  paddingBottom: 24,
+                  paddingTop: 20,
+                  borderBottomColor: COLOR.GRAY_EB,
+                  borderBottomWidth: 1,
+                })}
+                onPress={() => homeNavigation.push('SubwayPathDetail', { state: item })}
+              >
+                <View className="flex-row items-center justify-between">
+                  <FontText
+                    text="평균 소요시간"
+                    className="text-11 text-gray-999"
+                    fontWeight="600"
+                  />
+                  <View className="flex-row items-center">
+                    <FontText text="세부정보" className="mr-4 text-13 text-gray-999" />
+                    <IconRightArrowHead color={COLOR.GRAY_999} />
+                  </View>
                 </View>
-              </View>
-              <FontText text={pathTime(item)} className="mt-4 mb-16 text-20" fontWeight="600" />
+                <FontText text={pathTime(item)} className="mt-4 mb-16 text-20" fontWeight="600" />
 
-              {/* 지하철 경로 UI */}
-              <SubwaySimplePath
-                pathData={item.subPaths}
-                arriveStationName={item.lastEndStation}
-                betweenPathMargin={24}
-              />
-              <IssuesBanner subPaths={item.subPaths} />
-            </Pressable>
-          ))}
-      </ScrollView>
+                <SubwaySimplePath
+                  pathData={item.subPaths}
+                  arriveStationName={item.lastEndStation}
+                  betweenPathMargin={24}
+                />
+                <IssuesBanner subPaths={item.subPaths} />
+              </Pressable>
+            ))}
+          </ScrollView>
+        </>
+      )}
     </SafeAreaView>
   );
 };

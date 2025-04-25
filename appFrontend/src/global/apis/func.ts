@@ -242,7 +242,7 @@ export const getIssuesByLaneFetch = async (params: { page: number; line: string 
 };
 
 /**
- * 이슈 추천순 조회 axios
+ * now탭 인기 이슈 조회 axios
  */
 export const getPopularIssuesFetch = async () => {
   try {
@@ -251,7 +251,25 @@ export const getPopularIssuesFetch = async () => {
   } catch (err) {
     const error = err as AxiosError;
     Sentry.captureException({
-      target: '도움돼요 순 이슈 조회',
+      target: 'now탭 인기 이슈 조회',
+      input: { request: error.request },
+      output: { status: error.response?.status, error: error.message, response: error.response },
+    });
+    throw error;
+  }
+};
+
+/**
+ * 홈화면 캐러셀 인기 이슈 조회 axios
+ */
+export const getPopularIssuesAtMainFetch = async () => {
+  try {
+    const res = await publicServiceAPI.get<{ data: IssueGet[] }>(`/api/v1/issue/main-carousel`);
+    return res.data.data;
+  } catch (err) {
+    const error = err as AxiosError;
+    Sentry.captureException({
+      target: '홈화면 캐러셀 인기 이슈 조회',
       input: { request: error.request },
       output: { status: error.response?.status, error: error.message, response: error.response },
     });

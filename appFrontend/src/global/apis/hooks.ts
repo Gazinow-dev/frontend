@@ -1,5 +1,6 @@
 import {
   getNotiHistoryFetch,
+  getPopularIssuesAtMainFetch,
   getPopularIssuesFetch,
   getSavedRoutesFetch,
   getSearchRoutesFetch,
@@ -165,11 +166,15 @@ export const useGetSavedRoutesQuery = ({
   onSuccess,
 }: { onSuccess?: (data: MyRoutesType[]) => void } = {}) => {
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
-  const { data, refetch } = useQuery(['getRoads'], getSavedRoutesFetch, {
+  const { data, refetch, isError } = useQuery(['getRoads'], getSavedRoutesFetch, {
     enabled: isVerifiedUser === 'success auth',
     onSuccess,
   });
-  return { myRoutes: data, getSavedRoutesRefetch: refetch };
+  return {
+    myRoutes: data,
+    getSavedRoutesRefetch: refetch,
+    isSavedRoutesError: isError,
+  };
 };
 
 /**
@@ -219,7 +224,7 @@ export const useGetIssuesByLaneQuery = (line: string) => {
 };
 
 /**
- * 이슈 추천순 조회 훅
+ * now탭 인기 이슈 조회 훅
  */
 export const useGetPopularIssuesQuery = () => {
   const { data, refetch, isLoading } = useQuery(['getPopularIssues'], getPopularIssuesFetch);
@@ -231,10 +236,21 @@ export const useGetPopularIssuesQuery = () => {
 };
 
 /**
+ * 홈화면 캐러셀 인기 이슈 조회 훅
+ */
+export const useGetPopularIssuesAtMain = () => {
+  const { data, refetch } = useQuery(['getPopularIssuesAtMain'], getPopularIssuesAtMainFetch);
+  return {
+    popularIssues: data,
+    popularIssuesRefetch: refetch,
+  };
+};
+
+/**
  * 이슈 노선별 조회 훅
  */
 export const useGetNotiHistoriesQuery = () => {
-  const { data, refetch, fetchNextPage, hasNextPage } = useInfiniteQuery(
+  const { data, refetch, fetchNextPage, hasNextPage, isError } = useInfiniteQuery(
     'getNotiHistoryFetch',
     ({ pageParam = 0 }) => getNotiHistoryFetch(pageParam),
     {
@@ -244,5 +260,5 @@ export const useGetNotiHistoriesQuery = () => {
       },
     },
   );
-  return { data, refetch, fetchNextPage, hasNextPage };
+  return { data, refetch, fetchNextPage, hasNextPage, isError };
 };

@@ -10,6 +10,7 @@ import MyTabModal from '@/global/components/MyTabModal';
 import { useQueryClient } from 'react-query';
 import { SubwaySimplePath } from '@/global/components';
 import { showToast } from '@/global/utils/toast';
+import RetryLoad from '@/global/components/RetryLoad';
 
 const SavedRoutesScreen = () => {
   const navigation = useRootNavigation();
@@ -25,7 +26,7 @@ const SavedRoutesScreen = () => {
     },
   });
 
-  const { myRoutes } = useGetSavedRoutesQuery();
+  const { myRoutes, getSavedRoutesRefetch, isSavedRoutesError } = useGetSavedRoutesQuery();
 
   const showDeletePopup = (id: number) => {
     setRouteToDelete(id);
@@ -57,22 +58,34 @@ const SavedRoutesScreen = () => {
       </View>
       <ScrollView>
         <View className="mx-16 bg-white rounded-15">
-          {myRoutes?.map((item) => (
-            <View className="px-16 pt-20 pb-8 border-b-1 border-gray-beb" key={item.id}>
-              <View className="flex-row items-center justify-between mb-24">
-                <FontText text={item.roadName} className="text-18 leading-23" fontWeight="600" />
-                <TouchableOpacity onPress={() => showDeletePopup(item.id)} hitSlop={20}>
-                  <FontText text="삭제" className="text-13 text-gray-999 leading-19" />
-                </TouchableOpacity>
-              </View>
-              <SubwaySimplePath
-                pathData={item.subPaths}
-                arriveStationName={item.lastEndStation}
-                betweenPathMargin={24}
-                isHideIsuue
-              />
+          {isSavedRoutesError ? (
+            <View className="border-b-1 border-gray-beb">
+              <RetryLoad retryFn={getSavedRoutesRefetch} />
             </View>
-          ))}
+          ) : (
+            <>
+              {myRoutes?.map((item) => (
+                <View className="px-16 pt-20 pb-8 border-b-1 border-gray-beb" key={item.id}>
+                  <View className="flex-row items-center justify-between mb-24">
+                    <FontText
+                      text={item.roadName}
+                      className="text-18 leading-23"
+                      fontWeight="600"
+                    />
+                    <TouchableOpacity onPress={() => showDeletePopup(item.id)} hitSlop={20}>
+                      <FontText text="삭제" className="text-13 text-gray-999 leading-19" />
+                    </TouchableOpacity>
+                  </View>
+                  <SubwaySimplePath
+                    pathData={item.subPaths}
+                    arriveStationName={item.lastEndStation}
+                    betweenPathMargin={24}
+                    isHideIsuue
+                  />
+                </View>
+              ))}
+            </>
+          )}
           <Pressable
             style={({ pressed }) => ({
               backgroundColor: pressed ? COLOR.GRAY_E5 : COLOR.WHITE,
