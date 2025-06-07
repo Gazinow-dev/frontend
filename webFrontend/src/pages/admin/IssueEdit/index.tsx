@@ -93,11 +93,19 @@ const AdminIssueEditPage = () => {
     (line) => !issueLinesStations.map((item) => item.line).includes(line)
   );
 
-  const goBackToIssueList = () => {
+  const handleNavigateWithConfirm = (destination: string) => {
     const confirmed = window.confirm(
       "현재 수정 중인 내용이 사라집니다. 계속하시겠어요?"
     );
-    if (confirmed) navigate("/admin/issueList");
+    if (confirmed) navigate(destination);
+  };
+
+  const goBackToIssueList = () => {
+    handleNavigateWithConfirm("/admin/issueList");
+  };
+
+  const cancelBtnHandler = () => {
+    handleNavigateWithConfirm(`/admin/issue/${id}`);
   };
 
   if (!issueData) return null;
@@ -306,12 +314,7 @@ const AdminIssueEditPage = () => {
         <div className="flex max-w-2xl gap-4 px-4 py-3 mx-auto sm:px-8">
           <button
             className="w-full px-4 py-2 text-white transition-colors bg-gray-400 rounded-lg hover:bg-gray-500"
-            onClick={() => {
-              const confirmed = window.confirm(
-                "현재 수정 중인 내용이 사라집니다. 계속하시겠어요?"
-              );
-              if (confirmed) navigate(`/admin/issue/${id}`);
-            }}
+            onClick={cancelBtnHandler}
           >
             취소
           </button>
