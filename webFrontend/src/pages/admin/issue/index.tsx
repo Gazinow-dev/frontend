@@ -28,14 +28,16 @@ const AdminIssueDetailPage = () => {
     enabled: !!storageAccessToken && !!id,
   });
 
-  const formattedStartDate = useMemo(
-    () => dayjs(issueData?.startDate).format("YYYY.MM.DD HH:mm"),
-    [issueData?.startDate]
-  );
-
-  const formattedExpireDate = useMemo(
-    () => dayjs(issueData?.expireDate).format("YYYY.MM.DD HH:mm"),
-    [issueData?.expireDate]
+  const formattedTime = useMemo(
+    () => ({
+      start: issueData?.startDate
+        ? dayjs(issueData.startDate).format("YYYY.MM.DD HH:mm")
+        : "",
+      expire: issueData?.expireDate
+        ? dayjs(issueData.expireDate).format("YYYY.MM.DD HH:mm")
+        : "",
+    }),
+    [issueData?.startDate, issueData?.expireDate]
   );
 
   const sortedIssueDataLines = issueData?.lines.sort();
@@ -77,7 +79,7 @@ const AdminIssueDetailPage = () => {
       <section className="py-4 border-b">
         <h2 className="mb-1 text-sm font-semibold text-gray-700">기간</h2>
         <p className="text-sm text-gray-800">
-          {formattedStartDate} ~ {formattedExpireDate}
+          {formattedTime.start} ~ {formattedTime.expire}
         </p>
       </section>
 

@@ -89,16 +89,6 @@ const AdminIssueEditPage = () => {
     });
   };
 
-  const formattedStartDate = useMemo(
-    () => dayjs(startDate).format("YYYY-MM-DDTHH:mm"),
-    [startDate]
-  );
-
-  const formattedExpireDate = useMemo(
-    () => dayjs(expireDate).format("YYYY-MM-DDTHH:mm"),
-    [expireDate]
-  );
-
   const filteredLines = STATION_LINE.filter(
     (line) => !issueLinesStations.map((item) => item.line).includes(line)
   );
@@ -155,7 +145,7 @@ const AdminIssueEditPage = () => {
         <input
           type="datetime-local"
           className="w-full px-3 py-2 text-sm border rounded-lg"
-          value={formattedStartDate}
+          defaultValue={startDate}
           onChange={(e) => setStartDate(e.target.value)}
         />
       </div>
@@ -167,7 +157,7 @@ const AdminIssueEditPage = () => {
         <input
           type="datetime-local"
           className="w-full px-3 py-2 text-sm border rounded-lg"
-          value={formattedExpireDate}
+          defaultValue={expireDate}
           onChange={(e) => setExpireDate(e.target.value)}
         />
       </div>
