@@ -1,19 +1,86 @@
 import {
   ISSUE_KEYWORDS,
+  IssueGet,
   IssueKeywords,
   RawSubwayLineName,
   STATION_LINE,
 } from "@global/apis/entity";
 import { STORAGE_ACCESS_KEY } from "@global/constants";
 import localStorageFunc from "@global/utils/localStorage";
-import dayjs from "dayjs";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetStationsByLine } from "./apis/hooks";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { editIssue } from "./apis/func";
-import { IssueLineAndStations } from "./apis/entity";
+import { EditIssueBody } from "./apis/entity";
 import { getIssueDetail } from "@global/apis/func";
+
+type Action =
+  | { type: "INIT"; payload: IssueGet }
+  | { type: "TITLE"; payload: string }
+  | { type: "CONTENT"; payload: string }
+  | { type: "START-DATE"; payload: string }
+  | { type: "EXPIRE-DATE"; payload: string }
+  | { type: "KEYWORD"; payload: IssueKeywords }
+  | { type: "DELETE-LINE"; payload: RawSubwayLineName }
+  | { type: "ADD-LINE"; payload: RawSubwayLineName }
+  | {
+      type: "SET-START-STATION";
+      payload: { line: RawSubwayLineName; stationCode: number };
+    }
+  | {
+      type: "SET-END-STATION";
+      payload: { line: RawSubwayLineName; stationCode: number };
+    };
+
+const reducer = (editedIssue: EditIssueBody, { type, payload }: Action) => {
+  switch (type) {
+    case "INIT":
+      return editedIssue;
+    case "TITLE":
+      return { ...editedIssue, title: payload };
+    case "CONTENT":
+      return { ...editedIssue, content: payload };
+    case "START-DATE":
+      return { ...editedIssue, startDate: payload };
+    case "EXPIRE-DATE":
+      return { ...editedIssue, expireDate: payload };
+    case "KEYWORD":
+      return { ...editedIssue, keyword: payload };
+    case "DELETE-LINE":
+      return {
+        ...editedIssue,
+        issueUpdateStationList: editedIssue.issueUpdateStationList.filter(
+          (item) => item.line !== payload
+        ),
+      };
+    case "ADD-LINE":
+      return {
+        ...editedIssue,
+        issueUpdateStationList: [
+          ...editedIssue.issueUpdateStationList,
+          { line: payload, startStationCode: 0, endStationCode: 0 },
+        ],
+      };
+    case "SET-START-STATION":
+    case "SET-END-STATION":
+      return {
+        ...editedIssue,
+        issueUpdateStationList: editedIssue.issueUpdateStationList.map((item) =>
+          item.line === payload.line
+            ? {
+                ...item,
+                ...(type === "SET-START-STATION"
+                  ? { startStationCode: payload.stationCode }
+                  : { endStationCode: payload.stationCode }),
+              }
+            : item
+        ),
+      };
+    default:
+      return editedIssue;
+  }
+};
 
 const AdminIssueEditPage = () => {
   const navigate = useNavigate();
@@ -24,7 +91,7 @@ const AdminIssueEditPage = () => {
 
   useEffect(() => {
     if (!storageAccessToken) {
-        navigate("/admin/login");
+      navigate("/admin/login");
     }
   }, [storageAccessToken, navigate]);
 
@@ -34,37 +101,41 @@ const AdminIssueEditPage = () => {
     enabled: !!storageAccessToken && !!id,
   });
 
-  const [title, setTitle] = useState<string>(issueData?.title ?? "");
-  const [content, setContent] = useState<string>(issueData?.content ?? "");
-  const [startDate, setStartDate] = useState<string>(
-    issueData?.startDate ?? ""
-  );
-  const [expireDate, setExpireDate] = useState<string>(
-    issueData?.expireDate ?? ""
-  );
-  const [issueKeyword, setIssueKeyword] = useState<IssueKeywords>(
-    issueData?.keyword ?? "연착"
-  );
+  const { title, content, startDate, expireDate, keyword } = issueData || {};
 
-  const originalIssueLinesStations = Array.from(
-    (issueData?.stationDtos || []).reduce((map, { line, issueStationCode }) => {
-      return map.set(line, [...(map.get(line) || []), issueStationCode]);
-    }, new Map())
-  ).map(([line, stations]) => ({
-    line,
-    startStationCode: stations[0],
-    endStationCode: stations.at(-1),
-  }));
-
-  const [issueLinesStations, setIssueLinesStations] = useState<
-    IssueLineAndStations[]
-  >(originalIssueLinesStations);
-
-  const [getStationsByLine, setGetStationsByLine] = useState<RawSubwayLineName>(
-    issueLinesStations[0] ? issueLinesStations[0].line : "수도권 1호선"
+  const [editedIssue, dispatch] = useReducer(
+    reducer,
+    issueData,
+    (issueData) =>
+      ({
+        ...issueData,
+        issueUpdateStationList: Array.from(
+          (issueData?.stationDtos || []).reduce(
+            (map, { line, issueStationCode }) => {
+              return map.set(line, [
+                ...(map.get(line) || []),
+                issueStationCode,
+              ]);
+            },
+            new Map()
+          )
+        ).map(([line, stations]) => ({
+          line,
+          startStationCode: stations[0],
+          endStationCode: stations.at(-1),
+        })),
+      } as EditIssueBody)
   );
 
-  const { stationsByLinedata } = useGetStationsByLine(getStationsByLine);
+  useEffect(() => {
+    if (issueData) dispatch({ type: "INIT", payload: issueData });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const [selectedLine, setSelectedLine] =
+    useState<RawSubwayLineName>("수도권 1호선");
+
+  const { stationsByLinedata } = useGetStationsByLine(selectedLine);
 
   const { mutate } = useMutation({
     mutationFn: editIssue,
@@ -75,22 +146,13 @@ const AdminIssueEditPage = () => {
     onError: () => alert("수정 실패"),
   });
 
-  const handleSave = () => {
-    mutate({
-      data: {
-        id: Number(id),
-        title,
-        content,
-        startDate,
-        expireDate,
-        keyword: issueKeyword,
-        issueUpdateStationList: issueLinesStations,
-      },
-    });
-  };
+  const handleSave = () => mutate({ data: editedIssue });
 
   const filteredLines = STATION_LINE.filter(
-    (line) => !issueLinesStations.map((item) => item.line).includes(line)
+    (line) =>
+      !editedIssue.issueUpdateStationList
+        .map((item) => item.line)
+        .includes(line)
   );
 
   const sortedIssueStations = useMemo(
@@ -143,8 +205,8 @@ const AdminIssueEditPage = () => {
         <input
           type="text"
           className="w-full px-3 py-2 text-sm border rounded-lg"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          defaultValue={title}
+          onChange={(e) => dispatch({ type: "TITLE", payload: e.target.value })}
         />
       </div>
 
@@ -154,8 +216,10 @@ const AdminIssueEditPage = () => {
         </label>
         <textarea
           className="w-full border rounded-lg px-3 py-2 text-sm min-h-[120px] resize-y"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
+          defaultValue={content}
+          onChange={(e) =>
+            dispatch({ type: "CONTENT", payload: e.target.value })
+          }
         />
       </div>
 
@@ -167,7 +231,9 @@ const AdminIssueEditPage = () => {
           type="datetime-local"
           className="w-full px-3 py-2 text-sm border rounded-lg"
           defaultValue={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
+          onChange={(e) =>
+            dispatch({ type: "START-DATE", payload: e.target.value })
+          }
         />
       </div>
 
@@ -179,7 +245,9 @@ const AdminIssueEditPage = () => {
           type="datetime-local"
           className="w-full px-3 py-2 text-sm border rounded-lg"
           defaultValue={expireDate}
-          onChange={(e) => setExpireDate(e.target.value)}
+          onChange={(e) =>
+            dispatch({ type: "EXPIRE-DATE", payload: e.target.value })
+          }
         />
       </div>
 
@@ -188,14 +256,19 @@ const AdminIssueEditPage = () => {
           키워드
         </label>
         <select
-          value={issueKeyword}
-          onChange={(e) => setIssueKeyword(e.target.value as IssueKeywords)}
+          defaultValue={keyword}
+          onChange={(e) =>
+            dispatch({
+              type: "KEYWORD",
+              payload: e.target.value as IssueKeywords,
+            })
+          }
           className="px-2 py-1 text-sm text-gray-800 bg-gray-200 rounded-full"
         >
           <option value="">키워드를 선택하세요</option>
-          {ISSUE_KEYWORDS?.map((issueKeyword) => (
-            <option key={issueKeyword} value={issueKeyword}>
-              {issueKeyword}
+          {ISSUE_KEYWORDS?.map((keyword) => (
+            <option key={keyword} value={keyword}>
+              {keyword}
             </option>
           ))}
         </select>
@@ -207,7 +280,7 @@ const AdminIssueEditPage = () => {
         </label>
 
         <ul className="space-y-4">
-          {issueLinesStations.map(({ line }, idx) => (
+          {editedIssue.issueUpdateStationList.map(({ line }, idx) => (
             <li
               key={`${line}_${idx}`}
               className="flex flex-col space-y-2 md:flex-row md:items-center md:space-x-2 md:space-y-0"
@@ -215,11 +288,9 @@ const AdminIssueEditPage = () => {
               <div className="flex items-center space-x-2">
                 <button
                   type="button"
-                  onClick={() => {
-                    setIssueLinesStations((prev) =>
-                      prev.filter((item) => item.line !== line)
-                    );
-                  }}
+                  onClick={() =>
+                    dispatch({ type: "DELETE-LINE", payload: line })
+                  }
                   className="text-xs text-gray-500 bg-gray-100 rounded-full w-7 h-7 hover:bg-red-200"
                 >
                   X
@@ -228,21 +299,19 @@ const AdminIssueEditPage = () => {
               </div>
 
               <select
-                onClick={() => setGetStationsByLine(line)}
+                onClick={() => setSelectedLine(line)}
                 onChange={(e) =>
-                  setIssueLinesStations((prev) =>
-                    prev.map((item) =>
-                      item.line === line
-                        ? { ...item, startStationCode: Number(e.target.value) }
-                        : item
-                    )
-                  )
+                  dispatch({
+                    type: "SET-START-STATION",
+                    payload: { line, stationCode: +e.target.value },
+                  })
                 }
                 className="block w-full px-2 py-1 text-sm text-gray-800 bg-gray-100 rounded-full md:w-auto"
               >
                 <option value="">
-                  {issueLinesStations.find((item) => item.line === line)
-                    ?.startStationCode ?? "출발역"}
+                  {editedIssue.issueUpdateStationList.find(
+                    (item) => item.line === line
+                  )?.startStationCode ?? "출발역"}
                 </option>
                 {stationsByLinedata?.map((station) => (
                   <option
@@ -255,21 +324,19 @@ const AdminIssueEditPage = () => {
               </select>
 
               <select
-                onClick={() => setGetStationsByLine(line)}
+                onClick={() => setSelectedLine(line)}
                 onChange={(e) =>
-                  setIssueLinesStations((prev) =>
-                    prev.map((item) =>
-                      item.line === line
-                        ? { ...item, endStationCode: Number(e.target.value) }
-                        : item
-                    )
-                  )
+                  dispatch({
+                    type: "SET-END-STATION",
+                    payload: { line, stationCode: +e.target.value },
+                  })
                 }
                 className="block w-full px-2 py-1 text-sm text-gray-800 bg-gray-100 rounded-full md:w-auto"
               >
                 <option value="">
-                  {issueLinesStations.find((item) => item.line === line)
-                    ?.endStationCode ?? "도착역"}
+                  {editedIssue.issueUpdateStationList.find(
+                    (item) => item.line === line
+                  )?.endStationCode ?? "도착역"}
                 </option>
                 {stationsByLinedata?.map((station) => (
                   <option
@@ -287,14 +354,9 @@ const AdminIssueEditPage = () => {
         <select
           value=""
           onChange={(e) => {
-            setIssueLinesStations((prev) => [
-              ...prev,
-              {
-                line: e.target.value as RawSubwayLineName,
-                startStationCode: 0,
-                endStationCode: 0,
-              },
-            ]);
+            const value = e.target.value as RawSubwayLineName;
+            setSelectedLine(value);
+            dispatch({ type: "ADD-LINE", payload: value });
           }}
           className="block w-full px-2 py-1 mt-4 text-sm text-gray-800 bg-gray-200 rounded-full"
         >
