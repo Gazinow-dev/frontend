@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetAllIssuesQuery } from "./apis/hooks";
+import localStorageFunc from "@global/utils/localStorage";
+import { STORAGE_ACCESS_KEY } from "@global/constants";
 
 const AdminIssueListPage = () => {
   const navigate = useNavigate();
@@ -13,6 +15,8 @@ const AdminIssueListPage = () => {
   }, [data]);
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
+
+  const storageAccessToken = localStorageFunc.get<string>(STORAGE_ACCESS_KEY);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -27,6 +31,17 @@ const AdminIssueListPage = () => {
     if (loaderRef.current) observer.observe(loaderRef.current);
     return () => observer.disconnect();
   }, [fetchNextPage, hasNextPage]);
+
+  const navigateHandler = (id: number) => {
+    if (!storageAccessToken) {
+      const confirmed = window.confirm("로그인이 필요합니다.");
+      if (confirmed) {
+        navigate("/admin/login");
+      }
+    } else {
+      navigate(`/admin/issue/${id}`);
+    }
+  };
 
   if (isLoading)
     return (
@@ -48,7 +63,7 @@ const AdminIssueListPage = () => {
           <li
             key={`${issueData.id}_${issueData.title}`}
             className="p-4 transition border rounded-lg shadow-sm cursor-pointer hover:bg-gray-50"
-            onClick={() => navigate(`/admin/issue/${issueData.id}`)}
+            onClick={() => navigateHandler(issueData.id)}
           >
             <p className="text-base font-medium text-gray-900 sm:text-lg line-clamp-1">
               {issueData.title}

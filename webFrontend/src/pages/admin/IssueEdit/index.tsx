@@ -24,10 +24,7 @@ const AdminIssueEditPage = () => {
 
   useEffect(() => {
     if (!storageAccessToken) {
-      const confirmed = window.confirm("로그인이 필요합니다.");
-      if (confirmed) {
         navigate("/admin/login");
-      }
     }
   }, [storageAccessToken, navigate]);
 
