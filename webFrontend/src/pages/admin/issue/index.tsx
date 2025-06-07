@@ -40,7 +40,23 @@ const AdminIssueDetailPage = () => {
     [issueData?.startDate, issueData?.expireDate]
   );
 
-  const sortedIssueDataLines = issueData?.lines.sort();
+  const sortedIssueLines = useMemo(
+    () => (issueData?.lines ? [...issueData.lines].sort() : []),
+    [issueData?.lines]
+  );
+
+  const sortedIssueStations = useMemo(
+    () =>
+      issueData?.stationDtos
+        ? [...issueData.stationDtos].sort((a, b) => {
+            if (!a.line || !b.line) return 0;
+            const lineCompare = a.line.localeCompare(b.line, "ko");
+            if (lineCompare !== 0) return lineCompare;
+            return a.issueStationCode - b.issueStationCode;
+          })
+        : [],
+    [issueData?.stationDtos]
+  );
 
   const goBackToIssueList = () => navigate("/admin/issueList");
 
@@ -93,7 +109,7 @@ const AdminIssueDetailPage = () => {
       <section className="py-4 border-b">
         <h2 className="mb-1 text-sm font-semibold text-gray-700">노선</h2>
         <ul className="flex flex-wrap gap-2">
-          {sortedIssueDataLines?.map((line) => (
+          {sortedIssueLines?.map((line) => (
             <li
               key={line}
               className="px-2 py-1 text-sm text-gray-800 bg-gray-100 rounded-full"
@@ -107,7 +123,7 @@ const AdminIssueDetailPage = () => {
       <section className="py-4">
         <h2 className="mb-1 text-sm font-semibold text-gray-700">관련 역</h2>
         <ul className="space-y-2">
-          {issueData.stationDtos.map((station) => (
+          {sortedIssueStations.map((station) => (
             <li
               key={`${station.stationName}_${station.line}`}
               className="text-sm text-gray-800"

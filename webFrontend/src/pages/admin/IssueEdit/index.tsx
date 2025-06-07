@@ -93,6 +93,19 @@ const AdminIssueEditPage = () => {
     (line) => !issueLinesStations.map((item) => item.line).includes(line)
   );
 
+  const sortedIssueStations = useMemo(
+    () =>
+      issueData?.stationDtos
+        ? [...issueData.stationDtos].sort((a, b) => {
+            if (!a.line || !b.line) return 0;
+            const lineCompare = a.line.localeCompare(b.line, "ko");
+            if (lineCompare !== 0) return lineCompare;
+            return a.issueStationCode - b.issueStationCode;
+          })
+        : [],
+    [issueData?.stationDtos]
+  );
+
   const handleNavigateWithConfirm = (destination: string) => {
     const confirmed = window.confirm(
       "현재 수정 중인 내용이 사라집니다. 계속하시겠어요?"
@@ -299,7 +312,7 @@ const AdminIssueEditPage = () => {
           관련 역
         </label>
         <ul className="space-y-2">
-          {issueData.stationDtos.map((station) => (
+          {sortedIssueStations.map((station) => (
             <li
               key={`${station.issueStationCode}_${station.stationName}`}
               className="text-sm text-gray-800"
