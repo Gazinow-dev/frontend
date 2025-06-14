@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useDeletePostLike, useGetIssue, usePostLike } from "./api/hooks";
+import { useDeletePostLike, usePostLike } from "./api/hooks";
 
 import IconThumsUp from "@assets/icons/thumbs_up.svg?react";
 
@@ -12,6 +12,8 @@ import { debounce } from "lodash";
 import cn from "classnames";
 import localStorageFunc from "@global/utils/localStorage";
 import { STORAGE_ACCESS_KEY } from "@global/constants";
+import { useQuery } from "@tanstack/react-query";
+import { getIssueDetail } from "@global/apis/func";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
@@ -25,10 +27,17 @@ const IssueDetailPage = () => {
   // const closeModal = () => setIsOpenModal(false);
 
   const [token, setToken] = useState<string>("");
-  const { issueData, isLoadingIssue, refetchIssue } = useGetIssue({
-    id,
+
+  const {
+    data: issueData,
+    isLoading: isLoadingIssue,
+    refetch: refetchIssue,
+  } = useQuery({
+    queryKey: ["issue", id],
+    queryFn: () => getIssueDetail({ id }),
     enabled: (!!storageAccessToken && !!id) || (!!token && !!id),
   });
+
   const { doLikeMutate } = usePostLike({ onSuccess: refetchIssue });
   const { deleteLikeMutate } = useDeletePostLike({ onSuccess: refetchIssue });
 

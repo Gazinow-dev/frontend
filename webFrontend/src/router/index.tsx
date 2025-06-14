@@ -2,8 +2,10 @@ import IssueDetailPage from "@pages/issueDetail";
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import DeleteAccountPage from "@pages/deletetAccount";
-import IssuesManagementPage from "@pages/IssuesManagement";
-import IssueEditPage from "@pages/IssuesManagement/IssueEditPage";
+import AdminIssueListPage from "@pages/admin/issueList";
+import AdminIssueDetailPage from "@pages/admin/issue";
+import AdminIssueEditPage from "@pages/admin/IssueEdit";
+import AdminLoginPage from "@pages/admin/login";
 
 const router = createBrowserRouter([
   {
@@ -19,12 +21,20 @@ const router = createBrowserRouter([
         element: <DeleteAccountPage />,
       },
       {
-        path: "admin",
-        element: <IssuesManagementPage />,
+        path: "admin/login",
+        element: <AdminLoginPage />,
       },
       {
-        path: "admin/editIssue/:id",
-        element: <IssueEditPage />,
+        path: "admin/issueList",
+        element: <AdminIssueListPage />,
+      },
+      {
+        path: "admin/issue/:id",
+        element: <AdminIssueDetailPage />,
+      },
+      {
+        path: "admin/issueEdit/:id",
+        element: <AdminIssueEditPage />,
       },
     ],
   },
