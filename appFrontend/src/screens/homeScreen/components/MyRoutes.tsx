@@ -16,6 +16,7 @@ import { getTomorrowPushNotiOnStatusFetch } from '@/screens/myRootScreen/apis/fu
 import IssueKeywordIcon from '@/global/components/IssueKeywordIcon';
 import { COLOR } from '@/global/constants';
 import IconX from '@assets/icons/cross_x.svg';
+import { Shadow } from 'react-native-shadow-2';
 interface MyRoutesProps {
   isVerifiedUser: 'success auth' | 'fail auth' | 'yet';
   isRefreshing: boolean;
@@ -98,63 +99,71 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: MyRoutesPro
           <FontText text="저장경로 편집" className="text-13 leading-19 text-gray-999" />
         </TouchableOpacity>
       </View>
+
       {renderMyRoutes()}
+
       {isInfoVisible && (
-        <View
-          className="absolute top-48 left-10 border border-gray-beb rounded-10
-          px-12 py-14 w-[264px] overflow-hidden space-y-10
-          bg-white drop-shadow-[0_7px_29px_rgba(0,0,0,0.25)]"
+        <Shadow
+          distance={29}
+          offset={[0, 7]}
+          startColor="#64646F10"
+          containerStyle={{ position: 'absolute', top: 48, left: 10, zIndex: 10 }}
         >
-          <View className="flex-row">
-            <View className="flex-1 gap-2 py-2">
-              <FontText
-                text="어떤 정보가 보여지나요?"
-                className="text-14 leading-21"
-                fontWeight="600"
-              />
-              <FontText
-                text={
-                  isTomorrowPushNotiOn
-                    ? '내가 저장한 경로와 관련된 전날 21시 ~ 오늘 24시까지의 이슈가 표시돼요'
-                    : '내가 저장한 경로와 관련된 오늘 24시까지의 이슈가 표시돼요'
-                }
-                className="text-12 leading-15 text-gray-999"
-              />
-            </View>
-            <TouchableOpacity onPress={showInfoHandler} hitSlop={20}>
-              <IconX />
-            </TouchableOpacity>
-          </View>
-
-          <View className="flex-1 h-1 bg-gray-beb" />
-
-          <View className="space-y-10">
-            <View className="flex-row items-center gap-10">
-              <View>
-                <IssueKeywordIcon keyword="자연재해" color={COLOR.LINE4} width={30} height={30} />
-              </View>
-              <View className="flex-1 space-y-2">
-                <FontText text="진행 중 이슈" className="text-13 leading-19" fontWeight="600" />
+          <View
+            className="border border-gray-beb rounded-10 bg-white
+                  px-12 py-14 w-[264px] overflow-hidden space-y-10"
+          >
+            <View className="flex-row">
+              <View className="flex-1 gap-2 py-2">
                 <FontText
-                  text="현재 경로에 영향을 줄 수 있는 진행중인 이슈예요"
+                  text="어떤 정보가 보여지나요?"
+                  className="text-14 leading-21"
+                  fontWeight="600"
+                />
+                <FontText
+                  text={
+                    isTomorrowPushNotiOn
+                      ? '내가 저장한 경로와 관련된 전날 21시 ~ 오늘 24시까지의 이슈가 표시돼요'
+                      : '내가 저장한 경로와 관련된 오늘 24시까지의 이슈가 표시돼요'
+                  }
                   className="text-12 leading-15 text-gray-999"
                 />
               </View>
+              <TouchableOpacity onPress={showInfoHandler} hitSlop={20}>
+                <IconX />
+              </TouchableOpacity>
             </View>
-            <View className="flex-row items-center gap-10">
-              <View>
-                <IssueKeywordIcon keyword="자연재해" color="#0EB5EB66" width={30} height={30} />
+
+            <View className="flex-1 h-1 bg-gray-beb" />
+
+            <View className="space-y-10">
+              <View className="flex-row items-center gap-10">
+                <View>
+                  <IssueKeywordIcon keyword="자연재해" color={COLOR.LINE4} width={30} height={30} />
+                </View>
+                <View className="flex-1 space-y-2">
+                  <FontText text="진행 중 이슈" className="text-13 leading-19" fontWeight="600" />
+                  <FontText
+                    text="현재 경로에 영향을 줄 수 있는 진행중인 이슈예요"
+                    className="text-12 leading-15 text-gray-999"
+                  />
+                </View>
               </View>
-              <View className="flex-1 space-y-2 ">
-                <FontText text="예정 이슈" className="text-13 leading-19" fontWeight="600" />
-                <FontText
-                  text="저장된 경로에 영향을 줄 수 있는, 곧 시작될 예정 이슈예요"
-                  className="text-12 leading-15 text-gray-999"
-                />
+              <View className="flex-row items-center gap-10">
+                <View>
+                  <IssueKeywordIcon keyword="자연재해" color="#0EB5EB66" width={30} height={30} />
+                </View>
+                <View className="flex-1 space-y-2 ">
+                  <FontText text="예정 이슈" className="text-13 leading-19" fontWeight="600" />
+                  <FontText
+                    text="저장된 경로에 영향을 줄 수 있는, 곧 시작될 예정 이슈예요"
+                    className="text-12 leading-15 text-gray-999"
+                  />
+                </View>
               </View>
             </View>
           </View>
-        </View>
+        </Shadow>
       )}
     </View>
   );
