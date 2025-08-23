@@ -168,7 +168,7 @@ const NotiSettings = () => {
             onPress={() => rootNavigation.navigate('NewRouteNavigation', { screen: 'SavedRoutes' })}
           >
             <FontText
-              text={'내 경로 저장하고 알림받기'}
+              text="내 경로 저장하고 알림받기"
               className="text-13 text-gray-999"
               fontWeight="600"
             />
