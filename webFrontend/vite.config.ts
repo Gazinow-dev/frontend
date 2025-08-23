@@ -1,4 +1,4 @@
-import { sentryVitePlugin } from "@sentry/vite-plugin";
+// import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
@@ -8,10 +8,11 @@ export default defineConfig({
   plugins: [
     react(),
     svgr(),
-    sentryVitePlugin({
-      org: "gazinow",
-      project: "web",
-    }),
+    // 빌드 에러로 주석처리함
+    // sentryVitePlugin({
+    //   org: "gazinow",
+    //   project: "web",
+    // }),
   ],
 
   resolve: {
