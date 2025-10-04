@@ -1213,16 +1213,16 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - RNSentry (5.19.0):
+  - RNSentry (6.19.0):
+    - glog
     - hermes-engine
+    - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - React-hermes
-    - Sentry/HybridSDK (= 8.17.1)
+    - Sentry/HybridSDK (= 8.53.2)
   - RNSVG (13.14.0):
     - React-Core
-  - Sentry/HybridSDK (8.17.1):
-    - SentryPrivate (= 8.17.1)
-  - SentryPrivate (8.17.1)
+  - Sentry/HybridSDK (8.53.2)
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
 
@@ -1321,7 +1321,6 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - Sentry
-    - SentryPrivate
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1550,13 +1549,12 @@ SPEC CHECKSUMS:
   RNNotifee: 8768d065bf1e2f9f8f347b4bd79147431c7eacd6
   RNPermissions: 4f7b81b0d457c8ec4e892cc36ef2376734a4b22c
   RNScreens: 8d1521c6e375a79dbd4525efaf21704cc64ac0cf
-  RNSentry: 9dda14f4774c64b1858700ce47e38706952f0f45
+  RNSentry: 675a323f18f52c8ad35b5462f94a83dfe16bc1a8
   RNSVG: 4cab00c621b328a4a2fedaaedc15d8822216723e
-  Sentry: d9f99f9cc13777c5d938650c1e1c85047bb4f0d1
-  SentryPrivate: 839b1e58addf58624087a80b2628e543193fa8ef
+  Sentry: 59993bffde4a1ac297ba6d268dc4bbce068d7c1b
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 1b901a6d6eeba4e8a2e8f308f708691cdb5db312
 
-PODFILE CHECKSUM: afa972c6e37a984a8d25656c2f1964410ae22904
+PODFILE CHECKSUM: f58f7ac7d5dc4df434f3698ef46c7403b47dafe0
 
 COCOAPODS: 1.16.2
