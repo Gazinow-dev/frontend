@@ -1180,7 +1180,7 @@ PODS:
     - React-jsi (= 0.73.4)
     - React-logger (= 0.73.4)
     - React-perflogger (= 0.73.4)
-  - RNCAsyncStorage (1.22.0):
+  - RNCAsyncStorage (2.2.0):
     - React-Core
   - RNExitApp (2.0.0):
     - React-Core
@@ -1540,7 +1540,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: ceaeeb19e75912958625f72883d240640e8f40da
   React-utils: 8439db27c3745f6de9d67eb61f5600c8d624274c
   ReactCommon: cc18bd33c0fab03c67620da6a602dcc1704e66b4
-  RNCAsyncStorage: 992e0c559d9c1b2b637ecb343f6f1713e99b6598
+  RNCAsyncStorage: b44e8a4e798c3e1f56bffccd0f591f674fb9198f
   RNExitApp: 4432b9b7cc5ccec9f91c94e507849891282befd4
   RNFBAnalytics: 18e99c5fc17e1eb49c8e61b51cd97063b93d9a5c
   RNFBApp: 04ab278465cfd7a4f22de8add81c604e6cb273f2
