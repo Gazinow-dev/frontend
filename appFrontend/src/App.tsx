@@ -5,13 +5,18 @@ import { RootNavigation } from '@/navigation';
 import { store } from '@/store';
 import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import * as Sentry from '@sentry/react-native';
-import { MODE, SENTRY_DSN } from '@env';
+import { MODE, SENTRY_DSN, AMPLITUDE_API_KEY } from '@env';
 import { version as currentVersion } from '../package.json';
 import { fetch } from '@react-native-community/netinfo';
 import { Alert } from 'react-native';
 import RNExitApp from 'react-native-exit-app';
 import { RootStackParamList } from './navigation/types/navigation';
 import analytics from '@react-native-firebase/analytics';
+import * as amplitude from '@amplitude/analytics-react-native';
+import { SessionReplayPlugin } from '@amplitude/plugin-session-replay-react-native';
+
+amplitude.init(AMPLITUDE_API_KEY, undefined, { disableCookies: true }).promise;
+amplitude.add(new SessionReplayPlugin()).promise;
 
 Sentry.init({
   enabled: MODE === 'production',
