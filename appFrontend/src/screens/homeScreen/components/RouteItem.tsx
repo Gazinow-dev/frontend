@@ -37,13 +37,13 @@ const RouteItem = ({ route, hasIssues, isLastItem }: RouteItemProps) => {
       <View className="gap-6 mb-20">
         <View className="flex-row">
           <View
-            className={cn('rounded-16 px-6 py-4 bg-gray-beb', {
-              'bg-[#FBDCDA] mb-2': hasIssues,
+            className={cn('rounded-16 bg-gray-beb px-6 py-4', {
+              'mb-2 bg-[#FBDCDA]': hasIssues,
             })}
           >
             <FontText
               text={hasIssues ? `${filteredTotalTime} 이상 예상` : `평균 ${filteredTotalTime}`}
-              className={cn('text-12 text-gray-999 leading-14 text-center', {
+              className={cn('text-center text-12 leading-14 text-gray-999', {
                 'text-light-red': hasIssues,
               })}
               fontWeight="500"
@@ -65,7 +65,7 @@ const RouteItem = ({ route, hasIssues, isLastItem }: RouteItemProps) => {
         arriveStationName={route.lastEndStation}
         betweenPathMargin={24}
       />
-      {hasIssues ? <IssuesBanner subPaths={route.subPaths} /> : null}
+      {hasIssues && <IssuesBanner subPaths={route.subPaths} isHomeScreen />}
     </Pressable>
   );
 };

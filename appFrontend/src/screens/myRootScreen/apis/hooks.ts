@@ -6,9 +6,6 @@ import {
   logoutFetch,
   changeNicknameFetch,
   checkNicknameFetch,
-  addPathNotiSettingsFetch,
-  disablePathNotiFetch,
-  updatePathNotiSettingsFetch,
   getPathNotiFetch,
   getMyCommentsFetch,
 } from './func';
@@ -102,57 +99,6 @@ export const useCheckNicknameMutation = ({
     onError,
   });
   return { checkNicknameMutate: mutate };
-};
-
-/**
- * 알림 비활성화 훅
- */
-export const useDisablePathNotiMutation = ({
-  onSuccess,
-  onError,
-}: {
-  onSuccess: () => void;
-  onError?: (error: AxiosError) => void;
-}) => {
-  const { mutate } = useMutation(disablePathNotiFetch, {
-    onSuccess,
-    onError,
-  });
-  return { disablePathNotiMutate: mutate };
-};
-
-/**
- * 알림 설정 등록 훅
- */
-export const useAddPathNotiSettingsMutation = ({
-  onSuccess,
-  onError,
-}: {
-  onSuccess: () => void;
-  onError?: (error: AxiosError) => void;
-}) => {
-  const { mutate } = useMutation(addPathNotiSettingsFetch, {
-    onSuccess,
-    onError,
-  });
-  return { addPathNotiSettingsMutate: mutate };
-};
-
-/**
- * 알림 설정 수정 훅
- */
-export const usePathUpdateNotiSettingsMutation = ({
-  onSuccess,
-  onError,
-}: {
-  onSuccess: () => void;
-  onError?: (error: AxiosError) => void;
-}) => {
-  const { mutate } = useMutation(updatePathNotiSettingsFetch, {
-    onSuccess,
-    onError,
-  });
-  return { updatePathNotiSettingsMutate: mutate };
 };
 
 /**
