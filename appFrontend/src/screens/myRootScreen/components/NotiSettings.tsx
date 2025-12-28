@@ -18,6 +18,15 @@ import {
   setTomorrowPushNotiOnFetch,
 } from '../apis/func';
 import { COLOR } from '@/global/constants';
+import {
+  trackMyNotiLineOff,
+  trackMyNotiLineOn,
+  trackMyNotiPushOff,
+  trackMyNotiPushOn,
+  trackMyNotiTomorrowOff,
+  trackMyNotiTomorrowOn,
+} from '@/analytics/my.events';
+import { trackMapBookmark1 } from '@/analytics/map.events';
 
 const NotiSettings = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -40,19 +49,34 @@ const NotiSettings = () => {
 
   // 토글 on/off 설정
   const { mutate: setPushNotiOnMutate } = useMutation(setPushNotiOnFetch, {
-    onSuccess: async () => {
+    onSuccess: async (_, provider) => {
+      if (provider.alertAgree) {
+        trackMyNotiPushOn();
+      } else {
+        trackMyNotiPushOff();
+      }
       await queryClient.invalidateQueries(['getPushNotiOnStatus']);
       await queryClient.invalidateQueries(['getTomorrowPushNotiOnStatus']);
       await queryClient.invalidateQueries(['getDetailPushNotiOnStatus']);
     },
   });
   const { mutate: setTomorrowPushNotiOnMutate } = useMutation(setTomorrowPushNotiOnFetch, {
-    onSuccess: async () => {
+    onSuccess: async (_, provider) => {
+      if (provider.alertAgree) {
+        trackMyNotiTomorrowOn();
+      } else {
+        trackMyNotiTomorrowOff();
+      }
       await queryClient.invalidateQueries(['getTomorrowPushNotiOnStatus']);
     },
   });
   const { mutate: setDetailPushNotiOnMutate } = useMutation(setDetailPushNotiOnFetch, {
-    onSuccess: async () => {
+    onSuccess: async (_, provider) => {
+      if (provider.alertAgree) {
+        trackMyNotiLineOn();
+      } else {
+        trackMyNotiLineOff();
+      }
       await queryClient.invalidateQueries(['getDetailPushNotiOnStatus']);
     },
   });
@@ -148,7 +172,7 @@ const NotiSettings = () => {
               >
                 <FontText text={myRoutes.roadName} className="text-gray-999" fontWeight="500" />
                 <View className="flex-row items-center">
-                  <FontText text="편집" className="text-gray-999 text-13 leading-19" />
+                  <FontText text="편집" className="text-13 leading-19 text-gray-999" />
                   <MoreBtn height={19} className="ml-4" />
                 </View>
               </Pressable>
@@ -158,14 +182,17 @@ const NotiSettings = () => {
         </ScrollView>
       )}
       {isDetailPushNotiOn && myRoutes && myRoutes.length < 1 && (
-        <View className="items-center py-16 mx-16 mt-20 bg-gray-9f9 rounded-12">
+        <View className="items-center py-16 mx-16 mt-20 rounded-12 bg-gray-9f9">
           <View className="flex-row items-center">
             <IconExclamation />
-            <FontText className="pl-5 text-gray-999 text-14" text={'저장한 경로가 아직 없어요'} />
+            <FontText className="pl-5 text-14 text-gray-999" text={'저장한 경로가 아직 없어요'} />
           </View>
           <TouchableOpacity
             className="mt-8"
-            onPress={() => rootNavigation.navigate('NewRouteNavigation', { screen: 'SavedRoutes' })}
+            onPress={() => {
+              trackMapBookmark1();
+              rootNavigation.navigate('NewRouteNavigation', { screen: 'SavedRoutes' });
+            }}
           >
             <FontText
               text="내 경로 저장하고 알림받기"

@@ -14,6 +14,7 @@ import { useRootNavigation } from '@/navigation/RootNavigation';
 import { showToast } from '@/global/utils/toast';
 import { useAppDispatch } from '@/store';
 import { getAuthorizationState } from '@/store/modules';
+import { trackMyWithdraw } from '@/analytics/my.events';
 
 const ConfirmQuitScreen = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -38,6 +39,7 @@ const ConfirmQuitScreen = () => {
 
   const { deleteAccountMutate } = useDeleteAccountMutation({
     onSuccess: () => {
+      trackMyWithdraw();
       Sentry.captureMessage('유저가 탈퇴했어요');
       removeEncryptedStorage('access_token');
       removeEncryptedStorage('refresh_token');
@@ -84,7 +86,7 @@ const ConfirmQuitScreen = () => {
         </View>
 
         <TouchableOpacity
-          className="items-center mb-24 py-11 rounded-5 bg-black-717"
+          className="items-center mb-24 rounded-5 bg-black-717 py-11"
           onPress={() => myPageNavigation.goBack()}
         >
           <FontText text="이전으로 돌아가기" className="text-white text-17 leading-26" />

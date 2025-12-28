@@ -20,6 +20,7 @@ import * as Sentry from '@sentry/react-native';
 import cn from 'classname';
 import { useAppDispatch } from '@/store';
 import { getAuthorizationState } from '@/store/modules';
+import { trackMyWithdraw } from '@/analytics/my.events';
 
 const ConfirmPwScreen = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -30,6 +31,7 @@ const ConfirmPwScreen = () => {
 
   const { deleteAccountMutate } = useDeleteAccountMutation({
     onSuccess: () => {
+      trackMyWithdraw();
       Sentry.captureMessage('유저가 탈퇴했어요');
       removeEncryptedStorage('access_token');
       removeEncryptedStorage('refresh_token');
@@ -79,7 +81,7 @@ const ConfirmPwScreen = () => {
           </TouchableOpacity>
 
           <View className="flex-1">
-            <View className="pt-43 pb-29">
+            <View className="pb-29 pt-43">
               <FontText text="비밀번호 입력" className="text-24" fontWeight="600" />
               <View className="h-20" />
               <FontText text="탈퇴를 위해 비밀번호를 입력해주세요." />
@@ -87,7 +89,7 @@ const ConfirmPwScreen = () => {
 
             <FontText
               text="Password"
-              className="text-14 leadinig-21 text-gray-183"
+              className="leadinig-21 text-14 text-gray-183"
               fontWeight="500"
             />
 
@@ -103,7 +105,7 @@ const ConfirmPwScreen = () => {
           </View>
 
           <TouchableOpacity
-            className={cn('py-11 mb-41 rounded-5 items-center', {
+            className={cn('mb-41 items-center rounded-5 py-11', {
               'bg-black-717': isPwRight,
               'bg-gray-ddd': !isPwRight,
             })}

@@ -53,6 +53,8 @@ export const MY = {
   WITHDRAW: '[5]마이_회원탈퇴',
   NOTI_PUSH_ON: '[5]마이_알림_푸시_켜기',
   NOTI_PUSH_OFF: '[5]마이_알림_푸시_끄기',
-  NOTI_BOOKMARK_ON: '[5]마이_알림_저장경로_켜기',
-  NOTI_BOOKMARK_OFF: '[5]마이_알림_저장경로_끄기',
+  NOTI_TOMORROW_ON: '[5]마이_알림_내일이슈_켜기',
+  NOTI_TOMORROW_OFF: '[5]마이_알림_내일이슈_끄기',
+  NOTI_LINE_ON: '[5]마이_알림_경로별_켜기',
+  NOTI_LINE_OFF: '[5]마이_알림_경로별_끄기',
 } as const;
