@@ -28,3 +28,4 @@ export {
   NOTIFICATION,
 } from './navigation';
 export { default as COLOR } from './color';
+export { AUTH, REGISTER, MAP, NOW, MY } from './analytics';
