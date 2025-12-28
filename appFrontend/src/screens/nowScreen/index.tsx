@@ -45,7 +45,7 @@ const NowScreen = () => {
       return <LaneButtons activeButton={activeButton} setActiveButton={setActiveButton} />;
     } else if (isDataEmpty) {
       return (
-        <View className="items-center justify-center h-[70%]">
+        <View className="h-[70%] items-center justify-center">
           <FontText text="올라온 이슈가 없어요" className="text-18 text-gray-999" />
         </View>
       );

@@ -88,11 +88,11 @@ const SaveNewRoute = () => {
           />
           <View className="flex-row justify-between">
             {isDuplicatedName ? (
-              <View className="flex-row items-center h-14 ml-9">
+              <View className="flex-row items-center ml-9 h-14">
                 <XCircle width={14} />
                 <FontText
                   text={errorMessage}
-                  className="ml-4 text-12 text-light-red leading-14"
+                  className="ml-4 text-12 leading-14 text-light-red"
                   fontWeight="500"
                 />
               </View>
@@ -101,15 +101,15 @@ const SaveNewRoute = () => {
             )}
             <FontText
               text={`${roadName?.length ? roadName.length : 0}/10`}
-              className="text-12 text-gray-999 leading-14"
+              className="text-12 leading-14 text-gray-999"
             />
           </View>
         </View>
         <TouchableOpacity
-          className={cn('py-11 items-center', {
+          className={cn('items-center py-11', {
             'bg-gray-ddd': !roadName || isLoading || isDuplicatedName,
             'bg-black-717': roadName && !isLoading && !isDuplicatedName,
-            'mb-41 mx-16 rounded-5': !isKeyboardVisible,
+            'mx-16 mb-41 rounded-5': !isKeyboardVisible,
           })}
           onPress={() => {
             mutate({

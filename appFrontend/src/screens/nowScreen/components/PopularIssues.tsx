@@ -22,6 +22,12 @@ const PopularIssues = ({ popularIssues }: PopularIssuesProps) => {
 
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
+  const getIssueStatus = (startDate: string, expireDate: string) => {
+    if (dayjs().isAfter(dayjs(expireDate))) return '종료';
+    if (dayjs().isBefore(dayjs(startDate))) return '예정';
+    return '진행';
+  };
+
   return (
     <View>
       <View className="px-16 pt-24 pb-28">
@@ -30,8 +36,9 @@ const PopularIssues = ({ popularIssues }: PopularIssuesProps) => {
 
       <View className="px-16 pb-36">
         <View className="rounded-16 py-20 px-16 bg-[#F9FAFB]">
-          {popularIssues?.map(({ id, title, expireDate, likeCount }, index) => {
-            const isExpired = dayjs().isAfter(dayjs(expireDate));
+          {popularIssues?.map(({ id, title, startDate, expireDate, likeCount }, index) => {
+            const issueStatus = getIssueStatus(startDate, expireDate);
+
             if (!isExpanded && index !== 0) return null;
             return (
               <TouchableOpacity
@@ -50,13 +57,15 @@ const PopularIssues = ({ popularIssues }: PopularIssuesProps) => {
                       <View className="flex-row items-center space-x-4">
                         <View
                           className={cn('w-6 h-6 rounded-full bg-light-red', {
-                            'bg-gray-999': isExpired,
+                            'bg-[#F57F1F]': issueStatus === '예정',
+                            'bg-gray-999': issueStatus === '종료',
                           })}
                         />
                         <FontText
-                          text={isExpired ? '종료' : '진행중'}
+                          text={issueStatus}
                           className={cn('text-13 leading-19 text-light-red ', {
-                            'text-gray-999': isExpired,
+                            'text-[#F57F1F]': issueStatus === '예정',
+                            'text-gray-999': issueStatus === '종료',
                           })}
                         />
                       </View>

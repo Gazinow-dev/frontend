@@ -1,4 +1,14 @@
 PODS:
+  - amplitude-plugin-session-replay-react-native (0.4.5):
+    - AmplitudeSessionReplay (>= 0.4.0)
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
+  - amplitude-react-native (1.5.16):
+    - React-Core
+  - AmplitudeCore (1.2.4)
+  - AmplitudeSessionReplay (0.8.9):
+    - AmplitudeCore (< 2.0.0, >= 1.1.0)
   - boost (1.83.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.73.4)
@@ -108,7 +118,7 @@ PODS:
     - hermes-engine/Pre-built (= 0.73.4)
   - hermes-engine/Pre-built (0.73.4)
   - libevent (2.1.12)
-  - lottie-ios (4.4.1)
+  - lottie-ios (4.4.3)
   - lottie-react-native (6.7.0):
     - glog
     - lottie-ios (~> 4.4.1)
@@ -1180,7 +1190,7 @@ PODS:
     - React-jsi (= 0.73.4)
     - React-logger (= 0.73.4)
     - React-perflogger (= 0.73.4)
-  - RNCAsyncStorage (1.22.0):
+  - RNCAsyncStorage (2.2.0):
     - React-Core
   - RNExitApp (2.0.0):
     - React-Core
@@ -1213,20 +1223,22 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - RNSentry (5.19.0):
+  - RNSentry (6.19.0):
+    - glog
     - hermes-engine
+    - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - React-hermes
-    - Sentry/HybridSDK (= 8.17.1)
+    - Sentry/HybridSDK (= 8.53.2)
   - RNSVG (13.14.0):
     - React-Core
-  - Sentry/HybridSDK (8.17.1):
-    - SentryPrivate (= 8.17.1)
-  - SentryPrivate (8.17.1)
+  - Sentry/HybridSDK (8.53.2)
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
+  - "amplitude-plugin-session-replay-react-native (from `../node_modules/@amplitude/plugin-session-replay-react-native`)"
+  - "amplitude-react-native (from `../node_modules/@amplitude/analytics-react-native`)"
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -1305,6 +1317,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AmplitudeCore
+    - AmplitudeSessionReplay
     - Firebase
     - FirebaseAnalytics
     - FirebaseCore
@@ -1321,10 +1335,13 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - Sentry
-    - SentryPrivate
     - SocketRocket
 
 EXTERNAL SOURCES:
+  amplitude-plugin-session-replay-react-native:
+    :path: "../node_modules/@amplitude/plugin-session-replay-react-native"
+  amplitude-react-native:
+    :path: "../node_modules/@amplitude/analytics-react-native"
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
   DoubleConversion:
@@ -1468,6 +1485,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  amplitude-plugin-session-replay-react-native: b1af64bfc96c4b566ecd8a70d392661675523b99
+  amplitude-react-native: 27dc9831ff5edebfeb159efcf39b01d5db7451a0
+  AmplitudeCore: 25385873104770c5245ed5780acd3eb1b3ae74b7
+  AmplitudeSessionReplay: 9a9e35570e8b1c532ed50d67c81fd39c629ce726
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   FBLazyVector: 84f6edbe225f38aebd9deaf1540a4160b1f087d7
@@ -1486,7 +1507,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   hermes-engine: b2669ce35fc4ac14f523b307aff8896799829fe2
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  lottie-ios: e047b1d2e6239b787cc5e9755b988869cf190494
+  lottie-ios: fcb5e73e17ba4c983140b7d21095c834b3087418
   lottie-react-native: 652cb9e80481c508d0e3575185832d994d47c799
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
@@ -1540,7 +1561,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: ceaeeb19e75912958625f72883d240640e8f40da
   React-utils: 8439db27c3745f6de9d67eb61f5600c8d624274c
   ReactCommon: cc18bd33c0fab03c67620da6a602dcc1704e66b4
-  RNCAsyncStorage: 992e0c559d9c1b2b637ecb343f6f1713e99b6598
+  RNCAsyncStorage: b44e8a4e798c3e1f56bffccd0f591f674fb9198f
   RNExitApp: 4432b9b7cc5ccec9f91c94e507849891282befd4
   RNFBAnalytics: 18e99c5fc17e1eb49c8e61b51cd97063b93d9a5c
   RNFBApp: 04ab278465cfd7a4f22de8add81c604e6cb273f2
@@ -1550,13 +1571,12 @@ SPEC CHECKSUMS:
   RNNotifee: 8768d065bf1e2f9f8f347b4bd79147431c7eacd6
   RNPermissions: 4f7b81b0d457c8ec4e892cc36ef2376734a4b22c
   RNScreens: 8d1521c6e375a79dbd4525efaf21704cc64ac0cf
-  RNSentry: 9dda14f4774c64b1858700ce47e38706952f0f45
+  RNSentry: 675a323f18f52c8ad35b5462f94a83dfe16bc1a8
   RNSVG: 4cab00c621b328a4a2fedaaedc15d8822216723e
-  Sentry: d9f99f9cc13777c5d938650c1e1c85047bb4f0d1
-  SentryPrivate: 839b1e58addf58624087a80b2628e543193fa8ef
+  Sentry: 59993bffde4a1ac297ba6d268dc4bbce068d7c1b
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 1b901a6d6eeba4e8a2e8f308f708691cdb5db312
 
-PODFILE CHECKSUM: afa972c6e37a984a8d25656c2f1964410ae22904
+PODFILE CHECKSUM: f58f7ac7d5dc4df434f3698ef46c7403b47dafe0
 
 COCOAPODS: 1.16.2
