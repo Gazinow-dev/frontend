@@ -13,6 +13,10 @@ import { useNewRouteNavigation } from '@/navigation/NewRouteNavigation';
 import IconClock from '@assets/icons/clock.svg';
 import NoResultIcon from '@/assets/icons/no_result_icon.svg';
 import NoResultText from '@/assets/icons/no_result_text.svg';
+import {
+  trackMapBookmark3ArrivalChoice,
+  trackMapBookmark3DepartureChoice,
+} from '@/analytics/map.events';
 
 const SearchStation = () => {
   const newRouteNavigation = useNewRouteNavigation();
@@ -56,6 +60,13 @@ const SearchStation = () => {
 
   const stationBtnHandler = ({ stationName, stationLine }: (typeof searchResultData)[0]) => {
     if (!stationLine) return;
+
+    if (stationType === '출발역') {
+      trackMapBookmark3DepartureChoice({ station: stationName, line: stationLine });
+    } else {
+      trackMapBookmark3ArrivalChoice({ station: stationName, line: stationLine });
+    }
+
     addRecentMutate({ stationName, stationLine: subwayReturnLineName(stationLine) });
   };
 
@@ -63,7 +74,7 @@ const SearchStation = () => {
     <SafeAreaView className="flex-1 bg-white">
       <AddNewRouteHeader />
 
-      <View className="flex-row items-center rounded-28 border-1 border-[#d4d4d4] px-18 py-4 mt-20 mx-16">
+      <View className="mx-16 mt-20 flex-row items-center rounded-28 border-1 border-[#d4d4d4] px-18 py-4">
         <Input
           className="flex-1 h-36"
           value={searchTextValue}
@@ -85,7 +96,7 @@ const SearchStation = () => {
           </View>
 
           <ScrollView className="mt-18" keyboardShouldPersistTaps="handled">
-            {historyData?.map(({ stationName, stationLine }, index) => (
+            {historyData?.map(({ stationName, stationLine }, idx) => (
               <Pressable
                 style={({ pressed }) => ({
                   backgroundColor: pressed ? COLOR.GRAY_E5 : 'transparent',
@@ -96,12 +107,8 @@ const SearchStation = () => {
                   borderColor: COLOR.GRAY_EB,
                   gap: 7,
                 })}
-                onPress={() =>
-                  stationBtnHandler({
-                    stationName,
-                    stationLine,
-                  })
-                }
+                onPress={() => stationBtnHandler({ stationName, stationLine })}
+                key={`${stationName}_${idx}`}
               >
                 <IconClock />
                 <View>
@@ -151,7 +158,7 @@ const SearchStation = () => {
                       fontWeight="500"
                     />
                     <View className="h-3" />
-                    <FontText text={stationLine!} className="text-14 text-gray-999 leading-21" />
+                    <FontText text={stationLine!} className="text-14 leading-21 text-gray-999" />
                   </View>
                 </Pressable>
               ))}

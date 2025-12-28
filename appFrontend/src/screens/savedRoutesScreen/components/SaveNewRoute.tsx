@@ -13,6 +13,7 @@ import { useRoute } from '@react-navigation/native';
 import { showToast } from '@/global/utils/toast';
 import cn from 'classname';
 import { useRootNavigation } from '@/navigation/RootNavigation';
+import { trackMapBookmark4Name, trackMapBookmark5Finish } from '@/analytics/map.events';
 
 const SaveNewRoute = () => {
   const { state: resultData } = useRoute().params as { state: Path };
@@ -24,7 +25,15 @@ const SaveNewRoute = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isKeyboardVisible, setIsKeyboardVisible] = useState<boolean>(false);
 
+  const pathData = {
+    station_departure: resultData.firstStartStation,
+    station_arrival: resultData.lastEndStation,
+    line_departure: resultData.subPaths[1].name,
+    line_arrival: resultData.subPaths.at(-2)?.name!,
+  };
+
   useEffect(() => {
+    trackMapBookmark4Name(pathData);
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       setIsKeyboardVisible(true);
     });
@@ -38,16 +47,21 @@ const SaveNewRoute = () => {
   }, []);
 
   const freshSubPathData: SubPath[] = useMemo(() => {
-    const subPaths = resultData?.subPaths || [];
-    return subPaths.filter((subPath) => !!subPath.stations.length);
+    if (!resultData.subPaths) return [];
+    const subPaths = resultData.subPaths;
+    return Object.values(subPaths).filter((item) => !!item.stations.length);
   }, [resultData]);
 
   const { mutate, isLoading } = useSavedSubwayRoute({
     onSuccess: async (id) => {
+      trackMapBookmark5Finish({ ...pathData, name: roadName });
       await queryClient.invalidateQueries('getRoads');
       navigation.navigate('MyPageNavigation', {
         screen: 'NotiSettingsDetailScreen',
-        params: { myRoutes: { ...resultData, id, roadName }, isRightAfterAddingNewPath: true },
+        params: {
+          myRoutes: { ...resultData, subPaths: freshSubPathData, id, roadName },
+          prevScreen: 'SaveScreen',
+        },
       });
       showToast('saveRoute');
     },

@@ -10,6 +10,7 @@ import IconSwapChange from '@assets/icons/swap_change.svg';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { useFocusEffect } from '@react-navigation/native';
 import { FontText } from '@/global/ui';
+import { trackMapSearchArrivalClick, trackMapSearchDepartureClick } from '@/analytics/map.events';
 
 export interface SelectedStationTypes {
   departure: StationDataTypes;
@@ -24,6 +25,11 @@ const SwapStation = () => {
   const selectedStation = useAppSelect((state) => state.subwaySearch.selectedStation);
 
   const navigateSearchStation = (type: StationTypes) => {
+    if (type === '출발역') {
+      trackMapSearchDepartureClick();
+    } else {
+      trackMapSearchArrivalClick();
+    }
     dispatch(getStationType(type));
     navigation.navigate('IssueStack', { screen: 'SearchStation' });
   };
@@ -50,7 +56,7 @@ const SwapStation = () => {
     >
       <View className="flex-1 gap-12">
         <TouchableOpacity
-          className="justify-center pl-10 bg-gray-9f9 h-49 rounded-8"
+          className="justify-center pl-10 h-49 rounded-8 bg-gray-9f9"
           onPress={() => navigateSearchStation(DEPARTURE_STATION)}
         >
           <FontText
@@ -65,7 +71,7 @@ const SwapStation = () => {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          className="justify-center pl-10 bg-gray-9f9 h-49 rounded-8"
+          className="justify-center pl-10 h-49 rounded-8 bg-gray-9f9"
           onPress={() => navigateSearchStation(ARRIVAL_STATION)}
         >
           <FontText

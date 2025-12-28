@@ -17,6 +17,7 @@ import IssueKeywordIcon from '@/global/components/IssueKeywordIcon';
 import { COLOR } from '@/global/constants';
 import IconX from '@assets/icons/cross_x.svg';
 import { Shadow } from 'react-native-shadow-2';
+import { trackMapBookmark1 } from '@/analytics/map.events';
 interface MyRoutesProps {
   isVerifiedUser: 'success auth' | 'fail auth' | 'yet';
   isRefreshing: boolean;
@@ -40,10 +41,12 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: MyRoutesPro
   const [isInfoVisible, setInfoVisible] = useState(false);
   const showInfoHandler = () => setInfoVisible(!isInfoVisible);
 
-  const editMyRoutesHandler = () =>
+  const editMyRoutesHandler = () => {
+    trackMapBookmark1();
     isVerifiedUser === 'success auth'
       ? homeNavigation.navigate('SavedRoutes')
       : navigation.navigate('AuthStack', { screen: 'Landing' });
+  };
 
   useEffect(() => {
     queryClient.invalidateQueries(['getRoads']);
@@ -116,10 +119,7 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: MyRoutesPro
             startColor="#64646F10"
             containerStyle={{ position: 'absolute', top: 48, left: 10, zIndex: 20 }}
           >
-            <View
-              className="border border-gray-beb rounded-10 bg-white
-                  px-12 py-14 w-[264px] overflow-hidden space-y-10"
-            >
+            <View className="w-[264px] space-y-10 overflow-hidden rounded-10 border border-gray-beb bg-white px-12 py-14">
               <View className="flex-row">
                 <View className="flex-1 gap-2 py-2">
                   <FontText
@@ -165,7 +165,7 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: MyRoutesPro
                   <View>
                     <IssueKeywordIcon keyword="자연재해" color="#0EB5EB66" width={30} height={30} />
                   </View>
-                  <View className="flex-1 space-y-2 ">
+                  <View className="flex-1 space-y-2">
                     <FontText text="예정 이슈" className="text-13 leading-19" fontWeight="600" />
                     <FontText
                       text="저장된 경로에 영향을 줄 수 있는, 곧 시작될 예정 이슈예요"

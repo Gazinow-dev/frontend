@@ -11,6 +11,7 @@ import { useAppSelect } from '@/store';
 import SwapStation from './SwapStation';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
 import cn from 'classname';
+import { trackMapBookmark3Choice } from '@/analytics/map.events';
 
 interface SelectedStationTypes {
   departure: StationDataTypes;
@@ -94,18 +95,24 @@ const SelectNewRoute = () => {
 
                     <TouchableOpacity
                       className={cn(
-                        'w-24 h-24 rounded-full border-1 items-center justify-center border-gray-ebe',
+                        'h-24 w-24 items-center justify-center rounded-full border-1 border-gray-ebe',
                         {
                           'border-light-blue': selectedRoutePath === item,
                         },
                       )}
                       onPress={() => {
+                        trackMapBookmark3Choice({
+                          station_departure: item.firstStartStation,
+                          station_arrival: item.lastEndStation,
+                          line_departure: item.subPaths[1].name,
+                          line_arrival: item.subPaths.at(-2)?.name!,
+                        });
                         setSelectedRoutePath(item);
                       }}
                       hitSlop={20}
                     >
                       {selectedRoutePath === item && (
-                        <View className="rounded-full w-11 h-11 bg-light-blue" />
+                        <View className="rounded-full h-11 w-11 bg-light-blue" />
                       )}
                     </TouchableOpacity>
                   </View>
@@ -124,7 +131,7 @@ const SelectNewRoute = () => {
       </View>
 
       <TouchableOpacity
-        className={cn('py-11 mx-16 mb-41 rounded-5 items-center bg-gray-ddd', {
+        className={cn('mx-16 mb-41 items-center rounded-5 bg-gray-ddd py-11', {
           'bg-black-717': selectedRoutePath !== null,
         })}
         onPress={() =>

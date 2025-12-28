@@ -3,26 +3,28 @@ import { FontText, Toggle } from '@/global/ui';
 import { Pressable, SafeAreaView, TouchableOpacity, View } from 'react-native';
 import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
 import { useRoute } from '@react-navigation/native';
-import { MyRoutesType } from '@/global/apis/entity';
 import { useEffect, useState } from 'react';
 import cn from 'classname';
 import SetNotiTimesBtn from './SetNotiTimesBtn';
-import {
-  useAddPathNotiSettingsMutation,
-  useDisablePathNotiMutation,
-  useGetPathNotiQuery,
-  usePathUpdateNotiSettingsMutation,
-} from '../apis/hooks';
+import { useGetPathNotiQuery } from '../apis/hooks';
 import { rawTimeToReqTimeFormat } from '../util/timeFormatChange';
 import { showToast } from '@/global/utils/toast';
 import { useRootNavigation } from '@/navigation/RootNavigation';
+import { useMutation } from 'react-query';
+import { disablePathNotiFetch, updatePathNotiSettingsFetch } from '../apis/func';
+import { AxiosError } from 'axios';
+import {
+  DepArrNameAlert,
+  trackMapBookmark6Setting,
+  trackMapSearchBookmarkSetting,
+} from '@/analytics/map.events';
+import { RootStackParamList } from '@/navigation/types/navigation';
 
 const NotiSettingsDetailScreen = () => {
   const navigation = useRootNavigation();
-  const { myRoutes, isRightAfterAddingNewPath } = useRoute().params as {
-    myRoutes: MyRoutesType;
-    isRightAfterAddingNewPath?: boolean;
-  };
+  const params = useRoute().params as RootStackParamList['MyPageNavigation']['params'];
+  if (!params) return;
+  const { myRoutes, prevScreen } = params;
 
   const { pathNotiData } = useGetPathNotiQuery(myRoutes.id);
   const [isPushNotificationOn, setIsPushNotificationOn] = useState<boolean>(false);
@@ -63,37 +65,59 @@ const NotiSettingsDetailScreen = () => {
     });
   };
 
+  const routeInfo = {
+    station_departure: myRoutes.subPaths[0].stations[0].stationName,
+    station_arrival: myRoutes.subPaths.at(-1)?.stations.at(-1)?.stationName!,
+    line_departure: myRoutes.subPaths[0].name,
+    line_arrival: myRoutes.subPaths.at(-1)?.name!,
+    name: myRoutes.roadName,
+  };
+
+  const handleAfterSuccess = (trackData: DepArrNameAlert) => {
+    if (prevScreen === 'SaveModal') {
+      trackMapSearchBookmarkSetting(trackData);
+      navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
+      return;
+    }
+
+    if (prevScreen === 'SaveScreen') {
+      trackMapBookmark6Setting(trackData);
+      navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
+      return;
+    }
+
+    navigation.goBack();
+  };
+
+  const handle400Error = (error: AxiosError) => {
+    if (error.response?.status === 400) {
+      showToast('saveNotiSettingsFailed');
+    }
+  };
+
   // 완료 버튼 클릭 시 요청 전송
-  const { addPathNotiSettingsMutate } = useAddPathNotiSettingsMutation({
-    onSuccess: async () => navigation.goBack(),
-    onError: async (error) => {
-      if (error.response?.status == 400) {
-        showToast('saveNotiSettingsFailed');
-      }
+  const { mutate: updatePathNotiSettingsMutate } = useMutation(updatePathNotiSettingsFetch, {
+    onSuccess: (_, provider) => {
+      const trackData = {
+        ...routeInfo,
+        alarm: 'on' as const,
+        starttime: provider.dayTimeRanges[0].fromTime.replace(':', ''),
+        finishtime: provider.dayTimeRanges[0].toTime.replace(':', ''),
+        day: provider.dayTimeRanges.map(({ day }) => day).join(', '),
+      };
+      handleAfterSuccess(trackData);
     },
+    onError: handle400Error,
   });
-  const { updatePathNotiSettingsMutate } = usePathUpdateNotiSettingsMutation({
-    onSuccess: async () => {
-      if (isRightAfterAddingNewPath) {
-        navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
-      } else {
-        navigation.goBack();
-      }
+  const { mutate: disablePathNotiMutate } = useMutation(disablePathNotiFetch, {
+    onSuccess: () => {
+      const trackData = {
+        ...routeInfo,
+        alarm: 'off' as const,
+      };
+      handleAfterSuccess(trackData);
     },
-    onError: async (error) => {
-      if (error.response?.status == 400) {
-        showToast('saveNotiSettingsFailed');
-      }
-    },
-  });
-  const { disablePathNotiMutate } = useDisablePathNotiMutation({
-    onSuccess: async () => {
-      if (isRightAfterAddingNewPath) {
-        navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
-      } else {
-        navigation.goBack();
-      }
-    },
+    onError: handle400Error,
   });
 
   const createNotiSettingsBody = (selectedDays: string[], myRoutesId: number) => {
@@ -113,8 +137,6 @@ const NotiSettingsDetailScreen = () => {
       disablePathNotiMutate(myRoutes.id);
     } else if (pathNotiData?.enabled) {
       updatePathNotiSettingsMutate(notiSettings);
-    } else {
-      addPathNotiSettingsMutate(notiSettings);
     }
   };
 
