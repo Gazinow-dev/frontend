@@ -11,6 +11,7 @@ import { rawLineNameToNowCapsuleText } from '@/global/utils/subwayLine';
 import IconHeart from '@/assets/icons/icon-heart-mono.svg';
 import IconComment from '@/assets/icons/icon-chat-bubble-mono.svg';
 import { IssueGet } from '@/global/apis/entity';
+import { trackNowTotalIssueClick } from '@/analytics/now.events';
 
 interface SingleIssueContainerProps {
   issue: IssueGet;
@@ -53,19 +54,27 @@ const SingleIssueContainer = ({ issue }: SingleIssueContainerProps) => {
         columnGap: 12,
       })}
       onPress={() => {
+        trackNowTotalIssueClick({
+          title,
+          status: issueStatus,
+          like: likeCount,
+          comments: commentCount,
+          line: relatedSubwayLines,
+          date: timeAgo,
+        });
         dispatch(getIssueId(id));
         navigation.navigate('IssueStack', { screen: 'IssueDetail' });
       }}
     >
       <View
-        className={cn('bg-[#EB514733] rounded-6 justify-center h-32 w-32', {
+        className={cn('h-32 w-32 justify-center rounded-6 bg-[#EB514733]', {
           'bg-gray-beb': issueStatus === '종료',
           'bg-[#FF841F33]': issueStatus === '예정',
         })}
       >
         <FontText
           text={issueStatus}
-          className={cn('text-12 leading-14 text-light-red text-center', {
+          className={cn('text-center text-12 leading-14 text-light-red', {
             'text-gray-999': issueStatus === '종료',
             'text-[#F57F1F]': issueStatus === '예정',
           })}
@@ -75,10 +84,10 @@ const SingleIssueContainer = ({ issue }: SingleIssueContainerProps) => {
 
       <View className="flex-1 space-y-6">
         <View className="flex-row space-x-8">
-          <FontText text="영향권" className="text-[#58606A] text-13 leading-19" fontWeight="600" />
+          <FontText text="영향권" className="text-13 leading-19 text-[#58606A]" fontWeight="600" />
           <FontText
             text={relatedSubwayLines}
-            className="flex-1 text-gray-999 text-13 leading-19"
+            className="flex-1 text-13 leading-19 text-gray-999"
             numberOfLines={1}
           />
         </View>
@@ -96,8 +105,8 @@ const SingleIssueContainer = ({ issue }: SingleIssueContainerProps) => {
             <IconComment width={18} height={18} />
             <FontText text={'' + commentCount} className="text-13 leading-19 text-gray-999" />
           </View>
-          <View className="w-1 h-10 bg-[#D9D9D9]" />
-          <FontText text={timeAgo} className="text-gray-999 text-13 leading-19" />
+          <View className="h-10 w-1 bg-[#D9D9D9]" />
+          <FontText text={timeAgo} className="text-13 leading-19 text-gray-999" />
         </View>
       </View>
     </Pressable>
