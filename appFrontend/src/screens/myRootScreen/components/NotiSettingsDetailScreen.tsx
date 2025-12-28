@@ -87,7 +87,13 @@ const NotiSettingsDetailScreen = () => {
     },
   });
   const { disablePathNotiMutate } = useDisablePathNotiMutation({
-    onSuccess: async () => navigation.goBack(),
+    onSuccess: async () => {
+      if (isRightAfterAddingNewPath) {
+        navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
+      } else {
+        navigation.goBack();
+      }
+    },
   });
 
   const createNotiSettingsBody = (selectedDays: string[], myRoutesId: number) => {
@@ -156,7 +162,7 @@ const NotiSettingsDetailScreen = () => {
                 {days.map((day) => (
                   <Pressable
                     key={day}
-                    className={cn('w-40 h-40 rounded-full items-center justify-center', {
+                    className={cn('h-40 w-40 items-center justify-center rounded-full', {
                       'bg-purple-54f': selectedDays.includes(day),
                       'bg-gray-f2': !selectedDays.includes(day),
                     })}
@@ -180,7 +186,7 @@ const NotiSettingsDetailScreen = () => {
       </View>
 
       <TouchableOpacity
-        className={cn('h-48 mx-16 mb-41 rounded-5 items-center justify-center bg-black-717', {
+        className={cn('mx-16 mb-41 h-48 items-center justify-center rounded-5 bg-black-717', {
           'bg-gray-ddd': isPushNotificationOn && selectedDays.length === 0,
         })}
         onPress={saveSettingsHandler}
