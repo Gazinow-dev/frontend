@@ -15,7 +15,7 @@ const SubscribeTermsScreen = () => {
         <IconChevronLeft />
       </TouchableOpacity>
 
-      <ScrollView className="m-16 space-y-28">
+      <ScrollView contentContainerStyle={{ rowGap: 28, padding: 16 }}>
         <FontText
           text="가는길지금 이용약관 ver.1"
           fontWeight="500"
