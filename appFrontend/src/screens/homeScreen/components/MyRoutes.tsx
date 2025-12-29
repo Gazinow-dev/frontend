@@ -91,7 +91,7 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: MyRoutesPro
           className="absolute inset-0 z-10 w-screen h-screen bg-amber-20"
         />
       )}
-      <View className="relative mt-16 bg-white rounded-14">
+      <View className="relative bg-white rounded-14">
         <View className="flex-row items-center justify-between p-16 pt-20">
           <View className="flex-row gap-4">
             <FontText

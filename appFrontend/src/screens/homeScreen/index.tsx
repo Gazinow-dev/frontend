@@ -35,7 +35,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-gray-9f9">
       <ScrollView
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 64 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 64, gap: 16 }}
         showsVerticalScrollIndicator={false}
         scrollEnabled={isVerifiedUser === 'success auth'}
         refreshControl={
@@ -46,14 +46,12 @@ const HomeScreen = () => {
           />
         }
       >
-        <View className="flex-row mt-15">
-          <View className="flex-1" />
+        <View className="flex-row-reverse">
           <TouchableOpacity onPress={authStateHandler} hitSlop={20}>
             <IconBell />
           </TouchableOpacity>
         </View>
         <IssueCarrousel isRefreshing={isRefreshing} setIsRefreshing={setIsRefreshing} />
-        <View className="h-16" />
         <SwapStation />
         <MyRoutes
           isVerifiedUser={isVerifiedUser}

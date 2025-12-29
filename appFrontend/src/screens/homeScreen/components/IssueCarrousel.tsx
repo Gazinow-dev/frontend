@@ -98,8 +98,7 @@ const IssueCarrousel = ({ isRefreshing, setIsRefreshing }: IssueCarrouselProps) 
               backgroundColor: pressed ? COLOR.GRAY_E5 : COLOR.WHITE,
               padding: 16,
               paddingVertical: 20,
-              margin: 16,
-              marginBottom: 0,
+              marginHorizontal: 16,
               borderRadius: 12,
               gap: 6,
             })}
