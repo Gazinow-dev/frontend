@@ -82,12 +82,7 @@ const SearchStationScreen = () => {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: COLOR.WHITE,
-      }}
-    >
+    <SafeAreaView className="flex-1 bg-white">
       <View className="mx-16 mt-16 flex-row items-center rounded-28 border border-[#d4d4d4] py-4 pl-[18.25px] pr-16">
         <TouchableOpacity hitSlop={20} onPress={() => navigation.goBack()}>
           <IconLeftArrow />

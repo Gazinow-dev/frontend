@@ -52,8 +52,7 @@ const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: CommentInputP
   };
 
   return (
-    <View>
-      <View className="h-1 bg-gray-beb" />
+    <View className="border-t border-gray-beb">
       <Pressable
         className="mx-16 my-12 max-h-83 flex-row items-center justify-between rounded-12 bg-[#F9FAFB] py-10 pl-16 pr-8"
         onPress={handlePressInput}

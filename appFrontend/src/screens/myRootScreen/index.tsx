@@ -31,7 +31,7 @@ const MyRootScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
       {isVerifiedUser !== 'success auth' ? (
         <View className="px-32 py-44">
           <TouchableOpacity

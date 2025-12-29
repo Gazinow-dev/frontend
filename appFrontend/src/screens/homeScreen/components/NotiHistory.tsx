@@ -41,7 +41,7 @@ const NotiHistory = () => {
   const { mutate } = useMutation(updateNotiReadStatus);
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
       <View className="flex-row items-center justify-between p-16">
         <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={20}>
           <IconLeftArrowHead color="#3F3F46" width={24} />

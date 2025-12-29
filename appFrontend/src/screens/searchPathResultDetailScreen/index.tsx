@@ -80,7 +80,7 @@ const SearchPathResultDetailScreen = () => {
   }, [resultData]);
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
       <View className="flex-1 px-16">
         {/* header */}
         <View className="flex-row items-center justify-between py-16">
@@ -174,11 +174,12 @@ const SearchPathResultDetailScreen = () => {
         </View>
 
         {/* 경계선 */}
-        <View className="h-px mt-16 mb-21 bg-gray-beb" />
+        <View className="h-px mt-16 bg-gray-beb" />
 
         <FlatList
           data={freshSubPathData}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingTop: 21 }}
           keyExtractor={(item) => {
             if (typeof item === 'string') return 'dance';
             return item.distance + 'detail' + item.sectionTime;

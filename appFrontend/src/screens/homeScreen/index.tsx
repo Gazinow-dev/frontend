@@ -34,7 +34,7 @@ const HomeScreen = () => {
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-9f9">
+    <SafeAreaView className="flex-1 bg-gray-9f9" edges={['top']}>
       <ScrollView
         contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 64, gap: 16 }}
         showsVerticalScrollIndicator={false}

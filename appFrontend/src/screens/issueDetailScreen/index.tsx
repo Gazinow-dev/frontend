@@ -50,7 +50,7 @@ const IssueDetailScreen = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       className="flex-1"
     >
-      <SafeAreaView className="flex-1 bg-white">
+      <SafeAreaView className="flex-1 bg-white pb-15" edges={['top']}>
         <MyTabModal
           isVisible={isOpenLoginModal}
           onCancel={() => setIsOpenLoginModal(false)}

@@ -77,7 +77,7 @@ const SaveNewRoute = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       className="flex-1"
     >
-      <SafeAreaView className="flex-1 bg-white">
+      <SafeAreaView className="flex-1 bg-white" edges={['top']}>
         <AddNewRouteHeader />
         <View className="flex-1 px-16 bg-white">
           <View className="mt-32 mx-33 mb-22">

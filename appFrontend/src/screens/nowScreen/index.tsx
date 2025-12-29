@@ -93,7 +93,7 @@ const NowScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
       {isAllIssuesLoading ? (
         <View className="items-center justify-center flex-1">
           <LoadingCircle width={50} height={50} />

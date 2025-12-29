@@ -51,7 +51,7 @@ const SearchPathResultScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
       <View className="flex-row p-16 border-b-16 border-gray-f2 pb-15 pl-22">
         <TouchableOpacity className="mt-4 mr-16" onPress={() => homeNavigation.goBack()}>
           <IconLeftArrowHead color="#3F3F46" />
