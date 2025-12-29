@@ -1,6 +1,6 @@
 import { SubwaySimplePath } from '@/global/components';
 import { FontText, Toggle } from '@/global/ui';
-import { Pressable, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Pressable, TouchableOpacity, View } from 'react-native';
 import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
 import { useRoute } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
@@ -19,6 +19,7 @@ import {
   trackMapSearchBookmarkSetting,
 } from '@/analytics/map.events';
 import { RootStackParamList } from '@/navigation/types/navigation';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const NotiSettingsDetailScreen = () => {
   const navigation = useRootNavigation();

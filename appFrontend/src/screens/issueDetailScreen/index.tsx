@@ -4,7 +4,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   RefreshControl,
-  SafeAreaView,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -19,6 +18,7 @@ import CommentInput from './components/CommentInput';
 import MyTabModal from '@/global/components/MyTabModal';
 import RetryLoad from '@/global/components/RetryLoad';
 import NetworkErrorScreen from '@/global/components/NetworkErrorScreen';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const IssueDetailScreen = () => {
   const navigation = useRootNavigation();

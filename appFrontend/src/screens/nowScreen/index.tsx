@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { SingleIssueContainer, LaneButtons, PopularIssues } from './components';
 import { FreshSubwayLineName, IssueGet, NowScreenCapsules } from '@/global/apis/entity';
-import { FlatList, RefreshControl, SafeAreaView, View } from 'react-native';
+import { FlatList, RefreshControl, View } from 'react-native';
 import {
   useGetAllIssuesQuery,
   useGetIssuesByLaneQuery,
@@ -10,6 +10,7 @@ import {
 import { FontText } from '@/global/ui';
 import { subwayReturnLineName } from '@/global/utils/subwayLine';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const NowScreen = () => {
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);

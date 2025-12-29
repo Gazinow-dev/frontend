@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FontText } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { useRootNavigation } from '@/navigation/RootNavigation';
-import { Pressable, SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
 import IconPlusBtn from '@assets/icons/plus_circle.svg';
 import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
 import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
@@ -14,6 +14,7 @@ import RetryLoad from '@/global/components/RetryLoad';
 import { trackMapBookmark2, trackMapBookmarkDelete } from '@/analytics/map.events';
 import { myPathDeleteFetch } from '@/global/apis/func';
 import { MyRoutesType } from '@/global/apis/entity';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SavedRoutesScreen = () => {
   const navigation = useRootNavigation();

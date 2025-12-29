@@ -1,4 +1,4 @@
-import { Pressable, SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
 import { FontText } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { SubwaySimplePath } from '@/global/components';
@@ -12,6 +12,7 @@ import SwapStation from './SwapStation';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
 import cn from 'classname';
 import { trackMapBookmark3Choice } from '@/analytics/map.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface SelectedStationTypes {
   departure: StationDataTypes;

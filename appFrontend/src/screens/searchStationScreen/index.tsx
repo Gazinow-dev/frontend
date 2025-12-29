@@ -5,7 +5,7 @@ import { subwayReturnLineName } from '@/global/utils/subwayLine';
 import { useAppDispatch, useAppSelect } from '@/store';
 import { getSeletedStation } from '@/store/modules/stationSearchModule';
 import { useState } from 'react';
-import { Pressable, SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Input } from '@/global/ui';
 import IconLocationPin from '@assets/icons/location_pin.svg';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
@@ -16,6 +16,7 @@ import { RawSubwayLineName } from '@/global/apis/entity';
 import NoResultIcon from '@/assets/icons/no_result_icon.svg';
 import NoResultText from '@/assets/icons/no_result_text.svg';
 import { trackMapSearchArrivalChoice, trackMapSearchDepartureChoice } from '@/analytics/map.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SearchStationScreen = () => {
   const navigation = useHomeNavigation();

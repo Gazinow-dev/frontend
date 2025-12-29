@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelect } from '@/store';
 import { getSeletedStation, getStationType, initialize } from '@/store/modules';
 import type { StationDataTypes } from '@/store/modules';
 import IconSwapChange from '@assets/icons/swap_change.svg';
-import { SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import AddNewRouteHeader from './AddNewRouteHeader';
 import { useNewRouteNavigation } from '@/navigation/NewRouteNavigation';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
@@ -14,6 +14,7 @@ import {
   trackMapBookmark3ArrivalClick,
   trackMapBookmark3DepartureClick,
 } from '@/analytics/map.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export interface SelectedStationTypes {
   departure: StationDataTypes;

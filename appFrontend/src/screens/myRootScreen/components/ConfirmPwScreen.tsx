@@ -1,12 +1,5 @@
 import { useCallback, useState } from 'react';
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { FontText, Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { useRootNavigation } from '@/navigation/RootNavigation';
@@ -21,6 +14,7 @@ import cn from 'classname';
 import { useAppDispatch } from '@/store';
 import { getAuthorizationState } from '@/store/modules';
 import { trackMyWithdraw } from '@/analytics/my.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ConfirmPwScreen = () => {
   const myPageNavigation = useMyPageNavigation();

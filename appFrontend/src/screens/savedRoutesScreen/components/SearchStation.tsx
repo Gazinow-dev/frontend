@@ -5,7 +5,7 @@ import { getSeletedStation } from '@/store/modules/stationSearchModule';
 import { useAddRecentSearch, useGetSearchHistory, useSearchStationName } from '@/global/apis/hooks';
 import { useState } from 'react';
 import IconXCircleFill from '@assets/icons/x_circle_fill.svg';
-import { Pressable, SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
 import { subwayReturnLineName } from '@/global/utils/subwayLine';
 import IconLocationPin from '@assets/icons/location_pin.svg';
 import AddNewRouteHeader from './AddNewRouteHeader';
@@ -17,6 +17,7 @@ import {
   trackMapBookmark3ArrivalChoice,
   trackMapBookmark3DepartureChoice,
 } from '@/analytics/map.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SearchStation = () => {
   const newRouteNavigation = useNewRouteNavigation();

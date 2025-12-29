@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { FontText, Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import IconXCircle from '@assets/icons/x-circle-standard.svg';
@@ -16,6 +16,7 @@ import { useChangeNicknameMutation, useCheckNicknameMutation } from '../apis/hoo
 import { debounce } from 'lodash';
 import cn from 'classname';
 import { AxiosError } from 'axios';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ChangeNickNameScreen = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -105,7 +106,7 @@ const ChangeNickNameScreen = () => {
       </View>
 
       <View className="flex-1 px-16 bg-gray-9f9">
-        <View className="flex-row items-center px-16 py-8 mt-34 mb-8 rounded-5 border-1 border-[#d4d4d4] bg-white">
+        <View className="mb-8 mt-34 flex-row items-center rounded-5 border-1 border-[#d4d4d4] bg-white px-16 py-8">
           <Input
             className="flex-1 h-36"
             value={newNickname}

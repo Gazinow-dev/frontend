@@ -5,7 +5,7 @@ import { useSavedSubwayRoute } from '@/global/apis/hooks';
 import { useQueryClient } from 'react-query';
 import { SubwaySimplePath } from '@/global/components';
 import { Path, SubPath } from '@/global/apis/entity';
-import { View, Keyboard, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Keyboard, TouchableOpacity } from 'react-native';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import XCircle from '@assets/icons/x-circle-standard.svg';
 import AddNewRouteHeader from './AddNewRouteHeader';
@@ -14,6 +14,7 @@ import { showToast } from '@/global/utils/toast';
 import cn from 'classname';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { trackMapBookmark4Name, trackMapBookmark5Finish } from '@/analytics/map.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SaveNewRoute = () => {
   const { state: resultData } = useRoute().params as { state: Path };

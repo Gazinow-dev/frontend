@@ -1,4 +1,4 @@
-import { RefreshControl, SafeAreaView, ScrollView, View } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import { IssueCarrousel, SwapStation, MyRoutes } from './components';
 import { useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
@@ -7,6 +7,7 @@ import IconBell from '@assets/icons/bell.svg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HomeScreen = () => {
   const { isVerifiedUser, tryAuthorization } = useTryAuthorization();

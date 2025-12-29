@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FontText } from '@/global/ui';
 import MyTabModal from '@/global/components/MyTabModal';
-import { Alert, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Alert, TouchableOpacity, View } from 'react-native';
 import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/configureStore';
@@ -15,6 +15,7 @@ import { showToast } from '@/global/utils/toast';
 import { useAppDispatch } from '@/store';
 import { getAuthorizationState } from '@/store/modules';
 import { trackMyWithdraw } from '@/analytics/my.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ConfirmQuitScreen = () => {
   const myPageNavigation = useMyPageNavigation();

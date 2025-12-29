@@ -1,20 +1,13 @@
 import { COLOR } from '@/global/constants';
-import { FontText, Space } from '@/global/ui';
+import { FontText } from '@/global/ui';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import {
-  Animated,
-  Dimensions,
-  Modal,
-  Pressable,
-  SafeAreaView,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Animated, Dimensions, Modal, Pressable, TouchableOpacity, View } from 'react-native';
 import IconCheck from '@assets/icons/check.svg';
 import { WebView } from 'react-native-webview';
 import StepButton from '../ui/StepButton';
 import IconX from '@assets/icons/cross_x.svg';
 import IconRightArrowHead from '@assets/icons/right_arrow_head.svg';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type AgreeTermsType = '약관 전체 동의' | '(필수) 서비스 약관 동의' | '(필수) 개인정보 수집 동의';
 

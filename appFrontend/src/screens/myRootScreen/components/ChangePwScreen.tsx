@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import cn from 'classname';
-import { Alert, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Alert, TouchableOpacity, View } from 'react-native';
 import { FontText, Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import MyTabModal from '@/global/components/MyTabModal';
@@ -10,6 +10,7 @@ import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
 import IconCheck from '@assets/icons/check_green.svg';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import { useChangePasswordMutation, useCheckPasswordMutation } from '../apis/hooks';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ChangePwScreen = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -131,7 +132,7 @@ const ChangePwScreen = () => {
 
         <FontText text="현재 비밀번호" className="text-14 leading-21" fontWeight="500" />
         <Input
-          className="py-12 mt-6 mb-2 px-18 rounded-5 bg-gray-f2"
+          className="py-12 mt-6 mb-2 rounded-5 bg-gray-f2 px-18"
           value={curPassword}
           placeholder={`비밀번호를 입력해주세요`}
           placeholderTextColor={COLOR.GRAY_BE}
@@ -155,7 +156,7 @@ const ChangePwScreen = () => {
         )}
         <FontText className="mt-28 text-14 leading-21" text="새로운 비밀번호" fontWeight="500" />
         <Input
-          className="py-12 mt-6 mb-2 px-18 rounded-5 bg-gray-f2"
+          className="py-12 mt-6 mb-2 rounded-5 bg-gray-f2 px-18"
           value={changePassword}
           placeholder={`변경하실 비밀번호를 입력해주세요`}
           placeholderTextColor={COLOR.GRAY_BE}
@@ -196,7 +197,7 @@ const ChangePwScreen = () => {
           </View>
         )}
         <Input
-          className="py-12 mt-6 mb-2 px-18 rounded-5 bg-gray-f2"
+          className="py-12 mt-6 mb-2 rounded-5 bg-gray-f2 px-18"
           value={confirmPassword}
           placeholder={`비밀번호를 확인해주세요`}
           placeholderTextColor={COLOR.GRAY_BE}
