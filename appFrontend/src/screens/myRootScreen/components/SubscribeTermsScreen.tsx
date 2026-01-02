@@ -1,8 +1,9 @@
-import { SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
 import { FontText } from '@/global/ui';
 import { SUBSCRIBE_TERMS_VER_1 } from '@/global/constants/terms';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SubscribeTermsScreen = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -14,7 +15,7 @@ const SubscribeTermsScreen = () => {
         <IconChevronLeft />
       </TouchableOpacity>
 
-      <ScrollView className="m-16 space-y-28">
+      <ScrollView contentContainerStyle={{ rowGap: 28, padding: 16 }}>
         <FontText
           text="가는길지금 이용약관 ver.1"
           fontWeight="500"

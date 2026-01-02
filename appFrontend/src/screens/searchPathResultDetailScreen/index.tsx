@@ -1,10 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { FlatList, Modal, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { FlatList, Modal, TouchableOpacity, View } from 'react-native';
 import { FontText, Space } from '@/global/ui';
 import { useRoute } from '@react-navigation/native';
 import NewRouteSaveModal from './components/NewRouteSaveModal';
 import SearchPathDetailItem from './components/SearchPathDetailItem';
-import { useDeleteSavedSubwayRoute } from '@/global/apis/hooks';
 import { Path, SubPath } from '@/global/apis/entity';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
 import { COLOR } from '@/global/constants';
@@ -14,7 +13,9 @@ import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
 import { useAppSelect } from '@/store';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { showToast } from '@/global/utils/toast';
-import { updateNotiReadStatus } from '@/global/apis/func';
+import { myPathDeleteFetch, updateNotiReadStatus } from '@/global/apis/func';
+import { trackMapBookmarkDelete } from '@/analytics/map.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface DetailData extends Path {
   id: number;
@@ -38,10 +39,17 @@ const SearchPathResultDetailScreen = () => {
 
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
 
-  const { isLoading, deleteMutate } = useDeleteSavedSubwayRoute({
+  const { mutate: deleteMutate, isLoading } = useMutation(myPathDeleteFetch, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['getRoads']);
+      const trackData = {
+        station_departure: resultData.subPaths[0].stations[0].stationName,
+        station_arrival: resultData.subPaths.at(-1)?.stations.at(-1)?.stationName!,
+        line_departure: resultData.subPaths[0].name,
+        line_arrival: resultData.subPaths.at(-1)?.name!,
+      };
+      trackMapBookmarkDelete(trackData);
       setIsBookmarking(false);
+      await queryClient.invalidateQueries('getRoads');
       showToast('deleteRoute');
     },
   });
@@ -72,7 +80,7 @@ const SearchPathResultDetailScreen = () => {
   }, [resultData]);
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
       <View className="flex-1 px-16">
         {/* header */}
         <View className="flex-row items-center justify-between py-16">
@@ -99,20 +107,20 @@ const SearchPathResultDetailScreen = () => {
             ) : (
               <Modal visible onRequestClose={() => setIsSaveRouteModalOpen(false)} transparent>
                 <View className="relative items-center justify-center flex-1">
-                  <View className="bg-[#00000099] absolute top-0 w-full h-full" />
+                  <View className="absolute top-0 h-full w-full bg-[#00000099]" />
                   <View className="absolute w-4/5 px-24 pt-32 pb-24 bg-white rounded-12">
                     <FontText
                       text={`로그인하면 관심 경로의\n이슈를 알려드려요`}
                       className="text-center text-18"
                       fontWeight="600"
                     />
-                    <View className="flex-row w-full gap-x-8 mt-30">
+                    <View className="flex-row w-full mt-30 gap-x-8">
                       <TouchableOpacity
                         activeOpacity={0.5}
                         className="items-center flex-1 py-12 border rounded-5 border-gray-999"
                         onPress={() => setIsSaveRouteModalOpen(false)}
                       >
-                        <FontText text="취소" className="text-gray-999 text-14" fontWeight="600" />
+                        <FontText text="취소" className="text-14 text-gray-999" fontWeight="600" />
                       </TouchableOpacity>
                       <TouchableOpacity
                         activeOpacity={0.5}
@@ -166,11 +174,12 @@ const SearchPathResultDetailScreen = () => {
         </View>
 
         {/* 경계선 */}
-        <View className="h-px mt-16 mb-21 bg-gray-beb" />
+        <View className="h-px mt-16 bg-gray-beb" />
 
         <FlatList
           data={freshSubPathData}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingTop: 21 }}
           keyExtractor={(item) => {
             if (typeof item === 'string') return 'dance';
             return item.distance + 'detail' + item.sectionTime;

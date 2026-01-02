@@ -10,6 +10,7 @@ import {
 import { useAppSelect } from '@/store';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useMemo } from 'react';
+import { trackNowTotalIssueLine } from '@/analytics/now.events';
 
 interface LaneButtonsProps {
   activeButton: NowScreenCapsules;
@@ -40,20 +41,23 @@ const LaneButtons = ({ activeButton, setActiveButton }: LaneButtonsProps) => {
   const otherStations: FreshSubwayLineName[] = allLines.filter((line) => !myLines?.includes(line));
 
   return (
-    <View className="pt-16 bg-white">
+    <View className="bg-white pt-16">
       <ScrollView
         //TODO: iOS 측면 그라데이션
         fadingEdgeLength={130}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        className="pt-4 pb-12 space-x-12"
+        className="space-x-12 pb-12 pt-4"
       >
         <View className="w-4" />
         {['전체', ...myLines, ...otherStations].map((capsule) => (
           <TouchableOpacity
             key={capsule}
-            onPress={() => setActiveButton(capsule as NowScreenCapsules)}
-            className="px-[8.48px] py-[6.79px] rounded-17"
+            onPress={() => {
+              trackNowTotalIssueLine(capsule as NowScreenCapsules);
+              setActiveButton(capsule as NowScreenCapsules);
+            }}
+            className="rounded-17 px-[8.48px] py-[6.79px]"
             style={{
               backgroundColor:
                 activeButton === capsule

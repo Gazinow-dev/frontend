@@ -1,4 +1,4 @@
-import { Pressable, SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
 import { FontText } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import dayjs from 'dayjs';
@@ -15,6 +15,7 @@ import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
 import { Path } from '@/global/apis/entity';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
 import { IssuesBanner } from '../homeScreen/components';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 dayjs.locale('ko');
 
@@ -50,8 +51,8 @@ const SearchPathResultScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-row p-16 pb-15 pl-22 border-b-16 border-gray-f2">
+    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
+      <View className="flex-row p-16 border-b-16 border-gray-f2 pb-15 pl-22">
         <TouchableOpacity className="mt-4 mr-16" onPress={() => homeNavigation.goBack()}>
           <IconLeftArrowHead color="#3F3F46" />
         </TouchableOpacity>
@@ -69,7 +70,7 @@ const SearchPathResultScreen = () => {
       )}
       {data && (
         <>
-          <View className="px-16 bg-white py-14 border-b-1 border-gray-beb">
+          <View className="px-16 bg-white border-b-1 border-gray-beb py-14">
             <FontText
               text={'오늘 ' + dayjs().format('A HH시 mm분') + ' 기준'}
               className="text-purple-54f"

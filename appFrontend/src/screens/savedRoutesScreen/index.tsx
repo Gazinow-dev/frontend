@@ -2,25 +2,37 @@ import React, { useState } from 'react';
 import { FontText } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { useRootNavigation } from '@/navigation/RootNavigation';
-import { Pressable, SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
 import IconPlusBtn from '@assets/icons/plus_circle.svg';
 import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
-import { useDeleteSavedSubwayRoute, useGetSavedRoutesQuery } from '@/global/apis/hooks';
+import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
 import MyTabModal from '@/global/components/MyTabModal';
-import { useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { SubwaySimplePath } from '@/global/components';
 import { showToast } from '@/global/utils/toast';
 import RetryLoad from '@/global/components/RetryLoad';
+import { trackMapBookmark2, trackMapBookmarkDelete } from '@/analytics/map.events';
+import { myPathDeleteFetch } from '@/global/apis/func';
+import { MyRoutesType } from '@/global/apis/entity';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SavedRoutesScreen = () => {
   const navigation = useRootNavigation();
 
   const [popupVisible, setPopupVisible] = useState<boolean>(false);
-  const [routeToDelete, setRouteToDelete] = useState<number | null>(null);
+  const [routeToDelete, setRouteToDelete] = useState<MyRoutesType | null>(null);
   const queryClient = useQueryClient();
 
-  const { deleteMutate } = useDeleteSavedSubwayRoute({
+  const { mutate } = useMutation(myPathDeleteFetch, {
     onSuccess: async () => {
+      if (!routeToDelete) return;
+      const trackData = {
+        station_departure: routeToDelete.subPaths[0].stations[0].stationName,
+        station_arrival: routeToDelete.subPaths.at(-1)?.stations.at(-1)?.stationName!,
+        line_departure: routeToDelete.subPaths[0].name,
+        line_arrival: routeToDelete.subPaths.at(-1)?.name!,
+      };
+      trackMapBookmarkDelete(trackData);
       await queryClient.invalidateQueries('getRoads');
       showToast('deleteRoute');
     },
@@ -28,15 +40,16 @@ const SavedRoutesScreen = () => {
 
   const { myRoutes, getSavedRoutesRefetch, isSavedRoutesError } = useGetSavedRoutesQuery();
 
-  const showDeletePopup = (id: number) => {
-    setRouteToDelete(id);
+  const showDeletePopup = (route: MyRoutesType) => {
+    setRouteToDelete(route);
     setPopupVisible(true);
   };
 
   const hideModal = () => setPopupVisible(false);
 
   const handleConfirm = () => {
-    deleteMutate({ id: routeToDelete });
+    if (!routeToDelete) return;
+    mutate({ id: routeToDelete.id });
     hideModal();
   };
 
@@ -72,8 +85,8 @@ const SavedRoutesScreen = () => {
                       className="text-18 leading-23"
                       fontWeight="600"
                     />
-                    <TouchableOpacity onPress={() => showDeletePopup(item.id)} hitSlop={20}>
-                      <FontText text="삭제" className="text-13 text-gray-999 leading-19" />
+                    <TouchableOpacity onPress={() => showDeletePopup(item)} hitSlop={20}>
+                      <FontText text="삭제" className="text-13 leading-19 text-gray-999" />
                     </TouchableOpacity>
                   </View>
                   <SubwaySimplePath
@@ -97,7 +110,10 @@ const SavedRoutesScreen = () => {
               borderTopLeftRadius: myRoutes?.length === 0 ? 15 : 0,
               borderTopRightRadius: myRoutes?.length === 0 ? 15 : 0,
             })}
-            onPress={() => navigation.navigate('NewRouteNavigation', { screen: 'Swap' })}
+            onPress={() => {
+              trackMapBookmark2();
+              navigation.navigate('NewRouteNavigation', { screen: 'Swap' });
+            }}
           >
             <IconPlusBtn />
             <FontText

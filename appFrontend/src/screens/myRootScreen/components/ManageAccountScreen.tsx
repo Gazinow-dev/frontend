@@ -3,7 +3,7 @@ import { useRootNavigation } from '@/navigation/RootNavigation';
 import { getEncryptedStorage, removeEncryptedStorage } from '@/global/utils';
 import { FontText } from '@/global/ui';
 import MyTabModal from '@/global/components/MyTabModal';
-import { Pressable, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Pressable, TouchableOpacity, View } from 'react-native';
 import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import { showToast } from '@/global/utils/toast';
@@ -12,6 +12,8 @@ import { getAuthorizationState } from '@/store/modules';
 import { useLogoutMutation } from '../apis/hooks';
 import { COLOR } from '@/global/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { trackLogout } from '@/analytics/auth.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface RenderMenuProps {
   text: string;
@@ -44,6 +46,7 @@ const ManageAccountScreen = () => {
       await removeEncryptedStorage('refresh_token');
       await AsyncStorage.removeItem('isSocialLoggedIn');
       dispatch(getAuthorizationState('fail auth'));
+      trackLogout();
       navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
       showToast('logout');
     },

@@ -1,7 +1,8 @@
-import { SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { FontText } from '@global/ui';
 import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
 import { useRootNavigation } from '@/navigation/RootNavigation';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface NetworkErrorScreenProps {
   retryFn: () => void;
@@ -28,7 +29,7 @@ const NetworkErrorScreen = ({ retryFn, isShowBackBtn }: NetworkErrorScreenProps)
           text={`일시적인 오류가 발생했어요\n다시 시도해 주세요`}
           className="mt-8 mb-32 text-center text-gray-999"
         />
-        <TouchableOpacity onPress={retryFn} className="px-16 py-12 w-80 bg-black-717 rounded-5">
+        <TouchableOpacity onPress={retryFn} className="px-16 py-12 w-80 rounded-5 bg-black-717">
           <FontText text="확인" className="text-center text-white text-14" fontWeight="600" />
         </TouchableOpacity>
       </View>

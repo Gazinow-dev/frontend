@@ -5,7 +5,7 @@ import { subwayReturnLineName } from '@/global/utils/subwayLine';
 import { useAppDispatch, useAppSelect } from '@/store';
 import { getSeletedStation } from '@/store/modules/stationSearchModule';
 import { useState } from 'react';
-import { Pressable, SafeAreaView, ScrollView, TouchableOpacity, View } from 'react-native';
+import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Input } from '@/global/ui';
 import IconLocationPin from '@assets/icons/location_pin.svg';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
@@ -15,7 +15,8 @@ import IconXCircleFill from '@assets/icons/x_circle_fill.svg';
 import { RawSubwayLineName } from '@/global/apis/entity';
 import NoResultIcon from '@/assets/icons/no_result_icon.svg';
 import NoResultText from '@/assets/icons/no_result_text.svg';
-import cn from 'classname';
+import { trackMapSearchArrivalChoice, trackMapSearchDepartureChoice } from '@/analytics/map.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SearchStationScreen = () => {
   const navigation = useHomeNavigation();
@@ -68,19 +69,21 @@ const SearchStationScreen = () => {
 
   const stationBtnHandler = ({ stationName, stationLine }: (typeof searchResultData)[0]) => {
     if (!stationLine) return;
+
+    if (stationType === '출발역') {
+      trackMapSearchDepartureChoice({ station: stationName, line: stationLine });
+    } else {
+      trackMapSearchArrivalChoice({ station: stationName, line: stationLine });
+    }
+
     if (isVerifiedUser === 'success auth')
       addRecentMutate({ stationName, stationLine: subwayReturnLineName(stationLine) });
     else saveSelectedStation(subwayReturnLineName(stationLine), stationName);
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: COLOR.WHITE,
-      }}
-    >
-      <View className="py-4 pl-[18.25px] pr-16 mx-16 mt-16 flex-row items-center rounded-28 border border-[#d4d4d4]">
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="mx-16 mt-16 flex-row items-center rounded-28 border border-[#d4d4d4] py-4 pl-[18.25px] pr-16">
         <TouchableOpacity hitSlop={20} onPress={() => navigation.goBack()}>
           <IconLeftArrow />
         </TouchableOpacity>
@@ -91,7 +94,7 @@ const SearchStationScreen = () => {
           inputMode="search"
           onChangeText={changeSearchText}
           autoFocus
-          className="ml-16 mr-[31.2px] flex-1 h-36"
+          className="ml-16 mr-[31.2px] h-36 flex-1"
         />
         <TouchableOpacity hitSlop={20} onPress={deleteInputText}>
           <IconXCircleFill />
@@ -127,12 +130,7 @@ const SearchStationScreen = () => {
                   borderColor: COLOR.GRAY_EB,
                 })}
                 key={index}
-                onPress={() =>
-                  stationBtnHandler({
-                    stationName,
-                    stationLine,
-                  })
-                }
+                onPress={() => stationBtnHandler({ stationName, stationLine })}
               >
                 <IconClock />
                 <View className="gap-[2.95px]">
@@ -173,7 +171,7 @@ const SearchStationScreen = () => {
                     className="text-black leading-21"
                     fontWeight="500"
                   />
-                  <FontText text={stationLine!} className="text-14 leading-21 text-gray-99" />
+                  <FontText text={stationLine!} className="text-gray-99 text-14 leading-21" />
                 </View>
               </Pressable>
             ))}

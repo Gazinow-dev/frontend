@@ -16,14 +16,19 @@ import LoginNaver from '@assets/icons/login_naver.svg';
 import LoginApple from '@assets/icons/login_apple.svg';
 import LoginGoogle from '@assets/icons/login_google.svg';
 
-type SocialLoginTypes = 'naver' | 'google' | 'apple';
+import { trackLogin } from '@/analytics/auth.events';
+import { trackRegisterFinish } from '@/analytics/register.events';
+
+export type SocialLoginTypes = 'naver' | 'google' | 'apple';
 
 const SocialLogin = () => {
   const navigation = useRootNavigation();
   const dispatch = useAppDispatch();
 
   const { mutate: sendFirebaseTokenMutate } = useMutation(sendFirebaseTokenFetch, {
-    onSuccess: () => {
+    onSuccess: (data, provider) => {
+      if (!provider.loginType) return;
+      trackLogin({ type: provider.loginType, userId: data.memberId });
       navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
       showToast('socialLoginSuccess');
       AsyncStorage.setItem('isSocialLoggedIn', 'true');
@@ -65,8 +70,16 @@ const SocialLogin = () => {
         await setEncryptedStorage('access_token', urlParams.accessToken);
         await setEncryptedStorage('refresh_token', urlParams.refreshToken);
 
+        if (urlParams.socialLoginIsNewMember === 'true') {
+          trackRegisterFinish(socialLoginType);
+        }
+
         const firebaseToken = await messaging().getToken();
-        sendFirebaseTokenMutate({ email: urlParams.email, firebaseToken });
+        sendFirebaseTokenMutate({
+          email: urlParams.email,
+          firebaseToken,
+          loginType: socialLoginType,
+        });
       }
     } catch (error) {
       showToast('socialLoginFailed');
@@ -76,7 +89,7 @@ const SocialLogin = () => {
   return (
     <View className="mb-20 space-y-12 mx-30">
       <TouchableOpacity
-        className="flex-row items-center justify-between px-19 py-6 rounded-30 bg-[#03C75A]"
+        className="flex-row items-center justify-between rounded-30 bg-[#03C75A] px-19 py-6"
         onPress={() => onSocialLoginPress('naver')}
       >
         <LoginNaver />
@@ -85,7 +98,7 @@ const SocialLogin = () => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        className="flex-row items-center justify-between py-6 bg-white px-19 rounded-30"
+        className="flex-row items-center justify-between py-6 bg-white rounded-30 px-19"
         onPress={() => onSocialLoginPress('google')}
       >
         <LoginGoogle />
@@ -95,7 +108,7 @@ const SocialLogin = () => {
 
       {Platform.OS === 'ios' && (
         <TouchableOpacity
-          className="flex-row items-center justify-between py-6 bg-black px-19 rounded-30"
+          className="flex-row items-center justify-between py-6 bg-black rounded-30 px-19"
           onPress={() => onSocialLoginPress('apple')}
         >
           <LoginApple />

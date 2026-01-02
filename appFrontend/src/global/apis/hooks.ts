@@ -10,7 +10,6 @@ import { useMutation, useQuery, useInfiniteQuery } from 'react-query';
 import {
   searchAddHistoryFetch,
   searchHistoryFetch,
-  searchPathDeleteFetch,
   searchPathSaveFetch,
   searchPathsFetch,
   getAllIssuesFetch,
@@ -118,17 +117,6 @@ export const useSavedSubwayRoute = ({
   });
 
   return { data, isLoading, mutate };
-};
-
-/**
- * 저장한 지하철 경로 삭제 훅
- */
-export const useDeleteSavedSubwayRoute = ({ onSuccess }: { onSuccess: () => void }) => {
-  const { data, isLoading, mutate } = useMutation(searchPathDeleteFetch, {
-    onSuccess,
-  });
-
-  return { data, isLoading, deleteMutate: mutate };
 };
 
 /**

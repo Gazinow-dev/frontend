@@ -10,6 +10,7 @@ import { IssueGet } from '@/global/apis/entity';
 import { useAppSelect } from '@/store';
 import { showToast } from '@/global/utils/toast';
 import { AxiosError } from 'axios';
+import { trackNowComments } from '@/analytics/now.events';
 
 interface CommentInputProps {
   issueData: IssueGet;
@@ -26,7 +27,11 @@ const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: CommentInputP
   const isBannedUser = issueData.commentRestricted;
 
   const { mutate: postCommentMutate } = useMutation(postComment, {
-    onSuccess: () => {
+    onSuccess: (_, provider) => {
+      trackNowComments({
+        title: issueData.title,
+        text: provider.issueCommentContent,
+      });
       Keyboard.dismiss();
       setCommentText('');
       queryClient.invalidateQueries('getCommentsOnAIssue');
@@ -47,10 +52,9 @@ const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: CommentInputP
   };
 
   return (
-    <View>
-      <View className="h-1 bg-gray-beb" />
+    <View className="border-t border-gray-beb">
       <Pressable
-        className="flex-row justify-between items-center max-h-83 pr-8 pl-16 rounded-12 py-10 mx-16 my-12 bg-[#F9FAFB]"
+        className="mx-16 my-12 max-h-83 flex-row items-center justify-between rounded-12 bg-[#F9FAFB] py-10 pl-16 pr-8"
         onPress={handlePressInput}
       >
         <Input
@@ -66,7 +70,7 @@ const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: CommentInputP
         />
         <TouchableOpacity
           disabled={!commentText}
-          className={cn('items-center justify-center ml-12 rounded-full w-28 h-28 bg-gray-ddd', {
+          className={cn('ml-12 h-28 w-28 items-center justify-center rounded-full bg-gray-ddd', {
             'bg-light-blue': commentText,
           })}
           hitSlop={20}

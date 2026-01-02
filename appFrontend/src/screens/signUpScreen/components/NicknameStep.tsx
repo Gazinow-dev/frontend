@@ -1,7 +1,7 @@
 import { COLOR } from '@/global/constants';
 import cn from 'classname';
 import { FontText, Input } from '@/global/ui';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { useCheckNickname, useSignUp } from '../apis/hooks';
 import { debounce } from 'lodash';
@@ -13,9 +13,10 @@ import IconCheck from '@assets/icons/check.svg';
 import IconXCircle from '@assets/icons/x-circle-standard.svg';
 import { SignUpParams } from '../apis/entity';
 import messaging from '@react-native-firebase/messaging';
-import { useMutation } from 'react-query';
-import { sendFirebaseTokenFetch } from '@/screens/landingScreen/apis/func';
 import React from 'react';
+import { trackRegisterFinish, trackRegisterTerms } from '@/analytics/register.events';
+import { trackLogin } from '@/analytics/auth.events';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface NicknameStepProps {
   nicknameValue: string;
@@ -34,17 +35,17 @@ const NicknameStep = ({
 
   const [checkMessage, setCheckMessage] = useState<string>('');
 
-  const { mutate: sendFirebaseTokenMutate } = useMutation(sendFirebaseTokenFetch);
-
   const { signUpMutate } = useSignUp({
-    onSuccess: async ({ email, nickName, accessToken, refreshToken }) => {
+    onSuccess: async (res) => {
+      const { email, nickName, accessToken, refreshToken, memberId } = res;
       dispatch(saveUserInfo({ email, nickname: nickName }));
       dispatch(getAuthorizationState('success auth'));
       await setEncryptedStorage('access_token', accessToken);
       await setEncryptedStorage('refresh_token', refreshToken);
+      await AsyncStorage.removeItem('isSocialLoggedIn');
+      trackRegisterFinish('email');
+      trackLogin({ type: 'email', userId: memberId });
       setStep();
-      const firebaseToken = await messaging().getToken();
-      sendFirebaseTokenMutate({ email: signUpData.email, firebaseToken });
     },
   });
 
@@ -76,6 +77,10 @@ const NicknameStep = ({
     [],
   );
 
+  useEffect(() => {
+    trackRegisterTerms();
+  }, []);
+
   return (
     <View className="flex-1">
       <View className="gap-10">
@@ -87,7 +92,7 @@ const NicknameStep = ({
       </View>
 
       <View className="flex-1 mt-40">
-        <View className="justify-center pl-16 mt-6 mb-8 bg-gray-f2 rounded-5 py-13">
+        <View className="justify-center pl-16 mt-6 mb-8 rounded-5 bg-gray-f2 py-13">
           <Input
             value={nicknameValue}
             placeholder="닉네임 입력"
@@ -136,10 +141,12 @@ const NicknameStep = ({
         backgroundCondition={
           data?.state === 200 && !!checkMessage && !isLoading && nicknameValue.length >= 2
         }
-        onPress={() => {
+        onPress={async () => {
+          const firebaseToken = await messaging().getToken();
           signUpMutate({
             ...signUpData,
             nickName: signUpData.nickname,
+            firebaseToken,
           });
         }}
         disabled={data?.state !== 200 || (!checkMessage && isLoading && nicknameValue.length < 2)}

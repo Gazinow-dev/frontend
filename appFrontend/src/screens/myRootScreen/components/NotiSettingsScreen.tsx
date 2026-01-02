@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { AppState, AppStateStatus, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { AppState, AppStateStatus, TouchableOpacity, View } from 'react-native';
 import { FontText } from '@/global/ui';
 import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import RequestNotiOn from './RequestNotiOn';
 import NotiSettings from './NotiSettings';
 import notifee from '@notifee/react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const NotiSettingsScreen = () => {
   const myPageNavigation = useMyPageNavigation();

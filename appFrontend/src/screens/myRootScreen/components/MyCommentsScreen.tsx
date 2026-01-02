@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
-import { SafeAreaView, View, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
+import { View, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
 import { FontText } from '@/global/ui';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import { useGetMyComments } from '@screens/myRootScreen/apis/hooks';
 import SingleCommentContainer from '@/screens/myRootScreen/components/SingleCommentContainer';
 import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
 import NetworkErrorScreen from '@/global/components/NetworkErrorScreen';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MyCommentsScreen = () => {
   const myPageNavigation = useMyPageNavigation();

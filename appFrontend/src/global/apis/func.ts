@@ -153,7 +153,7 @@ export const searchPathSaveFetch = async (data: SaveMyRoutesType) => {
 /**
  * 저장된 지하철 경로 삭제 axios
  */
-export const searchPathDeleteFetch = async (params: { id: number | null }) => {
+export const myPathDeleteFetch = async (params: { id: number }) => {
   try {
     const res = await authServiceAPI.delete('/api/v1/my_find_road/delete_route', { params });
     return res.data.data;

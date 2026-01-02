@@ -2,13 +2,14 @@ import { FontText, Input, Space } from '@/global/ui';
 import cn from 'classname';
 import { COLOR } from '@/global/constants';
 import { KeyboardAvoidingView, Modal, Platform, Pressable, View } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SubwaySimplePath } from '@/global/components';
 import { useSavedSubwayRoute } from '@/global/apis/hooks';
 import { Path } from '@/global/apis/entity';
 import { useQueryClient } from 'react-query';
 import { showToast } from '@/global/utils/toast';
 import { useRootNavigation } from '@/navigation/RootNavigation';
+import { trackMapSearchBookmarkFinish, trackMapSearchBookmarkName } from '@/analytics/map.events';
 
 interface NewRouteSaveModalProps {
   freshData: Path;
@@ -29,15 +30,29 @@ const NewRouteSaveModal = ({
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [routeName, setRouteName] = useState<string>('');
 
+  const newRouteData = {
+    station_departure: freshData.firstStartStation,
+    station_arrival: freshData.lastEndStation,
+    line_departure: freshData.subPaths[0].name,
+    line_arrival: freshData.subPaths.at(-1)?.name!,
+  };
+
   const { isLoading, mutate } = useSavedSubwayRoute({
     onSuccess: async (id) => {
       await queryClient.invalidateQueries(['getRoads']);
       setMyPathId(id);
       onBookmark();
       closeModal();
+      trackMapSearchBookmarkFinish({
+        ...newRouteData,
+        name: routeName,
+      });
       navigation.navigate('MyPageNavigation', {
         screen: 'NotiSettingsDetailScreen',
-        params: { myRoutes: { ...freshData, id, roadName: routeName } },
+        params: {
+          myRoutes: { ...freshData, id, roadName: routeName },
+          prevScreen: 'SaveModal',
+        },
       });
       showToast('saveRoute');
     },
@@ -54,6 +69,10 @@ const NewRouteSaveModal = ({
       roadName: routeName,
     });
   };
+
+  useEffect(() => {
+    trackMapSearchBookmarkName(newRouteData);
+  }, []);
 
   return (
     <Modal visible onRequestClose={closeModal} transparent>
@@ -148,11 +167,11 @@ const NewRouteSaveModal = ({
               className="items-center flex-1 py-12 border rounded-5 border-gray-999"
               onPress={closeModal}
             >
-              <FontText text="취소" className="text-gray-999 text-14" fontWeight="600" />
+              <FontText text="취소" className="text-14 text-gray-999" fontWeight="600" />
             </Pressable>
             <Space width={8} />
             <Pressable
-              className={cn('py-12 rounded-5 flex-1 items-center bg-black-717', {
+              className={cn('flex-1 items-center rounded-5 bg-black-717 py-12', {
                 'bg-gray-ddd': isLoading || isDuplicatedError || routeName.length < 1,
               })}
               onPress={saveHandler}

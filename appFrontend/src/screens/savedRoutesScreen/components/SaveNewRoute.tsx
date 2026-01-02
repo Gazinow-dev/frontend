@@ -5,7 +5,7 @@ import { useSavedSubwayRoute } from '@/global/apis/hooks';
 import { useQueryClient } from 'react-query';
 import { SubwaySimplePath } from '@/global/components';
 import { Path, SubPath } from '@/global/apis/entity';
-import { View, Keyboard, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Keyboard, TouchableOpacity } from 'react-native';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import XCircle from '@assets/icons/x-circle-standard.svg';
 import AddNewRouteHeader from './AddNewRouteHeader';
@@ -13,6 +13,8 @@ import { useRoute } from '@react-navigation/native';
 import { showToast } from '@/global/utils/toast';
 import cn from 'classname';
 import { useRootNavigation } from '@/navigation/RootNavigation';
+import { trackMapBookmark4Name, trackMapBookmark5Finish } from '@/analytics/map.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SaveNewRoute = () => {
   const { state: resultData } = useRoute().params as { state: Path };
@@ -24,7 +26,15 @@ const SaveNewRoute = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isKeyboardVisible, setIsKeyboardVisible] = useState<boolean>(false);
 
+  const pathData = {
+    station_departure: resultData.firstStartStation,
+    station_arrival: resultData.lastEndStation,
+    line_departure: resultData.subPaths[1].name,
+    line_arrival: resultData.subPaths.at(-2)?.name!,
+  };
+
   useEffect(() => {
+    trackMapBookmark4Name(pathData);
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       setIsKeyboardVisible(true);
     });
@@ -38,16 +48,21 @@ const SaveNewRoute = () => {
   }, []);
 
   const freshSubPathData: SubPath[] = useMemo(() => {
-    const subPaths = resultData?.subPaths || [];
-    return subPaths.filter((subPath) => !!subPath.stations.length);
+    if (!resultData.subPaths) return [];
+    const subPaths = resultData.subPaths;
+    return Object.values(subPaths).filter((item) => !!item.stations.length);
   }, [resultData]);
 
   const { mutate, isLoading } = useSavedSubwayRoute({
     onSuccess: async (id) => {
+      trackMapBookmark5Finish({ ...pathData, name: roadName });
       await queryClient.invalidateQueries('getRoads');
       navigation.navigate('MyPageNavigation', {
         screen: 'NotiSettingsDetailScreen',
-        params: { myRoutes: { ...resultData, id, roadName }, isRightAfterAddingNewPath: true },
+        params: {
+          myRoutes: { ...resultData, subPaths: freshSubPathData, id, roadName },
+          prevScreen: 'SaveScreen',
+        },
       });
       showToast('saveRoute');
     },
@@ -62,7 +77,7 @@ const SaveNewRoute = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       className="flex-1"
     >
-      <SafeAreaView className="flex-1 bg-white">
+      <SafeAreaView className="flex-1 bg-white" edges={['top']}>
         <AddNewRouteHeader />
         <View className="flex-1 px-16 bg-white">
           <View className="mt-32 mx-33 mb-22">

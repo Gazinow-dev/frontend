@@ -1,20 +1,14 @@
 import { COLOR } from '@/global/constants';
-import { FontText, Space } from '@/global/ui';
+import { FontText } from '@/global/ui';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import {
-  Animated,
-  Dimensions,
-  Modal,
-  Pressable,
-  SafeAreaView,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Animated, Dimensions, Modal, Pressable, TouchableOpacity, View } from 'react-native';
 import IconCheck from '@assets/icons/check.svg';
 import { WebView } from 'react-native-webview';
 import StepButton from '../ui/StepButton';
 import IconX from '@assets/icons/cross_x.svg';
 import IconRightArrowHead from '@assets/icons/right_arrow_head.svg';
+import { trackRegisterPassword } from '@/analytics/register.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type AgreeTermsType = '약관 전체 동의' | '(필수) 서비스 약관 동의' | '(필수) 개인정보 수집 동의';
 
@@ -87,13 +81,15 @@ const SubscribeTermsModal = ({ setStep, closeModal }: SubscribeTermsModalProps) 
       duration: 600,
       useNativeDriver: true,
     }).start();
+
+    trackRegisterPassword();
   }, []);
 
   return (
     <Modal visible onRequestClose={!!openUrl ? () => setOpenUrl('') : closeModal} transparent>
       {!!openUrl ? (
         <SafeAreaView className="flex-1">
-          <View className="pb-10 pl-16 bg-white pt-13 border-b-1 border-gray-ddd">
+          <View className="pb-10 pl-16 bg-white border-b-1 border-gray-ddd pt-13">
             <TouchableOpacity hitSlop={20} onPress={() => setOpenUrl('')}>
               <IconX width={24} height={24} />
             </TouchableOpacity>
@@ -103,9 +99,9 @@ const SubscribeTermsModal = ({ setStep, closeModal }: SubscribeTermsModalProps) 
       ) : (
         <>
           {/* 백그라운드 */}
-          <View className="flex-1 bg-[#00000099] justify-end">
+          <View className="flex-1 justify-end bg-[#00000099]">
             <Animated.View
-              className="h-[65%] bg-white pt-33 px-16 "
+              className="h-[65%] bg-white px-16 pt-33"
               style={{
                 borderTopStartRadius: 14,
                 borderTopEndRadius: 14,
@@ -114,10 +110,10 @@ const SubscribeTermsModal = ({ setStep, closeModal }: SubscribeTermsModalProps) 
             >
               <Pressable
                 hitSlop={10}
-                className="flex-row items-center pl-10 mb-15 py-13 bg-gray-9f9 rounded-5"
+                className="flex-row items-center pl-10 mb-15 rounded-5 bg-gray-9f9 py-13"
                 onPress={allChangeAgreeTerms}
               >
-                <View className="items-center justify-center mr-10 bg-gray-3e3 rounded-3 w-22 h-22">
+                <View className="items-center justify-center mr-10 h-22 w-22 rounded-3 bg-gray-3e3">
                   {isCheckAll && <IconCheck width={18} height={18} color={COLOR.WHITE} />}
                 </View>
                 <FontText text="약관 전체 동의" className="text-14" fontWeight="600" />
@@ -132,7 +128,7 @@ const SubscribeTermsModal = ({ setStep, closeModal }: SubscribeTermsModalProps) 
                     onPress={() => changeAgreeTerms(text)}
                   >
                     <View className="flex-row items-center">
-                      <View className="items-center justify-center mr-10 rounded-3 bg-gray-3e3 w-22 h-22">
+                      <View className="items-center justify-center mr-10 h-22 w-22 rounded-3 bg-gray-3e3">
                         {agreeTerms.includes(text) && (
                           <IconCheck width={18} height={18} color={COLOR.WHITE} />
                         )}

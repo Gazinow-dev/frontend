@@ -1,4 +1,4 @@
-import { RefreshControl, SafeAreaView, ScrollView, View } from 'react-native';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import { IssueCarrousel, SwapStation, MyRoutes } from './components';
 import { useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
@@ -7,6 +7,7 @@ import IconBell from '@assets/icons/bell.svg';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HomeScreen = () => {
   const { isVerifiedUser, tryAuthorization } = useTryAuthorization();
@@ -33,9 +34,9 @@ const HomeScreen = () => {
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-9f9">
+    <SafeAreaView className="flex-1 bg-gray-9f9" edges={['top']}>
       <ScrollView
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 64 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 64, gap: 16 }}
         showsVerticalScrollIndicator={false}
         scrollEnabled={isVerifiedUser === 'success auth'}
         refreshControl={
@@ -46,14 +47,12 @@ const HomeScreen = () => {
           />
         }
       >
-        <View className="flex-row mt-15">
-          <View className="flex-1" />
+        <View className="flex-row-reverse">
           <TouchableOpacity onPress={authStateHandler} hitSlop={20}>
             <IconBell />
           </TouchableOpacity>
         </View>
         <IssueCarrousel isRefreshing={isRefreshing} setIsRefreshing={setIsRefreshing} />
-        <View className="h-16" />
         <SwapStation />
         <MyRoutes
           isVerifiedUser={isVerifiedUser}

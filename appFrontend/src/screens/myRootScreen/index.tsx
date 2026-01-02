@@ -1,4 +1,4 @@
-import { Platform, Pressable, SafeAreaView, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
 import { FontText } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { useSelector } from 'react-redux';
@@ -11,6 +11,7 @@ import { useRootNavigation } from '@/navigation/RootNavigation';
 import VersionCheck from 'react-native-version-check';
 import { useEffect, useState } from 'react';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MyRootScreen = () => {
   const rootNavigation = useRootNavigation();
@@ -30,7 +31,7 @@ const MyRootScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
       {isVerifiedUser !== 'success auth' ? (
         <View className="px-32 py-44">
           <TouchableOpacity

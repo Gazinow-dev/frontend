@@ -1,10 +1,12 @@
-import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { CompleteStep, EmailStep, NicknameStep, PasswordStep } from './components';
 import { COLOR } from '@/global/constants';
 import { useAuthNavigation } from '@/navigation/AuthNavigation';
 import IconLeftArrow from '@assets/icons/left_arrow_round.svg';
 import { SignUpParams } from './apis/entity';
+import { trackRegisterStart } from '@/analytics/register.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export type SignUpStepType = 'email' | 'password' | 'nickname' | 'complete';
 
@@ -40,6 +42,10 @@ const SignUpScreen = () => {
         break;
     }
   };
+
+  useEffect(() => {
+    trackRegisterStart();
+  }, []);
 
   return (
     <SafeAreaView className="flex-1 bg-gray-9f9">
