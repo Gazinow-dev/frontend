@@ -2,10 +2,10 @@ import { ScrollView, View } from 'react-native';
 import { FontText, Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import IconCheck from '@assets/icons/check.svg';
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
 import SubscribeTermsModal from './SubscribeTermsModal';
 import StepButton from '../ui/StepButton';
+import { trackRegisterAuthFinish } from '@/analytics/register.events';
 
 const combinationValidation = new RegExp(
   /^(?=.*[a-zA-Z])(?=.*[!~.,?@#$%^&()_/|;:'"<>*+=-])(?=.*[0-9])/,
@@ -42,6 +42,11 @@ const PasswordStep = ({
   const lengValidColor = isValidLength ? COLOR.LIGHT_GREEN : COLOR.GRAY_999;
 
   const closeModal = () => setIsTermsOpenModal(false);
+
+  useEffect(() => {
+    trackRegisterAuthFinish();
+  }, []);
+
   return (
     <>
       {isTermsOpenModal && <SubscribeTermsModal setStep={setStep} closeModal={closeModal} />}
@@ -57,7 +62,7 @@ const PasswordStep = ({
             <FontText text={emailValue} fontWeight="500" />
           </View>
           <FontText text="Password" className="text-14 text-gray-183" fontWeight="500" />
-          <View className="justify-center px-16 mt-6 py-13 rounded-5 bg-gray-f2">
+          <View className="justify-center px-16 mt-6 rounded-5 bg-gray-f2 py-13">
             <Input
               value={passwordValue}
               placeholder="비밀번호 입력"

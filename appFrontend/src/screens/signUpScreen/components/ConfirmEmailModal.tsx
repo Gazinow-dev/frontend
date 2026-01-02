@@ -17,6 +17,7 @@ import StepButton from '../ui/StepButton';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import IconLeftArrow from '@assets/icons/left_arrow_round.svg';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
+import { trackRegisterAuthSend } from '@/analytics/register.events';
 
 interface ConfirmEmailModalProps {
   authNumber: string;
@@ -62,6 +63,8 @@ const ConfirmEmailModal = ({
       duration: 600,
       useNativeDriver: true,
     }).start();
+
+    trackRegisterAuthSend();
   }, []);
 
   return (
@@ -99,7 +102,7 @@ const ConfirmEmailModal = ({
             />
 
             <View className="flex-1 mt-57">
-              <View className="flex-row items-center justify-center px-16 bg-gray-f2 py-13 rounded-5">
+              <View className="flex-row items-center justify-center px-16 rounded-5 bg-gray-f2 py-13">
                 <Input
                   value={authNumberValue}
                   placeholder="인증번호 4자리"
@@ -113,7 +116,7 @@ const ConfirmEmailModal = ({
                 <FontText text={timerValue.minutes + ':' + freshTimerSeconds} className="text-13" />
               </View>
 
-              <View className="flex-row items-center ml-[10.17] mt-7">
+              <View className="ml-[10.17] mt-7 flex-row items-center">
                 {isNotPass && <IconXCircle width={14} height={14} />}
                 <View className="w-3" />
                 <FontText
