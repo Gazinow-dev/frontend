@@ -12,11 +12,17 @@ import { Alert } from 'react-native';
 import RNExitApp from 'react-native-exit-app';
 import { RootStackParamList } from './navigation/types/navigation';
 import analytics from '@react-native-firebase/analytics';
-import * as amplitude from '@amplitude/analytics-react-native';
+import * as Amplitude from '@amplitude/analytics-react-native';
 import { SessionReplayPlugin } from '@amplitude/plugin-session-replay-react-native';
 
-amplitude.init(AMPLITUDE_API_KEY, undefined, { disableCookies: true }).promise;
-amplitude.add(new SessionReplayPlugin()).promise;
+Amplitude.init(AMPLITUDE_API_KEY, undefined, {
+  disableCookies: true,
+}).promise;
+Amplitude.add(
+  new SessionReplayPlugin({
+    sampleRate: 0.3,
+  }),
+).promise;
 
 Sentry.init({
   enabled: MODE === 'production',
