@@ -12,6 +12,7 @@ import { getAuthorizationState } from '@/store/modules';
 import { useLogoutMutation } from '../apis/hooks';
 import { COLOR } from '@/global/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { trackLogout } from '@/analytics/auth.events';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface RenderMenuProps {
@@ -45,6 +46,7 @@ const ManageAccountScreen = () => {
       await removeEncryptedStorage('refresh_token');
       await AsyncStorage.removeItem('isSocialLoggedIn');
       dispatch(getAuthorizationState('fail auth'));
+      trackLogout();
       navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
       showToast('logout');
     },

@@ -13,6 +13,7 @@ import IconXCircle from '@assets/icons/x-circle-standard.svg';
 import IconLeftArrow from '@assets/icons/left_arrow_round.svg';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { trackLogin } from '@/analytics/auth.events';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const emailValidation = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/);
@@ -33,6 +34,7 @@ const SignInScreen = () => {
       await setEncryptedStorage('access_token', data.accessToken);
       await setEncryptedStorage('refresh_token', data.refreshToken);
       await AsyncStorage.removeItem('isSocialLoggedIn');
+      trackLogin({ type: 'email', userId: data.memberId });
       navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
     },
     onError: ({ status }) => {
@@ -80,7 +82,7 @@ const SignInScreen = () => {
 
         <ScrollView className="flex-1">
           <FontText text="Email" className="text-14 text-gray-183" fontWeight="500" />
-          <View className="justify-center pl-16 mt-6 bg-gray-f2 py-13 rounded-5">
+          <View className="justify-center pl-16 mt-6 rounded-5 bg-gray-f2 py-13">
             <Input
               value={formData.email}
               placeholder="이메일을 입력해주세요"
@@ -97,7 +99,7 @@ const SignInScreen = () => {
           <Space height={20} />
 
           <FontText text="Password" className="text-14 text-gray-183" fontWeight="500" />
-          <View className="justify-center pl-16 mt-6 bg-gray-f2 py-13 rounded-5">
+          <View className="justify-center pl-16 mt-6 rounded-5 bg-gray-f2 py-13">
             <Input
               placeholder="비밀번호를 입력해주세요"
               value={formData.password}
@@ -119,7 +121,7 @@ const SignInScreen = () => {
           )}
         </ScrollView>
         <TouchableOpacity
-          className={cn('rounded-5 justify-center items-center h-48 mb-20 bg-black-717', {
+          className={cn('mb-20 h-48 items-center justify-center rounded-5 bg-black-717', {
             'bg-gray-ddd': !(isValidEmail && !!formData.password),
           })}
           onPress={submitFormData}
