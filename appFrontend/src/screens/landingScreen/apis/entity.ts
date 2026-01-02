@@ -1,9 +1,12 @@
+import { AuthType } from '@/analytics/auth.events';
+
 /**
  * 소셜로그인폼
  */
 export interface SocialLoginFormTypes {
   email: string;
   firebaseToken: string;
+  loginType?: AuthType;
 }
 
 /**

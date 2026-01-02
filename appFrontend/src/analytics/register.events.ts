@@ -39,6 +39,7 @@ export const trackRegisterTerms = () => {
 
 /**
  * 닉네임 입력하고 확인 버튼 눌러서 > 최종 가입 완료된 경우
+ * 소셜로그인 버튼 클릭 후 새로 가입 처리된 경우
  */
 export const trackRegisterFinish = (type: AuthType) => {
   Amplitude.track(REGISTER.FINISH, { type });
