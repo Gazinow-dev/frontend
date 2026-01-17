@@ -20,6 +20,7 @@ export type RootStackParamList = {
       | 'ManageAccountScreen'
       | 'NotiOnScreen'
       | 'NotiSettingsScreen'
+      | 'NoticesScreen'
       | 'SubscribeTermsScreen'
       | 'PersonalTermsScreen';
     params?: { myRoutes: MyRoutesType; prevScreen: 'SaveModal' | 'SaveScreen' };
@@ -61,6 +62,8 @@ export type MyPageStackParamList = {
   NotiOnScreen: undefined;
   NotiSettingsScreen: undefined;
   NotiSettingsDetailScreen: { myRoutes?: MyRoutesType };
+  NoticesScreen: undefined;
+  NoticeDetailScreen: { noticeId: number };
   SubscribeTermsScreen: undefined;
   PersonalTermsScreen: undefined;
 };

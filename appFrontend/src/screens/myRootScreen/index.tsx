@@ -75,9 +75,9 @@ const MyRootScreen = () => {
         </View>
       )}
 
-      <View className="flex-1 pt-20 space-y-10 bg-gray-9f9">
+      <View className="flex-1 space-y-10 bg-gray-9f9 pt-20">
         {isVerifiedUser === 'success auth' && (
-          <View className="mx-16 bg-white rounded-12">
+          <View className="mx-16 rounded-12 bg-white">
             <Pressable
               style={({ pressed }) => ({
                 backgroundColor: pressed ? COLOR.GRAY_E5 : 'transparent',
@@ -115,7 +115,7 @@ const MyRootScreen = () => {
             </Pressable>
           </View>
         )}
-        <View className="mx-16 bg-white rounded-12">
+        <View className="mx-16 rounded-12 bg-white">
           <Pressable
             style={({ pressed }) => ({
               backgroundColor: pressed ? COLOR.GRAY_E5 : 'transparent',
@@ -125,6 +125,20 @@ const MyRootScreen = () => {
               padding: 16,
               borderTopLeftRadius: 12,
               borderTopRightRadius: 12,
+            })}
+            onPress={() => rootNavigation.navigate('MyPageNavigation', { screen: 'NoticesScreen' })}
+          >
+            <FontText text="공지사항" className="leading-21 text-purple-54f" />
+            <IconArrowRight color="#D7D7D7" />
+          </Pressable>
+          <View className="h-1 bg-gray-beb" />
+          <Pressable
+            style={({ pressed }) => ({
+              backgroundColor: pressed ? COLOR.GRAY_E5 : 'transparent',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: 16,
             })}
             onPress={() =>
               rootNavigation.navigate('MyPageNavigation', { screen: 'SubscribeTermsScreen' })
@@ -150,7 +164,7 @@ const MyRootScreen = () => {
             <IconArrowRight color="#D7D7D7" />
           </Pressable>
           <View className="h-1 bg-gray-beb" />
-          <View className="flex-row justify-between p-16 rounded-b-12">
+          <View className="flex-row justify-between rounded-b-12 p-16">
             <FontText text="버전" className="leading-21 text-purple-54f" />
             <FontText text={versionText} className="text-12 leading-17" />
           </View>

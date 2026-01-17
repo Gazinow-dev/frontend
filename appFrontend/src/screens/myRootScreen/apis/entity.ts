@@ -38,3 +38,14 @@ export interface PathNotiSettingsResType {
     toTime: string;
   }[];
 }
+
+/**
+ * 앱 업데이트 공지 타입
+ */
+export type NoticeType = {
+  noticeId: number;
+  noticeTitle: string;
+  noticeContent: string;
+  createdAt: Date;
+  modifiedAt: string;
+};

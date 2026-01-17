@@ -1,7 +1,8 @@
-import { authServiceAPI } from '@/global/apis';
+import { authServiceAPI, publicServiceAPI } from '@/global/apis';
 import { AxiosError } from 'axios';
 import {
   LogoutFetchData,
+  NoticeType,
   NotiSettingsType,
   PathNotiSettingsResType,
   SetNotiOnOffType,
@@ -225,6 +226,42 @@ export const getMyCommentsFetch = async (params: { page: number }) => {
     const error = err as AxiosError;
     Sentry.captureException({
       target: '내가 쓴 댓글 조회',
+      input: { request: error.request },
+      output: { status: error.response?.status, error: error.message, response: error.response },
+    });
+    throw error;
+  }
+};
+
+/**
+ * 앱 업데이트 공지 목록 조회 axios
+ */
+export const getNotices = async () => {
+  try {
+    const res = await publicServiceAPI.get<{ data: NoticeType[] }>(`/api/v1/notices`);
+    return res.data.data;
+  } catch (err) {
+    const error = err as AxiosError;
+    Sentry.captureException({
+      target: '앱 업데이트 공지 목록 조회',
+      input: { request: error.request },
+      output: { status: error.response?.status, error: error.message, response: error.response },
+    });
+    throw error;
+  }
+};
+
+/**
+ * 앱 업데이트 공지 개별 조회 axios
+ */
+export const getNoticeDetail = async (noticeId: number) => {
+  try {
+    const res = await publicServiceAPI.get<{ data: NoticeType }>(`/api/v1/notices/${noticeId}`);
+    return res.data.data;
+  } catch (err) {
+    const error = err as AxiosError;
+    Sentry.captureException({
+      target: '앱 업데이트 공지 개별 조회',
       input: { request: error.request },
       output: { status: error.response?.status, error: error.message, response: error.response },
     });
