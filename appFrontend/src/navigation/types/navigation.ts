@@ -23,7 +23,7 @@ export type RootStackParamList = {
       | 'NoticesScreen'
       | 'SubscribeTermsScreen'
       | 'PersonalTermsScreen';
-    params?: { myRoutes: MyRoutesType; prevScreen: 'SaveModal' | 'SaveScreen' };
+    params?: { myRoutes: MyRoutesType; prevScreen?: 'SaveModal' | 'SaveScreen' };
   };
   SubwayPathDetail: { state?: Path | SubPath[]; notificationId?: number | null };
 };

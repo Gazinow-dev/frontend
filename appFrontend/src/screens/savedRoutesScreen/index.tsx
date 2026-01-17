@@ -38,7 +38,8 @@ const SavedRoutesScreen = () => {
     },
   });
 
-  const { myRoutes, getSavedRoutesRefetch, isSavedRoutesError } = useGetSavedRoutesQuery();
+  const { myRoutes, getSavedRoutesRefetch, isLoadingSavedRoutes, isSavedRoutesError } =
+    useGetSavedRoutesQuery();
 
   const showDeletePopup = (route: MyRoutesType) => {
     setRouteToDelete(route);
@@ -52,6 +53,12 @@ const SavedRoutesScreen = () => {
     mutate({ id: routeToDelete.id });
     hideModal();
   };
+
+  const handleSetNoti = (item: MyRoutesType) =>
+    navigation.navigate('MyPageNavigation', {
+      screen: 'NotiSettingsDetailScreen',
+      params: { myRoutes: item },
+    });
 
   return (
     <SafeAreaView className="flex-1 bg-gray-9f9">
@@ -85,9 +92,14 @@ const SavedRoutesScreen = () => {
                       className="text-18 leading-23"
                       fontWeight="600"
                     />
-                    <TouchableOpacity onPress={() => showDeletePopup(item)} hitSlop={20}>
-                      <FontText text="삭제" className="text-13 leading-19 text-gray-999" />
-                    </TouchableOpacity>
+                    <View className="flex-row gap-20">
+                      <TouchableOpacity onPress={() => handleSetNoti(item)} hitSlop={20}>
+                        <FontText text="알림설정" className="text-13 leading-19 text-gray-999" />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => showDeletePopup(item)} hitSlop={20}>
+                        <FontText text="삭제" className="text-13 leading-19 text-gray-999" />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                   <SubwaySimplePath
                     pathData={item.subPaths}

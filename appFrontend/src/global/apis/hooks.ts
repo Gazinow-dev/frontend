@@ -150,17 +150,15 @@ export const useGetSearchRoutesQuery = () => {
 /**
  * 저장한 지하철 경로 조회 훅
  */
-export const useGetSavedRoutesQuery = ({
-  onSuccess,
-}: { onSuccess?: (data: MyRoutesType[]) => void } = {}) => {
+export const useGetSavedRoutesQuery = () => {
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
-  const { data, refetch, isError } = useQuery(['getRoads'], getSavedRoutesFetch, {
+  const { data, refetch, isLoading, isError } = useQuery(['getRoads'], getSavedRoutesFetch, {
     enabled: isVerifiedUser === 'success auth',
-    onSuccess,
   });
   return {
     myRoutes: data,
     getSavedRoutesRefetch: refetch,
+    isLoadingSavedRoutes: isLoading,
     isSavedRoutesError: isError,
   };
 };
