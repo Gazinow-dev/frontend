@@ -18,6 +18,7 @@ import { updateNotiReadStatus } from '@/global/apis/func';
 import { useFocusEffect } from '@react-navigation/native';
 import NetworkErrorScreen from '@/global/components/NetworkErrorScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import LoadingCircle from '@/global/components/animations/LoadingCircle';
 
 const NotiHistory = () => {
   const navigation = useRootNavigation();
@@ -26,7 +27,8 @@ const NotiHistory = () => {
 
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
-  const { data, refetch, fetchNextPage, hasNextPage, isError } = useGetNotiHistoriesQuery();
+  const { data, refetch, fetchNextPage, hasNextPage, isLoading, isError } =
+    useGetNotiHistoriesQuery();
 
   const flattenedData = useMemo(() => {
     return data?.pages.flatMap((page) => page.content) ?? [];
@@ -40,6 +42,13 @@ const NotiHistory = () => {
 
   const { mutate } = useMutation(updateNotiReadStatus);
 
+  if (isLoading) {
+    return (
+      <SafeAreaView className="flex-1 items-center justify-center bg-white">
+        <LoadingCircle width={50} height={50} />
+      </SafeAreaView>
+    );
+  }
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top']}>
       <View className="flex-row items-center justify-between p-16">

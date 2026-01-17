@@ -19,10 +19,6 @@ const NoticeDetailScreen = () => {
     getNoticeDetail(noticeId),
   );
 
-  if (!data || isError) return <NetworkErrorScreen retryFn={refetch} isShowBackBtn />;
-
-  const { noticeTitle, noticeContent, createdAt } = data;
-
   if (isLoading) {
     return (
       <SafeAreaView className="flex-1 items-center justify-center bg-white">
@@ -30,6 +26,13 @@ const NoticeDetailScreen = () => {
       </SafeAreaView>
     );
   }
+
+  if (!data || isError) {
+    return <NetworkErrorScreen retryFn={refetch} isShowBackBtn />;
+  }
+
+  const { noticeTitle, noticeContent, createdAt } = data;
+
   return (
     <SafeAreaView className="flex-1 bg-white px-16">
       <TouchableOpacity

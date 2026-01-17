@@ -238,7 +238,7 @@ export const useGetPopularIssuesAtMain = () => {
  * 이슈 노선별 조회 훅
  */
 export const useGetNotiHistoriesQuery = () => {
-  const { data, refetch, fetchNextPage, hasNextPage, isError } = useInfiniteQuery(
+  const { data, refetch, fetchNextPage, hasNextPage, isLoading, isError } = useInfiniteQuery(
     'getNotiHistoryFetch',
     ({ pageParam = 0 }) => getNotiHistoryFetch(pageParam),
     {
@@ -248,5 +248,5 @@ export const useGetNotiHistoriesQuery = () => {
       },
     },
   );
-  return { data, refetch, fetchNextPage, hasNextPage, isError };
+  return { data, refetch, fetchNextPage, hasNextPage, isLoading, isError };
 };

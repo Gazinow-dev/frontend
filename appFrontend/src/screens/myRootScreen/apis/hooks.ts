@@ -113,7 +113,7 @@ export const useGetPathNotiQuery = (myPathId: number) => {
  * 내가 쓴 댓글 조회 훅
  */
 export const useGetMyComments = () => {
-  const { data, refetch, fetchNextPage, hasNextPage, isError } = useInfiniteQuery(
+  const { data, refetch, fetchNextPage, hasNextPage, isLoading, isError } = useInfiniteQuery(
     ['getMyComments'],
     ({ pageParam = 0 }) => getMyCommentsFetch({ page: pageParam }),
     {
@@ -128,6 +128,7 @@ export const useGetMyComments = () => {
     refetch,
     fetchNextPage,
     hasNextPage,
+    isLoading,
     isError,
   };
 };

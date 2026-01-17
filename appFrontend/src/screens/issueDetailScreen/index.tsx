@@ -19,6 +19,7 @@ import MyTabModal from '@/global/components/MyTabModal';
 import RetryLoad from '@/global/components/RetryLoad';
 import NetworkErrorScreen from '@/global/components/NetworkErrorScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import LoadingCircle from '@/global/components/animations/LoadingCircle';
 
 const IssueDetailScreen = () => {
   const navigation = useRootNavigation();
@@ -28,19 +29,28 @@ const IssueDetailScreen = () => {
   const issueId = useAppSelect((state) => state.subwaySearch.issueId);
   if (!issueId) return null;
 
-  const { issueData, refetchIssue, isIssueError } = useGetIssue({ issueId });
+  const { issueData, refetchIssue, isLoadingIssue, isIssueError } = useGetIssue({ issueId });
 
   const {
     commentsOnAIssue,
     commentsOnAIssueHasNextPage,
     commentsOnAIssueRefetch,
     fetchCommentsOnAIssueNextPage,
+    isLoadingComment,
     isCommentError,
   } = useGetCommentsOnAIssue({ issueId });
 
   const flattenedCommentData = useMemo(() => {
     return commentsOnAIssue?.pages.flatMap((page) => page.content);
   }, [commentsOnAIssue]);
+
+  if (isLoadingIssue || isLoadingComment) {
+    return (
+      <SafeAreaView className="flex-1 items-center justify-center bg-white">
+        <LoadingCircle width={50} height={50} />
+      </SafeAreaView>
+    );
+  }
 
   if (isIssueError || !issueData)
     return <NetworkErrorScreen retryFn={refetchIssue} isShowBackBtn />;

@@ -7,17 +7,25 @@ import SingleCommentContainer from '@/screens/myRootScreen/components/SingleComm
 import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
 import NetworkErrorScreen from '@/global/components/NetworkErrorScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import LoadingCircle from '@/global/components/animations/LoadingCircle';
 
 const MyCommentsScreen = () => {
   const myPageNavigation = useMyPageNavigation();
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
-  const { data, refetch, fetchNextPage, hasNextPage, isError } = useGetMyComments();
+  const { data, refetch, fetchNextPage, hasNextPage, isLoading, isError } = useGetMyComments();
 
   const flattenedData = useMemo(() => {
     return data?.pages.flatMap((page) => page.content) ?? [];
   }, [data]);
 
+  if (isLoading) {
+    return (
+      <SafeAreaView className="flex-1 items-center justify-center bg-white">
+        <LoadingCircle width={50} height={50} />
+      </SafeAreaView>
+    );
+  }
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row items-center space-x-12 border-b-1 border-gray-beb p-16">
