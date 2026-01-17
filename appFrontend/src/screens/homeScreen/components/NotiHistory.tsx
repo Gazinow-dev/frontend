@@ -2,7 +2,7 @@ import { FontText } from '@/global/ui';
 import React, { useCallback, useMemo, useState } from 'react';
 import { Pressable, RefreshControl, TouchableOpacity, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
+import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
 import IconNoNoti from '@assets/icons/no_result_icon.svg';
 import TextNoNoti from '@/assets/icons/no_notihistory_text.svg';
 import { useRootNavigation } from '@/navigation/RootNavigation';
@@ -44,7 +44,7 @@ const NotiHistory = () => {
     <SafeAreaView className="flex-1 bg-white" edges={['top']}>
       <View className="flex-row items-center justify-between p-16">
         <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={20}>
-          <IconLeftArrowHead color="#3F3F46" width={24} />
+          <IconChevronLeft />
         </TouchableOpacity>
 
         <FontText text="알림" className="text-18 leading-23" fontWeight="500" />
@@ -85,7 +85,7 @@ const NotiHistory = () => {
                   width={24}
                   height={24}
                 />
-                <View className="flex-1 ml-12 mr-32">
+                <View className="ml-12 mr-32 flex-1">
                   <FontText
                     text={item.notificationBody}
                     className={cn('text-14 leading-21', {
@@ -110,7 +110,7 @@ const NotiHistory = () => {
           }}
           ListFooterComponent={<View className="h-64" />}
           ListEmptyComponent={
-            <View className="items-center justify-center flex-1 gap-17 pt-250">
+            <View className="flex-1 items-center justify-center gap-17 pt-250">
               <IconNoNoti />
               <TextNoNoti />
             </View>

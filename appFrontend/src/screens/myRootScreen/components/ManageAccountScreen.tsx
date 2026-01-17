@@ -4,7 +4,7 @@ import { getEncryptedStorage, removeEncryptedStorage } from '@/global/utils';
 import { FontText } from '@/global/ui';
 import MyTabModal from '@/global/components/MyTabModal';
 import { Pressable, TouchableOpacity, View } from 'react-native';
-import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
+import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import { showToast } from '@/global/utils/toast';
 import { useAppDispatch } from '@/store';
@@ -81,7 +81,7 @@ const ManageAccountScreen = () => {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row items-center gap-12 p-16">
         <TouchableOpacity onPress={() => myPageNavigation.goBack()} hitSlop={20}>
-          <IconLeftArrowHead width={24} color="#3F3F46" />
+          <IconChevronLeft />
         </TouchableOpacity>
         <FontText text="계정 관리" className="text-18 leading-23" fontWeight="500" />
       </View>

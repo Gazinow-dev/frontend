@@ -9,7 +9,7 @@ import { useHomeNavigation } from '@/navigation/HomeNavigation';
 import { COLOR } from '@/global/constants';
 import { useMutation, useQueryClient } from 'react-query';
 import IconBookmark from '@assets/icons/bookmark.svg';
-import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
+import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
 import { useAppSelect } from '@/store';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { showToast } from '@/global/utils/toast';
@@ -85,7 +85,7 @@ const SearchPathResultDetailScreen = () => {
         {/* header */}
         <View className="flex-row items-center justify-between py-16">
           <TouchableOpacity hitSlop={20} onPress={() => navigation.goBack()}>
-            <IconLeftArrowHead color="#3F3F46" width={18} height={18} />
+            <IconChevronLeft />
           </TouchableOpacity>
           <TouchableOpacity hitSlop={20} onPress={bookmarkHandler} disabled={isLoading}>
             <IconBookmark
@@ -106,31 +106,31 @@ const SearchPathResultDetailScreen = () => {
               />
             ) : (
               <Modal visible onRequestClose={() => setIsSaveRouteModalOpen(false)} transparent>
-                <View className="relative items-center justify-center flex-1">
+                <View className="relative flex-1 items-center justify-center">
                   <View className="absolute top-0 h-full w-full bg-[#00000099]" />
-                  <View className="absolute w-4/5 px-24 pt-32 pb-24 bg-white rounded-12">
+                  <View className="absolute w-4/5 rounded-12 bg-white px-24 pb-24 pt-32">
                     <FontText
                       text={`로그인하면 관심 경로의\n이슈를 알려드려요`}
                       className="text-center text-18"
                       fontWeight="600"
                     />
-                    <View className="flex-row w-full mt-30 gap-x-8">
+                    <View className="mt-30 w-full flex-row gap-x-8">
                       <TouchableOpacity
                         activeOpacity={0.5}
-                        className="items-center flex-1 py-12 border rounded-5 border-gray-999"
+                        className="flex-1 items-center rounded-5 border border-gray-999 py-12"
                         onPress={() => setIsSaveRouteModalOpen(false)}
                       >
                         <FontText text="취소" className="text-14 text-gray-999" fontWeight="600" />
                       </TouchableOpacity>
                       <TouchableOpacity
                         activeOpacity={0.5}
-                        className="items-center flex-1 py-12 rounded-5 bg-black-717"
+                        className="flex-1 items-center rounded-5 bg-black-717 py-12"
                         onPress={() => {
                           setIsSaveRouteModalOpen(false);
                           rootNavigation.navigate('AuthStack', { screen: 'Landing' });
                         }}
                       >
-                        <FontText text="로그인" className="text-white text-14" fontWeight="600" />
+                        <FontText text="로그인" className="text-14 text-white" fontWeight="600" />
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -142,7 +142,7 @@ const SearchPathResultDetailScreen = () => {
         <View className="flex-row items-center justify-between pl-10">
           <View>
             <FontText text="평균 소요시간" className="text-13 text-gray-999" fontWeight="500" />
-            <View className="flex-row mt-2">
+            <View className="mt-2 flex-row">
               <FontText
                 text={
                   resultData.totalTime > 60
@@ -174,7 +174,7 @@ const SearchPathResultDetailScreen = () => {
         </View>
 
         {/* 경계선 */}
-        <View className="h-px mt-16 bg-gray-beb" />
+        <View className="mt-16 h-px bg-gray-beb" />
 
         <FlatList
           data={freshSubPathData}

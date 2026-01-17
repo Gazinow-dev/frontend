@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
 import { FontText } from '@/global/ui';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
-import IconLeftArrowHead from '@assets/icons/icon_chevron-left.svg';
+import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
 import NetworkErrorScreen from '@/global/components/NetworkErrorScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQuery } from 'react-query';
@@ -27,7 +27,7 @@ const NoticesScreen = () => {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row items-center space-x-12 border-b-1 border-gray-beb p-16">
         <TouchableOpacity onPress={() => myPageNavigation.goBack()} hitSlop={20}>
-          <IconLeftArrowHead width={24} height={24} color="#3F3F46" />
+          <IconChevronLeft />
         </TouchableOpacity>
         <FontText text="공지사항" className="text-18 leading-23" fontWeight="500" />
       </View>

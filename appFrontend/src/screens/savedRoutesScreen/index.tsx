@@ -4,7 +4,7 @@ import { COLOR } from '@/global/constants';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
 import IconPlusBtn from '@assets/icons/plus_circle.svg';
-import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
+import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
 import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
 import MyTabModal from '@/global/components/MyTabModal';
 import { useMutation, useQueryClient } from 'react-query';
@@ -65,12 +65,12 @@ const SavedRoutesScreen = () => {
       />
       <View className="flex-row items-center gap-12 p-16">
         <TouchableOpacity onPress={() => navigation.goBack()} hitSlop={20}>
-          <IconLeftArrowHead width={24} color="#3F3F46" />
+          <IconChevronLeft />
         </TouchableOpacity>
         <FontText text="저장경로 편집" className="text-18 leading-23" fontWeight="500" />
       </View>
       <ScrollView>
-        <View className="mx-16 bg-white rounded-15">
+        <View className="mx-16 rounded-15 bg-white">
           {isSavedRoutesError ? (
             <View className="border-b-1 border-gray-beb">
               <RetryLoad retryFn={getSavedRoutesRefetch} />
@@ -78,8 +78,8 @@ const SavedRoutesScreen = () => {
           ) : (
             <>
               {myRoutes?.map((item) => (
-                <View className="px-16 pt-20 pb-8 border-b-1 border-gray-beb" key={item.id}>
-                  <View className="flex-row items-center justify-between mb-24">
+                <View className="border-b-1 border-gray-beb px-16 pb-8 pt-20" key={item.id}>
+                  <View className="mb-24 flex-row items-center justify-between">
                     <FontText
                       text={item.roadName}
                       className="text-18 leading-23"

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FontText } from '@/global/ui';
 import MyTabModal from '@/global/components/MyTabModal';
 import { Alert, TouchableOpacity, View } from 'react-native';
-import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
+import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/configureStore';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
@@ -66,14 +66,14 @@ const ConfirmQuitScreen = () => {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 px-16">
         <TouchableOpacity
-          className="flex-row items-center h-56 w-30"
+          className="h-56 w-30 flex-row items-center"
           onPress={() => myPageNavigation.goBack()}
           hitSlop={20}
         >
-          <IconLeftArrowHead width={24} color="#3F3F46" />
+          <IconChevronLeft />
         </TouchableOpacity>
 
-        <View className="flex-1 space-20 pt-29">
+        <View className="space-20 flex-1 pt-29">
           <FontText
             text={`${nickname}님,\n정말 탈퇴하시겠어요?`}
             className="text-24 leading-32"
@@ -87,13 +87,13 @@ const ConfirmQuitScreen = () => {
         </View>
 
         <TouchableOpacity
-          className="items-center mb-24 rounded-5 bg-black-717 py-11"
+          className="mb-24 items-center rounded-5 bg-black-717 py-11"
           onPress={() => myPageNavigation.goBack()}
         >
-          <FontText text="이전으로 돌아가기" className="text-white text-17 leading-26" />
+          <FontText text="이전으로 돌아가기" className="text-17 leading-26 text-white" />
         </TouchableOpacity>
 
-        <TouchableOpacity className="items-center mb-36" onPress={() => setPopupVisible(true)}>
+        <TouchableOpacity className="mb-36 items-center" onPress={() => setPopupVisible(true)}>
           <View className="border-b-1 border-gray-999">
             <FontText text="탈퇴하기" className="text-13 text-gray-999" />
           </View>

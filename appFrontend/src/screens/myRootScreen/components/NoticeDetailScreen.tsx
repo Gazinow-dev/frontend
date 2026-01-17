@@ -6,7 +6,7 @@ import NetworkErrorScreen from '@/global/components/NetworkErrorScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontText } from '@/global/ui';
 import { TouchableOpacity, View } from 'react-native';
-import IconLeftArrowHead from '@assets/icons/icon_chevron-left.svg';
+import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import dayjs from 'dayjs';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
@@ -37,7 +37,7 @@ const NoticeDetailScreen = () => {
         hitSlop={20}
         onPress={() => myPageNavigation.goBack()}
       >
-        <IconLeftArrowHead width={24} height={24} color="#3F3F46" />
+        <IconChevronLeft />
       </TouchableOpacity>
       <View className="space-y-28 py-16 pb-64">
         <View className="space-y-12">

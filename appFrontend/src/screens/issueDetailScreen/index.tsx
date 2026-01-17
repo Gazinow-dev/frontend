@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
+import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { FontText } from '@/global/ui';
 import SingleCommentContainer from './components/SingleCommentContainer';
@@ -63,8 +63,8 @@ const IssueDetailScreen = () => {
           cancelText="취소"
         />
 
-        <TouchableOpacity className="p-16 w-30" hitSlop={20} onPress={() => navigation.goBack()}>
-          <IconLeftArrowHead color="#3F3F46" height={24} />
+        <TouchableOpacity className="w-30 p-16" hitSlop={20} onPress={() => navigation.goBack()}>
+          <IconChevronLeft />
         </TouchableOpacity>
 
         <FlatList
@@ -93,11 +93,11 @@ const IssueDetailScreen = () => {
           ListEmptyComponent={
             // TODO: 로딩 디자인 나오면 로직 수정
             !flattenedCommentData || isCommentError ? (
-              <View className="items-center justify-center flex-1">
+              <View className="flex-1 items-center justify-center">
                 <RetryLoad retryFn={commentsOnAIssueRefetch} />
               </View>
             ) : (
-              <View className="items-center justify-center flex-1 py-100">
+              <View className="flex-1 items-center justify-center py-100">
                 <FontText text="등록된 댓글이 없어요" className="text-[#DEDEDE]" />
               </View>
             )
