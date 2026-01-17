@@ -152,7 +152,7 @@ export const getTomorrowPushNotiOnStatusFetch = async (email: string) => {
  */
 export const setDetailPushNotiOnFetch = async ({ email, alertAgree }: SetNotiOnOffType) => {
   try {
-    await authServiceAPI.post('/api/v1/member/notifications/my-saved-route', { email, alertAgree });
+    await authServiceAPI.post('/api/v1/member/notifications/route-detail', { email, alertAgree });
   } catch (err) {
     const error = err as AxiosError;
     throw error;
@@ -165,7 +165,7 @@ export const setDetailPushNotiOnFetch = async ({ email, alertAgree }: SetNotiOnO
 export const getDetailPushNotiOnStatusFetch = async (email: string) => {
   try {
     const res = await authServiceAPI.get<{ data: { alertAgree: boolean } }>(
-      `/api/v1/member/notifications/my-saved-route/status?email=${email}`,
+      `/api/v1/member/notifications/route-detail/status?email=${email}`,
     );
     return res.data.data.alertAgree;
   } catch (err) {
