@@ -2,6 +2,13 @@ import { MY } from '@/global/constants';
 import * as Amplitude from '@amplitude/analytics-react-native';
 
 /**
+ * 마이탭 클릭
+ */
+export const trackMyTabClick = () => {
+  Amplitude.track(MY.MENU_CLICK);
+};
+
+/**
  * 회원탈퇴 완료한 경우
  */
 export const trackMyWithdraw = () => {

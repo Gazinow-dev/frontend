@@ -19,6 +19,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useState } from 'react';
 import { trackHomeTabClick } from '@/analytics/map.events';
 import { trackNowTabClick } from '@/analytics/now.events';
+import { trackMyTabClick } from '@/analytics/my.events';
 
 const Tab = createBottomTabNavigator();
 
@@ -138,6 +139,7 @@ const MainBottomTabNavigation = () => {
               <Pressable
                 className="flex-1 gap-5"
                 onPress={(e) => {
+                  trackMyTabClick();
                   props.onPress?.(e);
                 }}
               >
