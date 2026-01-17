@@ -50,6 +50,7 @@ export const NOW = {
 } as const;
 
 export const MY = {
+  MENU_CLICK: '[5]마이_메뉴클릭',
   WITHDRAW: '[5]마이_회원탈퇴',
   NOTI_PUSH_ON: '[5]마이_알림_푸시_켜기',
   NOTI_PUSH_OFF: '[5]마이_알림_푸시_끄기',
