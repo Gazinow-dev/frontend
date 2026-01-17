@@ -27,10 +27,10 @@ const Walkthrough = ({ setIsFirstRun }: WalkthroughProps) => {
       {walkthroughStep === 'Noti' && (
         <Pressable
           onPress={() => setIsFirstRun('finishedWalkThrough')}
-          className="items-end w-full h-full"
+          className="h-full w-full items-end"
         >
-          <ImageNoti className="mr-11 mt-9" />
-          <TextNoti className="mt-16 mr-15" />
+          <ImageNoti className="-mt-4 mr-11" />
+          <TextNoti className="mr-15 mt-16" />
         </Pressable>
       )}
     </SafeAreaView>
