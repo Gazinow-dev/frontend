@@ -34,8 +34,10 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: MyRoutesPro
   const { email } = useSelector((state: RootState) => state.auth);
 
   // 익일 알림 설정 on/off 여부
-  const { data: isTomorrowPushNotiOn } = useQuery(['getTomorrowPushNotiOnStatus'], () =>
-    getTomorrowPushNotiOnStatusFetch(email),
+  const { data: isTomorrowPushNotiOn } = useQuery(
+    ['getTomorrowPushNotiOnStatus'],
+    () => getTomorrowPushNotiOnStatusFetch(email),
+    { enabled: isVerifiedUser === 'success auth' },
   );
 
   const [isInfoVisible, setInfoVisible] = useState(false);
@@ -88,10 +90,10 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: MyRoutesPro
       {isInfoVisible && (
         <Pressable
           onPress={() => setInfoVisible(false)}
-          className="absolute inset-0 z-10 w-screen h-screen bg-amber-20"
+          className="bg-amber-20 absolute inset-0 z-10 h-screen w-screen"
         />
       )}
-      <View className="relative bg-white rounded-14">
+      <View className="relative rounded-14 bg-white">
         <View className="flex-row items-center justify-between p-16 pt-20">
           <View className="flex-row gap-4">
             <FontText
@@ -141,7 +143,7 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: MyRoutesPro
                 </TouchableOpacity>
               </View>
 
-              <View className="flex-1 h-1 bg-gray-beb" />
+              <View className="h-1 flex-1 bg-gray-beb" />
 
               <View className="space-y-10">
                 <View className="flex-row items-center gap-10">
