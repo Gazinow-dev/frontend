@@ -2,14 +2,13 @@ import { MyPageStackParamList } from '@/navigation/types/navigation';
 import { useRoute } from '@react-navigation/native';
 import { useQuery } from 'react-query';
 import { getNoticeDetail } from '../apis/func';
-import NetworkErrorScreen from '@/global/components/NetworkErrorScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontText } from '@/global/ui';
 import { TouchableOpacity, View } from 'react-native';
 import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import dayjs from 'dayjs';
-import LoadingCircle from '@/global/components/animations/LoadingCircle';
+import { LoadingScreen, NetworkErrorScreen } from '@/global/components';
 
 const NoticeDetailScreen = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -20,15 +19,10 @@ const NoticeDetailScreen = () => {
   );
 
   if (isLoading) {
-    return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-white">
-        <LoadingCircle width={50} height={50} />
-      </SafeAreaView>
-    );
+    return <LoadingScreen />;
   }
-
-  if (!data || isError) {
-    return <NetworkErrorScreen retryFn={refetch} isShowBackBtn />;
+  if (isError || !data) {
+    return <NetworkErrorScreen retryFn={refetch} />;
   }
 
   const { noticeTitle, noticeContent, createdAt } = data;

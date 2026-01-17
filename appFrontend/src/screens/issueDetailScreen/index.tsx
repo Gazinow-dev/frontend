@@ -17,9 +17,8 @@ import { useAppSelect } from '@/store';
 import CommentInput from './components/CommentInput';
 import MyTabModal from '@/global/components/MyTabModal';
 import RetryLoad from '@/global/components/RetryLoad';
-import NetworkErrorScreen from '@/global/components/NetworkErrorScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import LoadingCircle from '@/global/components/animations/LoadingCircle';
+import { LoadingScreen, NetworkErrorScreen } from '@/global/components';
 
 const IssueDetailScreen = () => {
   const navigation = useRootNavigation();
@@ -45,16 +44,11 @@ const IssueDetailScreen = () => {
   }, [commentsOnAIssue]);
 
   if (isLoadingIssue || isLoadingComment) {
-    return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-white">
-        <LoadingCircle width={50} height={50} />
-      </SafeAreaView>
-    );
+    return <LoadingScreen />;
   }
-
-  if (isIssueError || !issueData)
-    return <NetworkErrorScreen retryFn={refetchIssue} isShowBackBtn />;
-
+  if (isIssueError || !issueData) {
+    return <NetworkErrorScreen retryFn={refetchIssue} />;
+  }
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}

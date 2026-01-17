@@ -8,9 +8,8 @@ import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
 import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
 import MyTabModal from '@/global/components/MyTabModal';
 import { useMutation, useQueryClient } from 'react-query';
-import { SubwaySimplePath } from '@/global/components';
+import { LoadingScreen, NetworkErrorScreen, SubwaySimplePath } from '@/global/components';
 import { showToast } from '@/global/utils/toast';
-import RetryLoad from '@/global/components/RetryLoad';
 import { trackMapBookmark2, trackMapBookmarkDelete } from '@/analytics/map.events';
 import { myPathDeleteFetch } from '@/global/apis/func';
 import { MyRoutesType } from '@/global/apis/entity';
@@ -60,6 +59,12 @@ const SavedRoutesScreen = () => {
       params: { myRoutes: item },
     });
 
+  if (isLoadingSavedRoutes) {
+    return <LoadingScreen />;
+  }
+  if (isSavedRoutesError || !myRoutes) {
+    return <NetworkErrorScreen retryFn={getSavedRoutesRefetch} />;
+  }
   return (
     <SafeAreaView className="flex-1 bg-gray-9f9">
       <MyTabModal
@@ -78,39 +83,27 @@ const SavedRoutesScreen = () => {
       </View>
       <ScrollView>
         <View className="mx-16 rounded-15 bg-white">
-          {isSavedRoutesError ? (
-            <View className="border-b-1 border-gray-beb">
-              <RetryLoad retryFn={getSavedRoutesRefetch} />
-            </View>
-          ) : (
-            <>
-              {myRoutes?.map((item) => (
-                <View className="border-b-1 border-gray-beb px-16 pb-8 pt-20" key={item.id}>
-                  <View className="mb-24 flex-row items-center justify-between">
-                    <FontText
-                      text={item.roadName}
-                      className="text-18 leading-23"
-                      fontWeight="600"
-                    />
-                    <View className="flex-row gap-20">
-                      <TouchableOpacity onPress={() => handleSetNoti(item)} hitSlop={20}>
-                        <FontText text="알림설정" className="text-13 leading-19 text-gray-999" />
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={() => showDeletePopup(item)} hitSlop={20}>
-                        <FontText text="삭제" className="text-13 leading-19 text-gray-999" />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <SubwaySimplePath
-                    pathData={item.subPaths}
-                    arriveStationName={item.lastEndStation}
-                    betweenPathMargin={24}
-                    isHideIsuue
-                  />
+          {myRoutes?.map((item) => (
+            <View className="border-b-1 border-gray-beb px-16 pb-8 pt-20" key={item.id}>
+              <View className="mb-24 flex-row items-center justify-between">
+                <FontText text={item.roadName} className="text-18 leading-23" fontWeight="600" />
+                <View className="flex-row gap-20">
+                  <TouchableOpacity onPress={() => handleSetNoti(item)} hitSlop={20}>
+                    <FontText text="알림설정" className="text-13 leading-19 text-gray-999" />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => showDeletePopup(item)} hitSlop={20}>
+                    <FontText text="삭제" className="text-13 leading-19 text-gray-999" />
+                  </TouchableOpacity>
                 </View>
-              ))}
-            </>
-          )}
+              </View>
+              <SubwaySimplePath
+                pathData={item.subPaths}
+                arriveStationName={item.lastEndStation}
+                betweenPathMargin={24}
+                isHideIsuue
+              />
+            </View>
+          ))}
           <Pressable
             style={({ pressed }) => ({
               backgroundColor: pressed ? COLOR.GRAY_E5 : COLOR.WHITE,

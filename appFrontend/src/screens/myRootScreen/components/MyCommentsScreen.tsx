@@ -5,9 +5,8 @@ import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import { useGetMyComments } from '@screens/myRootScreen/apis/hooks';
 import SingleCommentContainer from '@/screens/myRootScreen/components/SingleCommentContainer';
 import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
-import NetworkErrorScreen from '@/global/components/NetworkErrorScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import LoadingCircle from '@/global/components/animations/LoadingCircle';
+import { LoadingScreen, NetworkErrorScreen } from '@/global/components';
 
 const MyCommentsScreen = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -20,11 +19,10 @@ const MyCommentsScreen = () => {
   }, [data]);
 
   if (isLoading) {
-    return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-white">
-        <LoadingCircle width={50} height={50} />
-      </SafeAreaView>
-    );
+    return <LoadingScreen />;
+  }
+  if (isError || !data) {
+    return <NetworkErrorScreen retryFn={refetch} />;
   }
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -34,40 +32,37 @@ const MyCommentsScreen = () => {
         </TouchableOpacity>
         <FontText text="내가 쓴 댓글" className="text-18 leading-23" fontWeight="500" />
       </View>
-      {isError ? (
-        <NetworkErrorScreen retryFn={refetch} />
-      ) : (
-        <FlatList
-          data={flattenedData}
-          renderItem={({ item, index }) => (
-            <SingleCommentContainer item={item} key={`${index}_${item.issueCommentId}`} />
-          )}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flexGrow: 1 }}
-          ListFooterComponent={<View className="h-64" />}
-          ListEmptyComponent={
-            <View className="flex-1 items-center justify-center">
-              <FontText text="내가 쓴 댓글이 없어요" className="text-[#DEDEDE]" />
-            </View>
+
+      <FlatList
+        data={flattenedData}
+        renderItem={({ item, index }) => (
+          <SingleCommentContainer item={item} key={`${index}_${item.issueCommentId}`} />
+        )}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ flexGrow: 1 }}
+        ListFooterComponent={<View className="h-64" />}
+        ListEmptyComponent={
+          <View className="flex-1 items-center justify-center">
+            <FontText text="내가 쓴 댓글이 없어요" className="text-[#DEDEDE]" />
+          </View>
+        }
+        onEndReached={() => {
+          if (hasNextPage) {
+            fetchNextPage();
           }
-          onEndReached={() => {
-            if (hasNextPage) {
-              fetchNextPage();
-            }
-          }}
-          refreshControl={
-            <RefreshControl
-              onRefresh={async () => {
-                setIsRefreshing(true);
-                await refetch();
-                setIsRefreshing(false);
-              }}
-              refreshing={isRefreshing}
-              progressViewOffset={-10}
-            />
-          }
-        />
-      )}
+        }}
+        refreshControl={
+          <RefreshControl
+            onRefresh={async () => {
+              setIsRefreshing(true);
+              await refetch();
+              setIsRefreshing(false);
+            }}
+            refreshing={isRefreshing}
+            progressViewOffset={-10}
+          />
+        }
+      />
     </SafeAreaView>
   );
 };

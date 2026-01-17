@@ -6,18 +6,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface NetworkErrorScreenProps {
   retryFn: () => void;
-  isShowBackBtn?: boolean;
 }
 
-const NetworkErrorScreen = ({ retryFn, isShowBackBtn }: NetworkErrorScreenProps) => {
+const NetworkErrorScreen = ({ retryFn }: NetworkErrorScreenProps) => {
   const navigation = useRootNavigation();
   return (
     <SafeAreaView className="flex-1 bg-white">
-      {isShowBackBtn && (
-        <TouchableOpacity className="w-30 p-16" hitSlop={20} onPress={() => navigation.goBack()}>
-          <IconChevronLeft />
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity className="w-30 p-16" hitSlop={20} onPress={() => navigation.goBack()}>
+        <IconChevronLeft />
+      </TouchableOpacity>
 
       <View className="flex-1 items-center justify-center bg-white">
         <FontText
@@ -30,11 +27,9 @@ const NetworkErrorScreen = ({ retryFn, isShowBackBtn }: NetworkErrorScreenProps)
           className="mb-32 mt-8 text-center text-gray-999"
         />
         <TouchableOpacity onPress={retryFn} className="w-80 rounded-5 bg-black-717 px-16 py-12">
-          <FontText text="확인" className="text-center text-14 text-white" fontWeight="600" />
+          <FontText text="재시도" className="text-center text-14 text-white" fontWeight="600" />
         </TouchableOpacity>
       </View>
-
-      <View className="h-100" />
     </SafeAreaView>
   );
 };
