@@ -50,7 +50,8 @@ authServiceAPI.interceptors.response.use(
     if (
       !error.response ||
       error.response.status !== 401 ||
-      error.response.config.url === '/api/v1/member/reissue'
+      error.response.config.url === '/api/v1/member/reissue' ||
+      store.getState().auth.isVerifiedUser === 'fail auth'
     ) {
       throw error;
     }
