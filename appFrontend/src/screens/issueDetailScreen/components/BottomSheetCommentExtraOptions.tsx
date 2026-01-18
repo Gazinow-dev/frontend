@@ -32,6 +32,9 @@ const BottomSheetCommentExtraOptions = ({
     onSuccess: async () => {
       queryClient.invalidateQueries('getCommentsOnAIssue');
       queryClient.invalidateQueries('getMyComments');
+      queryClient.invalidateQueries('getAllIssues');
+      queryClient.invalidateQueries('getIssuesByLane');
+      queryClient.invalidateQueries('getPopularIssues');
       showToast('commentDeleted');
     },
   });
@@ -89,7 +92,7 @@ const BottomSheetCommentExtraOptions = ({
         >
           <Pressable>
             <TouchableOpacity className="items-center h-32" onPress={onCancel}>
-              <View className="h-4 bg-gray-ddd w-34 top-12 rounded-2" />
+              <View className="h-4 top-12 w-34 rounded-2 bg-gray-ddd" />
             </TouchableOpacity>
             <TouchableOpacity className="px-16 py-12 mt-8 mb-64" onPress={showMoreMenuHandler}>
               <FontText text={mine ? '삭제하기' : '신고하기'} fontWeight="500" />

@@ -36,6 +36,9 @@ const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: CommentInputP
       setCommentText('');
       queryClient.invalidateQueries('getCommentsOnAIssue');
       queryClient.invalidateQueries('getMyComments');
+      queryClient.invalidateQueries('getAllIssues');
+      queryClient.invalidateQueries('getIssuesByLane');
+      queryClient.invalidateQueries('getPopularIssues');
     },
     onError: (error: AxiosError) => {
       if (error.response?.status === 422) showToast('postFailureByForbiddenWord');

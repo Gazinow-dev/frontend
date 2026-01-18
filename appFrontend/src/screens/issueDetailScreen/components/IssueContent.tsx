@@ -9,7 +9,7 @@ import IconComment from '@assets/icons/icon-chat-bubble-mono.svg';
 import IconHeart from '@assets/icons/icon-heart-mono.svg';
 // import ModalReportWrongInfo from './ModalReportWrongInfo';
 import { deletePostLike, postLike } from '../api/func';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { IssueGet } from '@/global/apis/entity';
 
 dayjs.locale('ko');
@@ -17,23 +17,34 @@ dayjs.extend(relativeTime);
 
 interface IssueContentProps {
   issueData: IssueGet;
-  refetchIssue: () => void;
   setIsOpenLoginModal: (value: boolean) => void;
 }
 
-const IssueContent = ({ issueData, refetchIssue, setIsOpenLoginModal }: IssueContentProps) => {
+const IssueContent = ({ issueData, setIsOpenLoginModal }: IssueContentProps) => {
   const { title, content, like, likeCount, commentCount, id } = issueData;
 
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
 
+  const queryClient = useQueryClient();
+
   const [isOpenModalReportWrongInfo, setIsOpenModalReportWrongInfo] = useState<boolean>(false);
 
   const { mutate: doLikeMutate } = useMutation(postLike, {
-    onSuccess: () => refetchIssue(),
+    onSuccess: () => {
+      queryClient.invalidateQueries('issue');
+      queryClient.invalidateQueries('getAllIssues');
+      queryClient.invalidateQueries('getIssuesByLane');
+      queryClient.invalidateQueries('getPopularIssues');
+    },
   });
 
   const { mutate: deleteLikeMutate } = useMutation(deletePostLike, {
-    onSuccess: () => refetchIssue(),
+    onSuccess: () => {
+      queryClient.invalidateQueries('issue');
+      queryClient.invalidateQueries('getAllIssues');
+      queryClient.invalidateQueries('getIssuesByLane');
+      queryClient.invalidateQueries('getPopularIssues');
+    },
   });
 
   const likeHandler = useCallback(
@@ -71,7 +82,7 @@ const IssueContent = ({ issueData, refetchIssue, setIsOpenLoginModal }: IssueCon
         <View className="flex-row justify-between py-8">
           <View className="flex-row space-x-8">
             <TouchableOpacity
-              className={'flex-row w-64 space-x-4 ' + (Platform.OS === 'ios' ? 'items-center' : '')}
+              className={'w-64 flex-row space-x-4 ' + (Platform.OS === 'ios' ? 'items-center' : '')}
               onPress={likeHandler}
               activeOpacity={0.5}
               hitSlop={30}
@@ -80,7 +91,7 @@ const IssueContent = ({ issueData, refetchIssue, setIsOpenLoginModal }: IssueCon
               <FontText text={'' + likeCount} className="text-13 text-gray-999" />
             </TouchableOpacity>
             <View
-              className={'flex-row w-64 space-x-4 ' + (Platform.OS === 'ios' ? 'items-center' : '')}
+              className={'w-64 flex-row space-x-4 ' + (Platform.OS === 'ios' ? 'items-center' : '')}
             >
               <IconComment />
               <FontText text={'' + commentCount} className="text-13 text-gray-999" />
