@@ -8,12 +8,12 @@ const LoadingScreen = () => {
   const navigation = useRootNavigation();
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <TouchableOpacity className="w-30 p-16" hitSlop={20} onPress={() => navigation.goBack()}>
+      <TouchableOpacity className="p-16 w-30" hitSlop={20} onPress={() => navigation.goBack()}>
         <IconChevronLeft />
       </TouchableOpacity>
 
-      <View className="flex-1 items-center justify-center bg-white">
-        <LoadingCircle width={50} height={50} />
+      <View className="items-center justify-center flex-1 bg-white">
+        <LoadingCircle />
       </View>
     </SafeAreaView>
   );

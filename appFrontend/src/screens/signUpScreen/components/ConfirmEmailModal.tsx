@@ -139,7 +139,7 @@ const ConfirmEmailModal = ({
                 />
                 {isLoading ? (
                   <View style={{ width: resendTextWidth }}>
-                    <LoadingCircle color="gray" width={25} height={20} />
+                    <LoadingCircle size={25} />
                   </View>
                 ) : (
                   <Pressable onPress={emailConfirmMutateHandler}>

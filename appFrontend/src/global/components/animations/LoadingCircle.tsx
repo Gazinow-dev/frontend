@@ -5,22 +5,11 @@ import { COLOR } from '@/global/constants';
 
 interface LoadingCircleProps {
   color?: 'white' | 'gray';
-  width?: number;
-  height?: number;
+  size?: number;
 }
 
-const LoadingCircle = ({ color, width, height }: LoadingCircleProps) => {
-  let lottieColor: number[] = [0, 0, 0];
-  switch (color) {
-    case 'white':
-      lottieColor = COLOR.RGB_WHITE;
-      break;
-    case 'gray':
-      lottieColor = COLOR.RGB_GRAY_999;
-      break;
-    default:
-      break;
-  }
+const LoadingCircle = ({ color = 'gray', size = 50 }: LoadingCircleProps) => {
+  const lottieColor = color === 'gray' ? COLOR.RGB_GRAY_999 : COLOR.RGB_WHITE;
 
   if (
     LoadingCircleLottie.layers &&
@@ -31,7 +20,9 @@ const LoadingCircle = ({ color, width, height }: LoadingCircleProps) => {
     LoadingCircleLottie.layers[0].shapes[2].c.k = lottieColor;
   }
 
-  return <LottieView source={LoadingCircleLottie} style={{ width, height }} autoPlay loop />;
+  return (
+    <LottieView source={LoadingCircleLottie} style={{ width: size, height: size }} autoPlay loop />
+  );
 };
 
 export default LoadingCircle;
