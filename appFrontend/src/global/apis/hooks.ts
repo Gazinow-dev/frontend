@@ -190,7 +190,7 @@ export const useGetAllIssuesQuery = () => {
  * 이슈 노선별 조회 훅
  */
 export const useGetIssuesByLaneQuery = (line: string) => {
-  const { data, refetch, fetchNextPage, hasNextPage } = useInfiniteQuery(
+  const { data, refetch, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery(
     ['getIssuesByLane', line],
     ({ pageParam = 0 }) => getIssuesByLaneFetch({ page: pageParam, line }),
     {
@@ -206,6 +206,7 @@ export const useGetIssuesByLaneQuery = (line: string) => {
     laneIssuesRefetch: refetch,
     fetchLaneIssuesNextPage: fetchNextPage,
     laneIssuesHasNextPage: hasNextPage,
+    isLoadingLaneIssues: isLoading,
   };
 };
 
