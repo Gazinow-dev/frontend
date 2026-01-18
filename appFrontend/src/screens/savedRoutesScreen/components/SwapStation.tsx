@@ -79,8 +79,10 @@ const SwapStation = ({ setSelectedStation }: SwapStationProps) => {
     }));
   };
 
+  const Wrapper = route.name === 'Swap' ? SafeAreaView : View;
+
   return (
-    <SafeAreaView className={cn({ 'flex-1 bg-white': route.name === 'Swap' })}>
+    <Wrapper className={route.name === 'Swap' ? 'flex-1 bg-white' : ''}>
       <AddNewRouteHeader />
       <View className="flex-row items-center px-16 bg-white pb-45 pt-28">
         <View className="flex-1 gap-8 mr-15">
@@ -91,7 +93,7 @@ const SwapStation = ({ setSelectedStation }: SwapStationProps) => {
           <IconSwapChange width={24} />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </Wrapper>
   );
 };
 
