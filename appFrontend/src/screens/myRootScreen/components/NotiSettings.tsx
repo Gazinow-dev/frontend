@@ -27,6 +27,7 @@ import {
   trackMyNotiTomorrowOn,
 } from '@/analytics/my.events';
 import { trackMapBookmark1 } from '@/analytics/map.events';
+import LoadingCircle from '@/global/components/animations/LoadingCircle';
 
 const NotiSettings = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -48,41 +49,53 @@ const NotiSettings = () => {
   );
 
   // 토글 on/off 설정
-  const { mutate: setPushNotiOnMutate } = useMutation(setPushNotiOnFetch, {
-    onSuccess: async (_, provider) => {
-      if (provider.alertAgree) {
-        trackMyNotiPushOn();
-      } else {
-        trackMyNotiPushOff();
-      }
-      await queryClient.invalidateQueries(['getPushNotiOnStatus']);
-      await queryClient.invalidateQueries(['getTomorrowPushNotiOnStatus']);
-      await queryClient.invalidateQueries(['getDetailPushNotiOnStatus']);
+  const { mutate: setPushNotiOnMutate, isLoading: isLoadingPushNotiToggle } = useMutation(
+    setPushNotiOnFetch,
+    {
+      onSuccess: async (_, provider) => {
+        if (provider.alertAgree) {
+          trackMyNotiPushOn();
+        } else {
+          trackMyNotiPushOff();
+        }
+        await queryClient.invalidateQueries(['getPushNotiOnStatus']);
+        await queryClient.invalidateQueries(['getTomorrowPushNotiOnStatus']);
+        await queryClient.invalidateQueries(['getDetailPushNotiOnStatus']);
+      },
     },
-  });
-  const { mutate: setTomorrowPushNotiOnMutate } = useMutation(setTomorrowPushNotiOnFetch, {
-    onSuccess: async (_, provider) => {
-      if (provider.alertAgree) {
-        trackMyNotiTomorrowOn();
-      } else {
-        trackMyNotiTomorrowOff();
-      }
-      await queryClient.invalidateQueries(['getTomorrowPushNotiOnStatus']);
-    },
-  });
-  const { mutate: setDetailPushNotiOnMutate } = useMutation(setDetailPushNotiOnFetch, {
-    onSuccess: async (_, provider) => {
-      if (provider.alertAgree) {
-        trackMyNotiLineOn();
-      } else {
-        trackMyNotiLineOff();
-      }
-      await queryClient.invalidateQueries(['getDetailPushNotiOnStatus']);
-    },
-  });
+  );
+  const { mutate: setTomorrowPushNotiOnMutate, isLoading: isLoadingTomorrowPushNotiToggle } =
+    useMutation(setTomorrowPushNotiOnFetch, {
+      onSuccess: async (_, provider) => {
+        if (provider.alertAgree) {
+          trackMyNotiTomorrowOn();
+        } else {
+          trackMyNotiTomorrowOff();
+        }
+        await queryClient.invalidateQueries(['getTomorrowPushNotiOnStatus']);
+      },
+    });
+  const { mutate: setDetailPushNotiOnMutate, isLoading: isLoadingDetailPushNotiToggle } =
+    useMutation(setDetailPushNotiOnFetch, {
+      onSuccess: async (_, provider) => {
+        if (provider.alertAgree) {
+          trackMyNotiLineOn();
+        } else {
+          trackMyNotiLineOff();
+        }
+        await queryClient.invalidateQueries(['getDetailPushNotiOnStatus']);
+      },
+    });
 
   return (
     <>
+      {(isLoadingPushNotiToggle ||
+        isLoadingTomorrowPushNotiToggle ||
+        isLoadingDetailPushNotiToggle) && (
+        <View className="absolute items-center justify-center w-full h-full">
+          <LoadingCircle />
+        </View>
+      )}
       <View className="h-1 bg-gray-beb" />
       <View className="flex-row items-center justify-between mx-16 h-53">
         <FontText
