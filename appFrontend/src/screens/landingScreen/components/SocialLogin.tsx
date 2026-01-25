@@ -28,7 +28,7 @@ const SocialLogin = () => {
   const { mutate: sendFirebaseTokenMutate } = useMutation(sendFirebaseTokenFetch, {
     onSuccess: (data, provider) => {
       if (!provider.loginType) return;
-      trackLogin({ type: provider.loginType, userId: data.memberId });
+      trackLogin({ type: provider.loginType, userId: data.memberId, email: provider.email });
       navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
       showToast('socialLoginSuccess');
       AsyncStorage.setItem('isSocialLoggedIn', 'true');

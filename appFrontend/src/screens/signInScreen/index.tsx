@@ -34,7 +34,7 @@ const SignInScreen = () => {
       await setEncryptedStorage('access_token', data.accessToken);
       await setEncryptedStorage('refresh_token', data.refreshToken);
       await AsyncStorage.removeItem('isSocialLoggedIn');
-      trackLogin({ type: 'email', userId: data.memberId });
+      trackLogin({ type: 'email', userId: data.memberId, email: data.email });
       navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
     },
     onError: ({ status }) => {

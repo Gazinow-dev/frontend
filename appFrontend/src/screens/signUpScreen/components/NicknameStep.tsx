@@ -44,7 +44,7 @@ const NicknameStep = ({
       await setEncryptedStorage('refresh_token', refreshToken);
       await AsyncStorage.removeItem('isSocialLoggedIn');
       trackRegisterFinish('email');
-      trackLogin({ type: 'email', userId: memberId });
+      trackLogin({ type: 'email', userId: memberId, email });
       setStep();
     },
   });
