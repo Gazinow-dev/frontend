@@ -81,7 +81,7 @@ authServiceAPI.interceptors.response.use(
       await setEncryptedStorage('access_token', response.data.data.accessToken);
       await setEncryptedStorage('refresh_token', response.data.data.refreshToken);
       // api 재요청
-      // return authServiceAPI(error.config || {});
+      return authServiceAPI(error.config || {});
     } else {
       // refresh token is not valid
       await EncryptedStorage.clear();
