@@ -55,7 +55,7 @@ const HomeScreen = () => {
         <View className="flex-row-reverse">
           <TouchableOpacity onPress={authStateHandler} hitSlop={20} className="relative">
             {(unreadData?.unreadNotificationCount ?? 0) > 0 && (
-              <View className="absolute right-2 top-2 z-10 h-10 w-10 rounded-full border-1 border-gray-9f9 bg-light-red" />
+              <View className="absolute z-10 w-10 h-10 rounded-full right-2 top-2 border-1 border-gray-9f9 bg-light-red" />
             )}
             <IconBell />
           </TouchableOpacity>
