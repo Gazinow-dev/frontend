@@ -68,13 +68,6 @@ authServiceAPI.interceptors.response.use(
     const accessToken = await getEncryptedStorage('access_token');
     const refreshToken = await getEncryptedStorage('refresh_token');
 
-    if (!refreshToken) {
-      await EncryptedStorage.clear();
-      store.dispatch(getAuthorizationState('fail auth'));
-      navigateReset('AuthStack');
-      throw error;
-    }
-
     try {
       const response = await axios.post(
         '/api/v1/member/reissue',
