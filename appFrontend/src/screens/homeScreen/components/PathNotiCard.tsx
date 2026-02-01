@@ -23,6 +23,13 @@ const PathNotiCard = ({ item, index }: Props) => {
   const dispatch = useAppDispatch();
   const { mutate } = useMutation(updateNotiReadStatus);
 
+  const handleCard = () => {
+    dispatch(getIssueId(item.issueId));
+    navigation.navigate('IssueStack', { screen: 'IssueDetail' });
+    if (!item.read) mutate(item.id);
+  };
+
+  if (keyword === '관리자') return null;
   return (
     <Pressable
       style={({ pressed }) => ({
@@ -33,11 +40,7 @@ const PathNotiCard = ({ item, index }: Props) => {
         borderBottomWidth: 1,
         borderColor: COLOR.GRAY_EB,
       })}
-      onPress={() => {
-        dispatch(getIssueId(item.issueId));
-        navigation.navigate('IssueStack', { screen: 'IssueDetail' });
-        if (!item.read) mutate(item.id);
-      }}
+      onPress={handleCard}
       key={`${index}_${item.issueId}`}
     >
       <IssueKeywordIcon

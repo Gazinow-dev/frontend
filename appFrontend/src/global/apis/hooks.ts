@@ -15,7 +15,7 @@ import {
   getAllIssuesFetch,
   getIssuesByLaneFetch,
 } from '@/global/apis/func';
-import { RawSubwayLineName, MyRoutesType, SubwayStrEnd } from './entity';
+import { RawSubwayLineName, SubwayStrEnd } from './entity';
 import { subwayFreshLineName } from '@/global/utils';
 import { useAppSelect } from '@/store';
 import { useMemo } from 'react';

@@ -18,12 +18,17 @@ export type RootStackParamList = {
       | 'ConfirmPwScreen'
       | 'ConfirmQuitScreen'
       | 'ManageAccountScreen'
+      | 'NoticeDetailScreen'
       | 'NotiOnScreen'
       | 'NotiSettingsScreen'
       | 'NoticesScreen'
       | 'SubscribeTermsScreen'
       | 'PersonalTermsScreen';
-    params?: { myRoutes: MyRoutesType; prevScreen?: 'SaveModal' | 'SaveScreen' };
+    params?: {
+      myRoutes?: MyRoutesType;
+      prevScreen?: 'SaveModal' | 'SaveScreen';
+      noticeId?: number;
+    };
   };
   SubwayPathDetail: { state?: Path | SubPath[]; notificationId?: number | null };
 };
