@@ -7,7 +7,7 @@ import { store } from '@/store';
 import { getAuthorizationState } from '@/store/modules';
 import { navigationRef } from '@/App';
 
-const navigateReset = (name: 'MainBottomTab') => {
+const navigateReset = (name: 'AuthStack') => {
   if (navigationRef.isReady()) {
     navigationRef.reset({ routes: [{ name }] });
   }
@@ -50,9 +50,18 @@ authServiceAPI.interceptors.response.use(
     if (
       !error.response ||
       error.response.status !== 401 ||
-      error.response.config.url === '/api/v1/member/reissue' ||
       store.getState().auth.isVerifiedUser === 'fail auth'
     ) {
+      throw error;
+    }
+
+    const originalRequest = error.config!;
+
+    // reissue 자체가 401 → refreshToken 만료 → 로그인 화면으로 유도
+    if (originalRequest.url === '/api/v1/member/reissue') {
+      await EncryptedStorage.clear();
+      store.dispatch(getAuthorizationState('fail auth'));
+      navigateReset('AuthStack');
       throw error;
     }
 
@@ -60,34 +69,31 @@ authServiceAPI.interceptors.response.use(
     const refreshToken = await getEncryptedStorage('refresh_token');
 
     if (!refreshToken) {
+      await EncryptedStorage.clear();
       store.dispatch(getAuthorizationState('fail auth'));
-      navigateReset('MainBottomTab');
-      return error;
+      navigateReset('AuthStack');
+      throw error;
     }
 
-    const response = await axios.post(
-      'api/v1/member/reissue',
-      {
-        accessToken,
-        refreshToken,
-      },
-      {
-        baseURL: API_BASE_URL,
-        headers: { Authorization: `Bearer ${accessToken}` },
-      },
-    );
+    try {
+      const response = await axios.post(
+        '/api/v1/member/reissue',
+        { accessToken, refreshToken },
+        {
+          baseURL: API_BASE_URL,
+          headers: { Authorization: `Bearer ${accessToken}` },
+        },
+      );
 
-    if (response.status === 200) {
       await setEncryptedStorage('access_token', response.data.data.accessToken);
       await setEncryptedStorage('refresh_token', response.data.data.refreshToken);
       // api 재요청
-      return authServiceAPI(error.config || {});
-    } else {
-      // refresh token is not valid
+      return authServiceAPI(error.config!);
+    } catch (reissueError) {
       await EncryptedStorage.clear();
       store.dispatch(getAuthorizationState('fail auth'));
-      navigateReset('MainBottomTab');
-      return error;
+      navigateReset('AuthStack');
+      throw reissueError;
     }
   },
 );
