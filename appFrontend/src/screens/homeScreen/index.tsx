@@ -1,6 +1,6 @@
 import { RefreshControl, ScrollView, View } from 'react-native';
 import { IssueCarrousel, SwapStation, MyRoutes } from './components';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { useTryAuthorization } from './hooks';
 import IconBell from '@assets/icons/bell.svg';
@@ -10,6 +10,7 @@ import { useHomeNavigation } from '@/navigation/HomeNavigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useQuery } from 'react-query';
 import { getUnreadNotiCount } from '@/global/apis/func';
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeScreen = () => {
   const { isVerifiedUser, tryAuthorization } = useTryAuthorization();
@@ -18,7 +19,7 @@ const HomeScreen = () => {
 
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
-  const { data: unreadData } = useQuery(['getUnreadNotiCount'], getUnreadNotiCount, {
+  const { data: unreadData, refetch } = useQuery(['getUnreadNotiCount'], getUnreadNotiCount, {
     enabled: isVerifiedUser === 'success auth',
   });
 
@@ -36,8 +37,19 @@ const HomeScreen = () => {
   }, [isVerifiedUser]);
 
   useEffect(() => {
+    if (isRefreshing) refetch();
+  }, [isRefreshing]);
+
+  useEffect(() => {
     if (isVerifiedUser === 'yet') tryAuthorization();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, []),
+  );
+
   return (
     <SafeAreaView className="flex-1 bg-gray-9f9" edges={['top']}>
       <ScrollView
