@@ -10,7 +10,7 @@ import { COLOR } from '@/global/constants';
 import { useAppDispatch } from '@/store';
 import { getAuthorizationState, saveUserInfo } from '@/store/modules';
 import IconXCircle from '@assets/icons/x-circle-standard.svg';
-import IconLeftArrow from '@assets/icons/left_arrow_round.svg';
+import IconArrowLeft from '@assets/icons/arrow-left.svg';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { trackLogin } from '@/analytics/auth.events';
@@ -65,73 +65,89 @@ const SignInScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-gray-9f9">
       <KeyboardAvoidingView
-        className="flex-1 px-16"
+        className="flex-1"
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <TouchableOpacity
-          hitSlop={20}
-          className="mb-43 mt-30 w-30"
-          onPress={() => navigation.goBack()}
+        <ScrollView
+          className="flex-1 px-16"
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+          bounces={false}
         >
-          <IconLeftArrow color={COLOR.BASIC_BLACK} />
-        </TouchableOpacity>
+          <TouchableOpacity
+            className="mb-45 mt-30"
+            hitSlop={20}
+            onPress={() => navigation.goBack()}
+          >
+            <IconArrowLeft />
+          </TouchableOpacity>
 
-        <FontText text="이메일로 로그인" className="text-black text-24" fontWeight="700" />
+          <FontText
+            text="이메일로 로그인"
+            className="text-24 leading-35 text-black"
+            fontWeight="600"
+          />
 
-        <Space height={75} />
-
-        <ScrollView className="flex-1">
-          <FontText text="Email" className="text-14 text-gray-183" fontWeight="500" />
-          <View className="justify-center pl-16 mt-6 rounded-5 bg-gray-f2 py-13">
-            <Input
-              value={formData.email}
-              placeholder="이메일을 입력해주세요"
-              placeholderTextColor={COLOR.GRAY_BE}
-              fontSize="16px"
-              onChangeText={(text) => changeFormText('email', text)}
-              keyboardType="email-address"
-              isBlur={isLoading}
-              textContentType="oneTimeCode"
-              className="h-25"
-            />
-          </View>
-
-          <Space height={20} />
-
-          <FontText text="Password" className="text-14 text-gray-183" fontWeight="500" />
-          <View className="justify-center pl-16 mt-6 rounded-5 bg-gray-f2 py-13">
-            <Input
-              placeholder="비밀번호를 입력해주세요"
-              value={formData.password}
-              placeholderTextColor={COLOR.GRAY_BE}
-              fontSize="16px"
-              onChangeText={(text) => changeFormText('password', text)}
-              secureTextEntry
-              isBlur={isLoading}
-              className="h-25"
-            />
-          </View>
-
-          {!!errorMessage && (
-            <View className="flex-row items-center mt-8 ml-9">
-              <IconXCircle width={14} height={14} />
-              <Space width={3} />
-              <FontText text={errorMessage} className="text-12 text-light-red" fontWeight="500" />
+          <View className="mt-55 flex-1 space-y-20">
+            <View>
+              <FontText
+                text="Email"
+                className="text-14 leading-21 text-gray-183"
+                fontWeight="500"
+              />
+              <View className="mt-6 rounded-5 bg-gray-f2 py-13 pl-16">
+                <Input
+                  value={formData.email}
+                  placeholder="이메일을 입력해주세요"
+                  placeholderTextColor={COLOR.GRAY_BE}
+                  fontSize="16px"
+                  onChangeText={(text) => changeFormText('email', text)}
+                  keyboardType="email-address"
+                  isBlur={isLoading}
+                  textContentType="oneTimeCode"
+                  className="h-25"
+                />
+              </View>
             </View>
-          )}
-        </ScrollView>
-        <TouchableOpacity
-          className={cn('mb-20 h-48 items-center justify-center rounded-5 bg-black-717', {
-            'bg-gray-ddd': !(isValidEmail && !!formData.password),
-          })}
-          onPress={submitFormData}
-          disabled={!isValidEmail || !formData.password}
-        >
-          <FontText text="로그인" className="text-white" fontWeight="600" />
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
+            <View>
+              <FontText
+                text="Password"
+                className="text-14 leading-21 text-gray-183"
+                fontWeight="500"
+              />
+              <View className="mt-6 rounded-5 bg-gray-f2 py-13 pl-16">
+                <Input
+                  placeholder="비밀번호를 입력해주세요"
+                  value={formData.password}
+                  placeholderTextColor={COLOR.GRAY_BE}
+                  fontSize="16px"
+                  onChangeText={(text) => changeFormText('password', text)}
+                  secureTextEntry
+                  isBlur={isLoading}
+                  className="h-25"
+                />
+              </View>
+            </View>
 
-      <Space height={20} />
+            {!!errorMessage && (
+              <View className="ml-9 mt-8 flex-row items-center space-x-3">
+                <IconXCircle width={14} height={14} />
+                <FontText text={errorMessage} className="text-12 text-light-red" fontWeight="500" />
+              </View>
+            )}
+          </View>
+
+          <TouchableOpacity
+            className={cn('mb-20 items-center rounded-5 bg-gray-ddd py-11', {
+              'bg-black-717': isValidEmail && !!formData.password,
+            })}
+            onPress={submitFormData}
+            disabled={!isValidEmail || !formData.password}
+          >
+            <FontText text="로그인" className="text-17 leading-26 text-white" fontWeight="600" />
+          </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
