@@ -8,6 +8,7 @@ import {
   checkNicknameFetch,
   getPathNotiFetch,
   getMyCommentsFetch,
+  getNotices,
 } from './func';
 import { AxiosError } from 'axios';
 
@@ -116,6 +117,30 @@ export const useGetMyComments = () => {
   const { data, refetch, fetchNextPage, hasNextPage, isLoading, isError } = useInfiniteQuery(
     ['getMyComments'],
     ({ pageParam = 0 }) => getMyCommentsFetch({ page: pageParam }),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        if (lastPage?.content && lastPage?.content.length < 15) return undefined;
+        return allPages.length;
+      },
+    },
+  );
+  return {
+    data,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isError,
+  };
+};
+
+/**
+ * 앱 업데이트 공지사항 페이징된 목록 조회 훅
+ */
+export const useGetUpdateNotices = () => {
+  const { data, refetch, fetchNextPage, hasNextPage, isLoading, isError } = useInfiniteQuery(
+    ['getNotices'],
+    ({ pageParam = 0 }) => getNotices({ page: pageParam, size: 15, sort: 'asc' }),
     {
       getNextPageParam: (lastPage, allPages) => {
         if (lastPage?.content && lastPage?.content.length < 15) return undefined;

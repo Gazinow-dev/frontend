@@ -1,3 +1,5 @@
+import { Pagination } from '@/global/apis/entity';
+
 /**
  * 로그아웃
  */
@@ -49,3 +51,8 @@ export type NoticeType = {
   createdAt: Date;
   modifiedAt: string;
 };
+
+/**
+ * 페이징된 앱 업데이트 공지 목록 타입
+ */
+export type AllNoticesType = Pagination<NoticeType>;

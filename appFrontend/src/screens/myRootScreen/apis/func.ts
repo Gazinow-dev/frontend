@@ -1,6 +1,7 @@
 import { authServiceAPI, publicServiceAPI } from '@/global/apis';
 import { AxiosError } from 'axios';
 import {
+  AllNoticesType,
   LogoutFetchData,
   NoticeType,
   NotiSettingsType,
@@ -236,9 +237,11 @@ export const getMyCommentsFetch = async (params: { page: number }) => {
 /**
  * 앱 업데이트 공지 목록 조회 axios
  */
-export const getNotices = async () => {
+export const getNotices = async (params: { page: number; size: number; sort: 'asc' }) => {
   try {
-    const res = await publicServiceAPI.get<{ data: NoticeType[] }>(`/api/v1/notices`);
+    const res = await publicServiceAPI.get<{ data: AllNoticesType }>(`/api/v1/notices`, {
+      params,
+    });
     return res.data.data;
   } catch (err) {
     const error = err as AxiosError;
