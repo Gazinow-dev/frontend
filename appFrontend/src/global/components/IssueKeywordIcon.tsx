@@ -8,7 +8,7 @@ import IconProtest from '@assets/icons/path_protest.svg';
 import IconConstruction from '@assets/icons/path_construction.svg';
 import { View } from 'react-native';
 
-interface IssueKeywordIconProps {
+interface Props {
   keyword: IssueKeywords;
   color: string;
   width: number;
@@ -16,7 +16,7 @@ interface IssueKeywordIconProps {
   isPath?: boolean;
 }
 
-const IssueKeywordIcon = ({ keyword, color, width, height, isPath }: IssueKeywordIconProps) => {
+const IssueKeywordIcon = ({ keyword, color, width, height, isPath }: Props) => {
   return (
     <View style={{ alignItems: 'center', position: 'relative', bottom: isPath ? 6 : 0 }}>
       {isPath && (

@@ -26,13 +26,13 @@ const commentReportReason = [
   { reason: 'OTHER', text: '기타 (신고 사유 입력)' },
 ];
 
-interface ModalProps {
+interface Props {
   isVisible: boolean;
   onCancel: () => void;
   issueCommentId: number;
 }
 
-const ModalReportComment = ({ isVisible, onCancel, issueCommentId }: ModalProps) => {
+const ModalReportComment = ({ isVisible, onCancel, issueCommentId }: Props) => {
   const queryClient = useQueryClient();
   const [selectedReason, setSelectedReason] = useState<CommentReportReasonType | null>(null);
   const [reasonDescription, setReasonDescription] = useState<string>('');
@@ -68,9 +68,9 @@ const ModalReportComment = ({ isVisible, onCancel, issueCommentId }: ModalProps)
     <Modal animationType="fade" transparent visible={isVisible} onRequestClose={handleCancel}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        className="items-center justify-center flex-1 bg-[#00000060]"
+        className="flex-1 items-center justify-center bg-[#00000060]"
       >
-        <View className="bg-white w-[81%] px-24 py-28 rounded-12 space-y-24">
+        <View className="w-[81%] space-y-24 rounded-12 bg-white px-24 py-28">
           <FontText text="댓글 신고" className="text-center text-18" fontWeight="600" />
 
           <View>
@@ -87,7 +87,7 @@ const ModalReportComment = ({ isVisible, onCancel, issueCommentId }: ModalProps)
           </View>
 
           <View>
-            <View className="h-64 mt-[-10px] px-12 mb-10 rounded-5 py-11 bg-gray-9f9">
+            <View className="mb-10 mt-[-10px] h-64 rounded-5 bg-gray-9f9 px-12 py-11">
               <Input
                 className={cn(Platform.OS === 'ios' ? 'text-14' : 'top-[-6px] text-14', {
                   'text-gray-d7d': selectedReason !== 'OTHER',
@@ -104,20 +104,20 @@ const ModalReportComment = ({ isVisible, onCancel, issueCommentId }: ModalProps)
             </View>
             <FontText
               text={`${reasonDescription.length}/100`}
-              className="text-right text-12 text-gray-999 leading-14"
+              className="text-right text-12 leading-14 text-gray-999"
               fontWeight="500"
             />
           </View>
 
           <View className="flex-row space-x-8">
             <TouchableOpacity
-              className="items-center flex-1 p-12 border-1 border-gray-999 rounded-5"
+              className="items-center flex-1 p-12 rounded-5 border-1 border-gray-999"
               onPress={handleCancel}
             >
-              <FontText text="취소" className="text-gray-999 text-14 leading-21" fontWeight="600" />
+              <FontText text="취소" className="text-14 leading-21 text-gray-999" fontWeight="600" />
             </TouchableOpacity>
             <TouchableOpacity
-              className={cn('items-center flex-1 p-12 bg-gray-ddd rounded-5', {
+              className={cn('flex-1 items-center rounded-5 bg-gray-ddd p-12', {
                 'bg-black-717':
                   selectedReason &&
                   (selectedReason !== 'OTHER' || (selectedReason === 'OTHER' && reasonDescription)),

@@ -1,5 +1,4 @@
 import { View } from 'react-native';
-import type { TextInput } from 'react-native/types';
 import { FontText, Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { useEffect, useRef, useState } from 'react';
@@ -17,15 +16,13 @@ export interface TimerType {
   seconds: number;
 }
 
-interface EmailStepProps {
+interface Props {
   emailValue: string;
   setStep: () => void;
   changeEmailValue: (value: string) => void;
 }
 
-const EmailStep = ({ emailValue, setStep, changeEmailValue }: EmailStepProps) => {
-  const inputRef = useRef<TextInput>(null);
-
+const EmailStep = ({ emailValue, setStep, changeEmailValue }: Props) => {
   const { authNumber, resetAuthNumber, emailConfirmMutate, isLoading } = useEmailConfirm({
     onSuccess: () => {
       setIsOpenConfirmModal(true);
@@ -106,13 +103,13 @@ const EmailStep = ({ emailValue, setStep, changeEmailValue }: EmailStepProps) =>
           <FontText text="회원가입" className="text-24" fontWeight="700" />
           <FontText
             text="본인인증을 위한 이메일을 입력해주세요"
-            className="text-13 text-gray-9999"
+            className="text-gray-9999 text-13"
           />
         </View>
 
         <View className="flex-1">
           <FontText text="Email" className="text-14 text-gray-183" fontWeight="500" />
-          <View className="justify-center pl-16 mt-6 mb-8 bg-gray-f2 py-13 rounded-5">
+          <View className="justify-center pl-16 mt-6 mb-8 rounded-5 bg-gray-f2 py-13">
             <Input
               isBlur={isOpenConfirmModal}
               value={emailValue}

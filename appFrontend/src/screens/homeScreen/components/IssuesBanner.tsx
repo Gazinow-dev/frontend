@@ -9,12 +9,12 @@ import { TouchableOpacity } from 'react-native';
 import cn from 'classname';
 import { trackMapBookmarkIssueCheck, trackMapSearchIssueCheck } from '@/analytics/map.events';
 
-interface IssuesBannerProps {
+interface Props {
   subPaths: SubPath[];
   isHomeScreen?: boolean;
 }
 
-const IssuesBanner = ({ subPaths, isHomeScreen }: IssuesBannerProps) => {
+const IssuesBanner = ({ subPaths, isHomeScreen }: Props) => {
   const issues = subPaths.filter((subPath) => !!subPath.issueSummary.length);
   if (issues.length < 1) return null;
 

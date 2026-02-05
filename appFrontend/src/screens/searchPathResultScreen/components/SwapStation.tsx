@@ -1,5 +1,4 @@
 import cn from 'classname';
-
 import { ARRIVAL_STATION, DEPARTURE_STATION } from '@/global/constants';
 import { useAppDispatch } from '@/store';
 import { getSeletedStation, getStationType } from '@/store/modules';
@@ -10,11 +9,11 @@ import { useRootNavigation } from '@/navigation/RootNavigation';
 import { FontText } from '@/global/ui';
 import { trackMapSearchArrivalClick, trackMapSearchDepartureClick } from '@/analytics/map.events';
 
-interface SwapStationProps {
+interface Props {
   selectedStation: SelectedStationTypes;
 }
 
-const SwapStation = ({ selectedStation }: SwapStationProps) => {
+const SwapStation = ({ selectedStation }: Props) => {
   const dispatch = useAppDispatch();
   const navigation = useRootNavigation();
 

@@ -5,7 +5,7 @@ import { useId, useMemo } from 'react';
 import { SubPath } from '@/global/apis/entity';
 import React from 'react';
 
-interface SubwaySimplePathProps {
+interface Props {
   pathData: SubPath[];
   arriveStationName: string;
   betweenPathMargin: number;
@@ -17,7 +17,7 @@ const SubwaySimplePath = ({
   arriveStationName,
   betweenPathMargin,
   isHideIsuue = false,
-}: SubwaySimplePathProps) => {
+}: Props) => {
   const freshLanesPathData = useMemo(() => {
     return pathData.filter((item) => !!item.stations.length);
   }, [pathData]);
@@ -50,7 +50,9 @@ const SubwaySimplePath = ({
   }, [freshLanesPathData]);
 
   return (
-    <View style={{ marginBottom: isOverNameLength || isBottomPathsDirect ? 32 : 16, marginTop: 16 }}>
+    <View
+      style={{ marginBottom: isOverNameLength || isBottomPathsDirect ? 32 : 16, marginTop: 16 }}
+    >
       <View
         style={{
           flexDirection: 'row',

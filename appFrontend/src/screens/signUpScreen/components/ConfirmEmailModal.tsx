@@ -19,7 +19,7 @@ import IconLeftArrow from '@assets/icons/left_arrow_round.svg';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
 import { trackRegisterAuthSend } from '@/analytics/register.events';
 
-interface ConfirmEmailModalProps {
+interface Props {
   authNumber: string;
   timerValue: TimerType;
   closeModal: () => void;
@@ -35,7 +35,7 @@ const ConfirmEmailModal = ({
   setStep,
   emailConfirmMutateHandler,
   isLoading,
-}: ConfirmEmailModalProps) => {
+}: Props) => {
   const StatusBarHeight = Platform.OS === 'ios' ? getStatusBarHeight(true) + 30 : 30;
   const [resendTextWidth, setResendTextWidth] = useState<number>(0);
 

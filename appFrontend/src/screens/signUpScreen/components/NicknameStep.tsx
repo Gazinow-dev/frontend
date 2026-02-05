@@ -18,19 +18,14 @@ import { trackRegisterFinish, trackRegisterTerms } from '@/analytics/register.ev
 import { trackLogin } from '@/analytics/auth.events';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-interface NicknameStepProps {
+interface Props {
   nicknameValue: string;
   signUpData: SignUpParams;
   changeNicknameValue: (value: string) => void;
   setStep: () => void;
 }
 
-const NicknameStep = ({
-  nicknameValue,
-  signUpData,
-  changeNicknameValue,
-  setStep,
-}: NicknameStepProps) => {
+const NicknameStep = ({ nicknameValue, signUpData, changeNicknameValue, setStep }: Props) => {
   const dispatch = useAppDispatch();
 
   const [checkMessage, setCheckMessage] = useState<string>('');

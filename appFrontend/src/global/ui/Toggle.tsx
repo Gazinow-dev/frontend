@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Animated, Easing, Pressable } from 'react-native';
 import cn from 'classname';
 
-type ToggleProps = {
+interface Props {
   isOn: boolean;
   onToggle: () => void;
   disabled?: boolean;
-};
+}
 
-const Toggle = ({ isOn, onToggle, disabled }: ToggleProps) => {
+const Toggle = ({ isOn, onToggle, disabled }: Props) => {
   const [animatedValue] = useState(new Animated.Value(isOn ? 1 : 0));
 
   useEffect(() => {

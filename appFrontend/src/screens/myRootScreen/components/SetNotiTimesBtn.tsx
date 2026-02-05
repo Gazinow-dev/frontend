@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import TimePicker from '@/global/ui/TimePicker';
 import { resTimeToTimeIndicatorFormat } from '../util/timeFormatChange';
 
-interface SetNotiTimesBtnProps {
+interface Props {
   isPushNotificationOn: boolean;
   savedStartTime: string;
   savedEndTime: string;
@@ -18,7 +18,7 @@ const SetNotiTimesBtn = ({
   savedEndTime,
   setSavedStartTime,
   setSavedEndTime,
-}: SetNotiTimesBtnProps) => {
+}: Props) => {
   const [openedTimePicker, setOpenedTimePicker] = useState<'start' | 'end' | null>(null);
 
   useEffect(() => {

@@ -1,12 +1,12 @@
 import { View } from 'react-native';
 
-interface SpaceProps {
+interface Props {
   width?: number;
   height?: number;
   backgroundColor?: string;
 }
 
-const Space = ({ width, height, backgroundColor }: SpaceProps) => {
+const Space = ({ width, height, backgroundColor }: Props) => {
   return (
     <View
       style={{

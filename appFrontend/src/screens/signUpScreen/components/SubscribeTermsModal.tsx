@@ -14,12 +14,12 @@ type AgreeTermsType = '약관 전체 동의' | '(필수) 서비스 약관 동의
 
 const listData: AgreeTermsType[] = ['(필수) 서비스 약관 동의', '(필수) 개인정보 수집 동의'];
 
-interface SubscribeTermsModalProps {
+interface Props {
   setStep: () => void;
   closeModal: () => void;
 }
 
-const SubscribeTermsModal = ({ setStep, closeModal }: SubscribeTermsModalProps) => {
+const SubscribeTermsModal = ({ setStep, closeModal }: Props) => {
   const height = Dimensions.get('window').height;
 
   const animRef = useRef(new Animated.Value(height)).current;

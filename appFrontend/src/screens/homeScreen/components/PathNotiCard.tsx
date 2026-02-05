@@ -11,10 +11,10 @@ import { getIssueId } from '@/store/modules';
 import { useMutation } from 'react-query';
 import { updateNotiReadStatus } from '@/global/apis/func';
 
-type Props = {
+interface Props {
   item: NotiHistoryContent;
   index: number;
-};
+}
 
 const PathNotiCard = ({ item, index }: Props) => {
   const { keyword, read, notificationBody, notificationTitle, agoTime } = item;

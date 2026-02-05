@@ -15,12 +15,12 @@ import { IssueGet } from '@/global/apis/entity';
 dayjs.locale('ko');
 dayjs.extend(relativeTime);
 
-interface IssueContentProps {
+interface Props {
   issueData: IssueGet;
   setIsOpenLoginModal: (value: boolean) => void;
 }
 
-const IssueContent = ({ issueData, setIsOpenLoginModal }: IssueContentProps) => {
+const IssueContent = ({ issueData, setIsOpenLoginModal }: Props) => {
   const { title, content, like, likeCount, commentCount, id } = issueData;
 
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);

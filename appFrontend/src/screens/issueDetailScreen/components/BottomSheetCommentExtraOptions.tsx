@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { deleteComment } from '../api/func';
 import { useAppSelect } from '@/store';
 
-interface BottomSheetProps {
+interface Props {
   isVisible: boolean;
   onCancel: () => void;
   commentDetail: CommentContent;
@@ -22,7 +22,7 @@ const BottomSheetCommentExtraOptions = ({
   commentDetail,
   setIsOpenModalReportComment,
   setIsOpenLoginModal,
-}: BottomSheetProps) => {
+}: Props) => {
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
   const queryClient = useQueryClient();
   const { issueCommentId, mine } = commentDetail;

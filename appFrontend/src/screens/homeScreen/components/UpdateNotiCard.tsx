@@ -8,10 +8,10 @@ import { useRootNavigation } from '@/navigation/RootNavigation';
 import { useMutation } from 'react-query';
 import { updateNotiReadStatus } from '@/global/apis/func';
 
-type Props = {
+interface Props {
   item: NotiHistoryContent;
   index: number;
-};
+}
 
 const UpdateNotiCard = ({ item, index }: Props) => {
   const { issueId, notificationTitle, read, agoTime } = item;

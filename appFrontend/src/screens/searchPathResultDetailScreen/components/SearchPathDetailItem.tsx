@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import cn from 'classname';
-import { FontText, Space } from '@/global/ui';
+import { FontText } from '@/global/ui';
 import { subwayLineColor } from '@/global/utils';
 import { SubPath } from '@/global/apis/entity';
 import { COLOR } from '@/global/constants';
@@ -13,13 +13,13 @@ import { getIssueId } from '@/store/modules';
 import IconDownArrowHead from '@assets/icons/down_arrow_head.svg';
 import IssueKeywordIcon from '@/global/components/IssueKeywordIcon';
 
-interface SearchPathDetailItemProps {
+interface Props {
   data: SubPath;
   isLastLane: boolean;
   lineLength: number;
 }
 
-const SearchPathDetailItem = ({ data, isLastLane, lineLength }: SearchPathDetailItemProps) => {
+const SearchPathDetailItem = ({ data, isLastLane, lineLength }: Props) => {
   const navigation = useRootNavigation();
   const dispatch = useAppDispatch();
 
@@ -43,7 +43,7 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: SearchPathDetail
             }}
           />
           <View
-            className={cn('w-4 flex-1 ml-8 mt-[-10px]', {
+            className={cn('ml-8 mt-[-10px] w-4 flex-1', {
               'mb-[-40px]': !isOpenPathList,
             })}
             style={{
@@ -76,7 +76,7 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: SearchPathDetail
           {/* 이슈박스 */}
           {data.issueSummary.map((issue) => (
             <TouchableOpacity
-              className="flex-row pt-10 pb-12 pl-12 pr-10 mt-4 bg-white border border-[#f0f0f0] rounded-10"
+              className="mt-4 flex-row rounded-10 border border-[#f0f0f0] bg-white pb-12 pl-12 pr-10 pt-10"
               onPress={() => {
                 dispatch(getIssueId(issue.id));
                 navigation.navigate('IssueStack', { screen: 'IssueDetail' });
@@ -147,7 +147,7 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: SearchPathDetail
                   return (
                     <View
                       key={item.stationName.length + item.stationName}
-                      className={cn('flex-row ml-[-32]', {
+                      className={cn('ml-[-32] flex-row', {
                         'mt-9': idx !== 0,
                       })}
                     >
@@ -167,7 +167,7 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: SearchPathDetail
         </View>
       </View>
       {/* 도착역 */}
-      <View className="flex-row z-[99999] relative">
+      <View className="relative z-[99999] flex-row">
         <View
           className="w-20 h-20 rounded-full"
           style={{
@@ -186,12 +186,12 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: SearchPathDetail
         </View>
       </View>
       {!isLastLane && (
-        <View className="mt-[-20px] ml-[-25px] flex-row items-center">
+        <View className="ml-[-25px] mt-[-20px] flex-row items-center">
           <View className="mt-18">
             <IconWalkHuman width={24} height={24} />
           </View>
           <View className="overflow-hidden">
-            <View className="ml-9 w-4 h-60 z-[-1] bg-gray-ddd" />
+            <View className="z-[-1] ml-9 h-60 w-4 bg-gray-ddd" />
           </View>
         </View>
       )}

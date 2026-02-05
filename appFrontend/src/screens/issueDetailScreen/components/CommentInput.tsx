@@ -12,13 +12,13 @@ import { showToast } from '@/global/utils/toast';
 import { AxiosError } from 'axios';
 import { trackNowComments } from '@/analytics/now.events';
 
-interface CommentInputProps {
+interface Props {
   issueData: IssueGet;
   issueId: number;
   setIsOpenLoginModal: (value: boolean) => void;
 }
 
-const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: CommentInputProps) => {
+const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: Props) => {
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
   const queryClient = useQueryClient();
 

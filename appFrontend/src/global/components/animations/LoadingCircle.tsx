@@ -3,12 +3,12 @@ import LottieView from 'lottie-react-native';
 import LoadingCircleLottie from './loadingCircle.json';
 import { COLOR } from '@/global/constants';
 
-interface LoadingCircleProps {
+interface Props {
   color?: 'white' | 'gray';
   size?: number;
 }
 
-const LoadingCircle = ({ color = 'gray', size = 50 }: LoadingCircleProps) => {
+const LoadingCircle = ({ color = 'gray', size = 50 }: Props) => {
   const lottieColor = color === 'gray' ? COLOR.RGB_GRAY_999 : COLOR.RGB_WHITE;
 
   if (

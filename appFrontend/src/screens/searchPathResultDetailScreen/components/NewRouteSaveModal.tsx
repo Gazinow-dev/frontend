@@ -11,18 +11,14 @@ import { showToast } from '@/global/utils/toast';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { trackMapSearchBookmarkFinish, trackMapSearchBookmarkName } from '@/analytics/map.events';
 
-interface NewRouteSaveModalProps {
+interface Props {
   freshData: Path;
   closeModal: () => void;
   onBookmark: () => void;
   setMyPathId: (id: number) => void;
 }
-const NewRouteSaveModal = ({
-  freshData,
-  closeModal,
-  onBookmark,
-  setMyPathId,
-}: NewRouteSaveModalProps) => {
+
+const NewRouteSaveModal = ({ freshData, closeModal, onBookmark, setMyPathId }: Props) => {
   const queryClient = useQueryClient();
   const navigation = useRootNavigation();
 

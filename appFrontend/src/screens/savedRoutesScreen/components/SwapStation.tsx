@@ -20,13 +20,14 @@ export interface SelectedStationTypes {
   departure: StationDataTypes;
   arrival: StationDataTypes;
 }
-interface SwapStationProps {
-  setSelectedStation: React.Dispatch<React.SetStateAction<SelectedStationTypes>>;
-}
 
 type StationTypes = typeof DEPARTURE_STATION | typeof ARRIVAL_STATION;
 
-const SwapStation = ({ setSelectedStation }: SwapStationProps) => {
+interface Props {
+  setSelectedStation: React.Dispatch<React.SetStateAction<SelectedStationTypes>>;
+}
+
+const SwapStation = ({ setSelectedStation }: Props) => {
   const route = useRoute();
   const newRouteNavigation = useNewRouteNavigation();
   const dispatch = useAppDispatch();

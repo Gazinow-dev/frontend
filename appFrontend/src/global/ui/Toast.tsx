@@ -3,12 +3,12 @@ import { FontText } from '.';
 import ToastCheck from '@assets/icons/toast_check.svg';
 import ToastWarning from '@assets/icons/toast_warning.svg';
 
-interface ToastProps {
+interface Props {
   text: string;
   isWarning?: boolean;
 }
 
-const Toast = ({ text, isWarning }: ToastProps) => {
+const Toast = ({ text, isWarning }: Props) => {
   return (
     <View
       style={{

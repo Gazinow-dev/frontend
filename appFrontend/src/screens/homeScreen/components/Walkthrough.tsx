@@ -7,11 +7,11 @@ import TextNoti from '@assets/icons/text_walkthrough_noti.svg';
 import { isFirstRunType } from '@/navigation/MainBottomTabNavigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-interface WalkthroughProps {
+interface Props {
   setIsFirstRun: (isFirstRun: isFirstRunType) => void;
 }
 
-const Walkthrough = ({ setIsFirstRun }: WalkthroughProps) => {
+const Walkthrough = ({ setIsFirstRun }: Props) => {
   const { width, height } = Dimensions.get('window');
   const [walkthroughStep, setWalkthroughStep] = useState<'Path' | 'Noti'>('Path');
 
@@ -27,10 +27,10 @@ const Walkthrough = ({ setIsFirstRun }: WalkthroughProps) => {
       {walkthroughStep === 'Noti' && (
         <Pressable
           onPress={() => setIsFirstRun('finishedWalkThrough')}
-          className="h-full w-full items-end"
+          className="items-end w-full h-full"
         >
           <ImageNoti className="-mt-4 mr-11" />
-          <TextNoti className="mr-15 mt-16" />
+          <TextNoti className="mt-16 mr-15" />
         </Pressable>
       )}
     </SafeAreaView>

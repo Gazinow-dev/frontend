@@ -1,11 +1,11 @@
 import { useState } from "react";
 import cn from "classnames";
 
-interface WrongInfoModalProps {
+interface Props {
   closeModal: () => void;
 }
 
-const WrongInfoModal = ({ closeModal }: WrongInfoModalProps) => {
+const WrongInfoModal = ({ closeModal }: Props) => {
   const [selectRadio, setSelectRadio] = useState<"end" | "wrong" | null>(null);
   const [wrongInputText, setWrongInputText] = useState<string>("");
 
@@ -28,7 +28,7 @@ const WrongInfoModal = ({ closeModal }: WrongInfoModalProps) => {
                   "border-2 border-gray-ebe rounded-full size-[22px] flex items-center justify-center",
                   {
                     "border-purple": selectRadio === "end",
-                  }
+                  },
                 )}
               >
                 {selectRadio === "end" && (
@@ -51,7 +51,7 @@ const WrongInfoModal = ({ closeModal }: WrongInfoModalProps) => {
                   "border-2 border-gray-ebe rounded-full size-[22px] flex items-center justify-center",
                   {
                     "border-purple": selectRadio === "wrong",
-                  }
+                  },
                 )}
               >
                 {selectRadio === "wrong" && (

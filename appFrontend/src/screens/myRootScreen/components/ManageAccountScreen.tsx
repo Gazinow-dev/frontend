@@ -15,7 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { trackLogout } from '@/analytics/auth.events';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-interface RenderMenuProps {
+interface Props {
   text: string;
   onPress: () => void;
 }
@@ -59,7 +59,7 @@ const ManageAccountScreen = () => {
     logoutMutate({ accessToken, refreshToken });
   };
 
-  const renderMenu = ({ text, onPress }: RenderMenuProps) => (
+  const renderMenu = ({ text, onPress }: Props) => (
     <>
       <Pressable
         style={({ pressed }) => ({

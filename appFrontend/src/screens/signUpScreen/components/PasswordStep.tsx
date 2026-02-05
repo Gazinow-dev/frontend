@@ -11,19 +11,14 @@ const combinationValidation = new RegExp(
   /^(?=.*[a-zA-Z])(?=.*[!~.,?@#$%^&()_/|;:'"<>*+=-])(?=.*[0-9])/,
 );
 
-interface PasswordStepProps {
+interface Props {
   emailValue: string;
   passwordValue: string;
   setStep: () => void;
   changePasswordValue: (value: string) => void;
 }
 
-const PasswordStep = ({
-  emailValue,
-  passwordValue,
-  changePasswordValue,
-  setStep,
-}: PasswordStepProps) => {
+const PasswordStep = ({ emailValue, passwordValue, changePasswordValue, setStep }: Props) => {
   const [isTermsOpenModal, setIsTermsOpenModal] = useState<boolean>(false);
   const [isValueCombination, setIsValidCombination] = useState<boolean>(false);
   const [isValidLength, setIsValidLength] = useState<boolean>(false);

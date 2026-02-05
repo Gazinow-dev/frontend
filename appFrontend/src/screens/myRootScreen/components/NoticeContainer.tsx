@@ -5,11 +5,11 @@ import { NoticeType } from '../apis/entity';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import dayjs from 'dayjs';
 
-interface CommentProps {
+interface Props {
   item: NoticeType;
 }
 
-const NoticeContainer = ({ item }: CommentProps) => {
+const NoticeContainer = ({ item }: Props) => {
   const { noticeId, noticeTitle, createdAt } = item;
   const myPageNavigation = useMyPageNavigation();
 

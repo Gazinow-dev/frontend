@@ -13,11 +13,11 @@ import IconComment from '@/assets/icons/icon-chat-bubble-mono.svg';
 import { IssueGet } from '@/global/apis/entity';
 import { trackNowTotalIssueClick } from '@/analytics/now.events';
 
-interface SingleIssueContainerProps {
+interface Props {
   issue: IssueGet;
 }
 
-const SingleIssueContainer = ({ issue }: SingleIssueContainerProps) => {
+const SingleIssueContainer = ({ issue }: Props) => {
   const dispatch = useAppDispatch();
   const navigation = useRootNavigation();
 

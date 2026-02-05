@@ -10,11 +10,11 @@ import IconHeart from '@/assets/icons/icon-heart-mono.svg';
 import { IssueGet } from '@/global/apis/entity';
 import { trackNowHotIssueClick, trackNowHotIssueOpen } from '@/analytics/now.events';
 
-interface PopularIssuesProps {
+interface Props {
   popularIssues: IssueGet[];
 }
 
-const PopularIssues = ({ popularIssues }: PopularIssuesProps) => {
+const PopularIssues = ({ popularIssues }: Props) => {
   if (popularIssues.length < 1) return null;
 
   const dispatch = useAppDispatch();
@@ -31,7 +31,7 @@ const PopularIssues = ({ popularIssues }: PopularIssuesProps) => {
 
   return (
     <View>
-      <View className="px-16 pb-28 pt-24">
+      <View className="px-16 pt-24 pb-28">
         <FontText text="지금 인기 이슈" className="text-20 leading-25" fontWeight="600" />
       </View>
 

@@ -3,7 +3,7 @@ import { subwayLineColor } from '@/global/utils';
 import { View } from 'react-native';
 import IssueKeywordIcon from '../IssueKeywordIcon';
 
-interface PathBarProps {
+interface Props {
   stationCode: StationCode;
   isFirst?: boolean;
   isLast: boolean;
@@ -11,7 +11,7 @@ interface PathBarProps {
   isHideIsuue: boolean;
 }
 
-const PathBar = ({ stationCode, isFirst, isLast, issues, isHideIsuue }: PathBarProps) => {
+const PathBar = ({ stationCode, isFirst, isLast, issues, isHideIsuue }: Props) => {
   return (
     <View
       style={{
