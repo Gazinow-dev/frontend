@@ -35,12 +35,16 @@ const SetNotiTimesBtn = ({
     if (openedTimePicker === 'start') toValue = 1;
     else if (openedTimePicker === 'end') toValue = 2;
 
-    Animated.timing(animatedValue, {
+    const animation = Animated.timing(animatedValue, {
       toValue,
       duration: 300,
       easing: Easing.inOut(Easing.ease),
       useNativeDriver: false,
-    }).start();
+    });
+
+    animation.start();
+
+    return () => animation.stop();
   }, [openedTimePicker]);
 
   const translateYStart = animatedValue.interpolate({
@@ -58,7 +62,7 @@ const SetNotiTimesBtn = ({
       <View className="flex-row items-center justify-between px-16 h-53 border-b-1 border-gray-beb">
         <FontText text="시작 시간" />
         <Pressable
-          className="items-center justify-center w-113 h-36 rounded-8 bg-gray-beb"
+          className="items-center justify-center h-36 w-113 rounded-8 bg-gray-beb"
           onPress={() => setOpenedTimePicker(openedTimePicker === 'start' ? null : 'start')}
         >
           <FontText
@@ -76,7 +80,7 @@ const SetNotiTimesBtn = ({
       <View className="flex-row items-center justify-between px-16 h-53 border-b-1 border-gray-beb">
         <FontText text="종료 시간" />
         <Pressable
-          className="items-center justify-center w-113 h-36 rounded-8 bg-gray-beb"
+          className="items-center justify-center h-36 w-113 rounded-8 bg-gray-beb"
           onPress={() => setOpenedTimePicker(openedTimePicker === 'end' ? null : 'end')}
         >
           <FontText text={resTimeToTimeIndicatorFormat(savedEndTime)} className="text-light-blue" />

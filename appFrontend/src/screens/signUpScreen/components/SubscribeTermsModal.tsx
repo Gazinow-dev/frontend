@@ -76,13 +76,16 @@ const SubscribeTermsModal = ({ setStep, closeModal }: SubscribeTermsModalProps) 
   };
 
   useEffect(() => {
-    Animated.timing(animRef, {
+    const animation = Animated.timing(animRef, {
       toValue: 0,
       duration: 600,
       useNativeDriver: true,
-    }).start();
+    });
 
+    animation.start();
     trackRegisterPassword();
+
+    return () => animation.stop();
   }, []);
 
   return (

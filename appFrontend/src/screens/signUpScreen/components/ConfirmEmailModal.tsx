@@ -58,13 +58,16 @@ const ConfirmEmailModal = ({
   };
 
   useEffect(() => {
-    Animated.timing(animRef, {
+    const animation = Animated.timing(animRef, {
       toValue: StatusBarHeight,
       duration: 600,
       useNativeDriver: true,
-    }).start();
+    });
 
+    animation.start();
     trackRegisterAuthSend();
+
+    return () => animation.stop();
   }, []);
 
   return (
