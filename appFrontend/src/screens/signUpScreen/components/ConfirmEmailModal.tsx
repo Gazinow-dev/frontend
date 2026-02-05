@@ -15,7 +15,7 @@ import { TimerType } from './EmailStep';
 import IconXCircle from '@assets/icons/x-circle-standard.svg';
 import StepButton from '../ui/StepButton';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import IconLeftArrow from '@assets/icons/left_arrow_round.svg';
+import IconArrowLeft from '@assets/icons/arrow-left.svg';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
 import { trackRegisterAuthSend } from '@/analytics/register.events';
 
@@ -83,10 +83,10 @@ const ConfirmEmailModal = ({
         {/* 콘텐츠 */}
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          className="justify-end flex-1"
+          className="flex-1 justify-end"
         >
           <Animated.View
-            className="flex-1 px-16 pt-32 bg-white"
+            className="flex-1 bg-white px-16 pt-32"
             style={{
               borderTopStartRadius: 14,
               borderTopEndRadius: 14,
@@ -95,7 +95,7 @@ const ConfirmEmailModal = ({
             }}
           >
             <TouchableOpacity hitSlop={10} className="mb-28" onPress={closeModal}>
-              <IconLeftArrow color={COLOR.BASIC_BLACK} />
+              <IconArrowLeft />
             </TouchableOpacity>
 
             <FontText
@@ -104,8 +104,8 @@ const ConfirmEmailModal = ({
               fontWeight="700"
             />
 
-            <View className="flex-1 mt-57">
-              <View className="flex-row items-center justify-center px-16 rounded-5 bg-gray-f2 py-13">
+            <View className="mt-57 flex-1">
+              <View className="flex-row items-center justify-center rounded-5 bg-gray-f2 px-16 py-13">
                 <Input
                   value={authNumberValue}
                   placeholder="인증번호 4자리"
@@ -113,7 +113,7 @@ const ConfirmEmailModal = ({
                   fontSize="14px"
                   onChangeText={(value) => changeValue(value)}
                   keyboardType="number-pad"
-                  className="flex-1 h-25"
+                  className="h-25 flex-1"
                   maxLength={4}
                 />
                 <FontText text={timerValue.minutes + ':' + freshTimerSeconds} className="text-13" />
@@ -135,7 +135,7 @@ const ConfirmEmailModal = ({
                 />
               </View>
 
-              <View className="flex-row justify-center space-x-8 mt-34">
+              <View className="mt-34 flex-row justify-center space-x-8">
                 <FontText
                   text="메일을 받지 못하셨나요?"
                   className="text-13 leading-19 text-gray-999"
