@@ -5,7 +5,7 @@ import { useAppDispatch } from '@/store';
 import { FontText } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { CommentContent } from '@/global/apis/entity';
-import IconHeart from '@assets/icons/icon-heart-mono.svg';
+import { IconHeart } from '@/assets/icons';
 
 interface Props {
   item: CommentContent;

@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { View, TouchableOpacity, FlatList, RefreshControl } from 'react-native';
 import { FontText } from '@/global/ui';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
-import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
+import { IconChevronLeft } from '@assets/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NoticeContainer from './NoticeContainer';
 import { LoadingScreen, NetworkErrorScreen } from '@/global/components';
@@ -26,7 +26,7 @@ const NoticesScreen = () => {
   }
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-row items-center p-16 space-x-12 border-b-1 border-gray-beb">
+      <View className="flex-row items-center space-x-12 border-b-1 border-gray-beb p-16">
         <TouchableOpacity onPress={() => myPageNavigation.goBack()} hitSlop={20}>
           <IconChevronLeft />
         </TouchableOpacity>
@@ -42,7 +42,7 @@ const NoticesScreen = () => {
         contentContainerStyle={{ flexGrow: 1 }}
         ListFooterComponent={<View className="h-64" />}
         ListEmptyComponent={
-          <View className="items-center justify-center flex-1">
+          <View className="flex-1 items-center justify-center">
             <FontText text="공지사항이 없어요" className="text-[#DEDEDE]" />
           </View>
         }

@@ -1,18 +1,14 @@
 import { FontText } from '@/global/ui';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { RefreshControl, TouchableOpacity, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
-import IconNoNoti from '@assets/icons/no_result_icon.svg';
-import TextNoNoti from '@/assets/icons/no_notihistory_text.svg';
 import { useRootNavigation } from '@/navigation/RootNavigation';
-import SettingsIcon from '@/assets/icons/icon_setting.svg';
 import { useGetNotiHistoriesQuery } from '@/global/apis/hooks';
 import { useFocusEffect } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LoadingScreen, NetworkErrorScreen } from '@/global/components';
-import UpdateNotiCard from './UpdateNotiCard';
-import PathNotiCard from './PathNotiCard';
+import { PathNotiCard, UpdateNotiCard } from '.';
+import { IconChevronLeft, IconNoResult, IconSetting } from '@/assets/icons';
 
 const NotiHistory = () => {
   const navigation = useRootNavigation();
@@ -51,7 +47,7 @@ const NotiHistory = () => {
           onPress={() => navigation.push('MyPageNavigation', { screen: 'NotiSettingsScreen' })}
           hitSlop={20}
         >
-          <SettingsIcon />
+          <IconSetting />
         </TouchableOpacity>
       </View>
 
@@ -65,9 +61,9 @@ const NotiHistory = () => {
         }}
         ListFooterComponent={<View className="h-64" />}
         ListEmptyComponent={
-          <View className="items-center justify-center flex-1 gap-17 pt-250">
-            <IconNoNoti />
-            <TextNoNoti />
+          <View className="flex-1 items-center justify-center gap-17 pt-250">
+            <IconNoResult />
+            <FontText text="아직 알림이 없어요" className="text-188 leading-23 text-[#DEDEDE]" />
           </View>
         }
         showsVerticalScrollIndicator={false}

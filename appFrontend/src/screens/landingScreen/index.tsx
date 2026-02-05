@@ -3,7 +3,7 @@ import { useAuthNavigation } from '@/navigation/AuthNavigation';
 import { Animated, TouchableOpacity, View } from 'react-native';
 import SocialLogin from './components/SocialLogin';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import IconChevronLeftWhite from '@assets/icons/icon_chevron-left-white.svg';
+import { IconChevronLeftWhite } from '@/assets/icons';
 
 const LandingScreen = () => {
   const navigation = useAuthNavigation();

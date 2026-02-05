@@ -3,7 +3,7 @@ import { Alert, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'r
 import { FontText, Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { useRootNavigation } from '@/navigation/RootNavigation';
-import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
+import { IconChevronLeft } from '@assets/icons';
 import { removeEncryptedStorage } from '@/global/utils';
 import { debounce } from 'lodash';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';

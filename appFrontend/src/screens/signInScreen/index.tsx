@@ -9,8 +9,7 @@ import { useSignInMutation } from './apis/hooks';
 import { COLOR } from '@/global/constants';
 import { useAppDispatch } from '@/store';
 import { getAuthorizationState, saveUserInfo } from '@/store/modules';
-import IconXCircle from '@assets/icons/x-circle-standard.svg';
-import IconArrowLeft from '@assets/icons/arrow-left.svg';
+import { IconArrowLeft, IconInvalid } from '@assets/icons';
 import messaging from '@react-native-firebase/messaging';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { trackLogin } from '@/analytics/auth.events';
@@ -131,7 +130,7 @@ const SignInScreen = () => {
 
             {!!errorMessage && (
               <View className="ml-9 mt-8 flex-row items-center space-x-3">
-                <IconXCircle width={14} height={14} />
+                <IconInvalid />
                 <FontText text={errorMessage} className="text-12 text-light-red" fontWeight="500" />
               </View>
             )}

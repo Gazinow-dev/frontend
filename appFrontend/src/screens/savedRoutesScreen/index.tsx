@@ -3,8 +3,7 @@ import { FontText } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
-import IconPlusBtn from '@assets/icons/plus_circle.svg';
-import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
+import { IconChevronLeft, IconPlusCircle } from '@/assets/icons';
 import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
 import MyTabModal from '@/global/components/MyTabModal';
 import { useMutation, useQueryClient } from 'react-query';
@@ -120,7 +119,7 @@ const SavedRoutesScreen = () => {
               navigation.navigate('NewRouteNavigation', { screen: 'Swap' });
             }}
           >
-            <IconPlusBtn />
+            <IconPlusCircle />
             <FontText
               text="경로 추가하기"
               className="ml-6 text-14 leading-21 text-gray-999"

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FontText } from '@/global/ui';
 import MyTabModal from '@/global/components/MyTabModal';
 import { Alert, TouchableOpacity, View } from 'react-native';
-import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
+import { IconChevronLeft } from '@assets/icons';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/configureStore';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';

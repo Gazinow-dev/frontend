@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { AppState, AppStateStatus, TouchableOpacity, View } from 'react-native';
 import { FontText } from '@/global/ui';
-import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
+import { IconChevronLeft } from '@assets/icons';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import RequestNotiOn from './RequestNotiOn';
 import NotiSettings from './NotiSettings';

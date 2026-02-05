@@ -4,7 +4,7 @@ import { FontText } from '@/global/ui';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import { useGetMyComments } from '@screens/myRootScreen/apis/hooks';
 import SingleCommentContainer from '@/screens/myRootScreen/components/SingleCommentContainer';
-import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
+import { IconChevronLeft } from '@assets/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LoadingScreen, NetworkErrorScreen } from '@/global/components';
 

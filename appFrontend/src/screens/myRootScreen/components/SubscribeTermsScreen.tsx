@@ -1,6 +1,6 @@
 import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
-import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
+import { IconChevronLeft } from '@assets/icons';
 import { FontText } from '@/global/ui';
 import { SUBSCRIBE_TERMS_VER_1 } from '@/global/constants/terms';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -30,7 +30,7 @@ const SubscribeTermsScreen = () => {
                 <FontText
                   key={idx}
                   text={detail}
-                  className="font-light tracking-normal leading-25"
+                  className="font-light leading-25 tracking-normal"
                 />
               ))}
             </View>

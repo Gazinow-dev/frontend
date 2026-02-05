@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontText } from '@/global/ui';
 import { SubPath } from '@/global/apis/entity';
-import MoreBtn from '@/assets/icons/moreBtn.svg';
+import { IconChevronRight2 } from '@/assets/icons';
 import { useAppDispatch } from '@/store';
 import { getIssueId } from '@/store/modules';
 import { useRootNavigation } from '@/navigation/RootNavigation';
@@ -59,7 +59,7 @@ const IssuesBanner = ({ subPaths, isHomeScreen }: Props) => {
             fontWeight="600"
             numberOfLines={1}
           />
-          <MoreBtn />
+          <IconChevronRight2 />
         </TouchableOpacity>
       ))}
     </>

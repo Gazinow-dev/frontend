@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Keyboard, Pressable, TouchableOpacity, View } from 'react-native';
 import { Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
-import IconArrowUp from '@assets/icons/up_arrow.svg';
+import { IconArrowUp } from '@assets/icons';
 import cn from 'classname';
 import { postComment } from '../api/func';
 import { useMutation, useQueryClient } from 'react-query';

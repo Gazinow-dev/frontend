@@ -6,7 +6,7 @@ import { useAppDispatch } from '@/store';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import dayjs from 'dayjs';
 import cn from 'classname';
-import IconHeart from '@/assets/icons/icon-heart-mono.svg';
+import { IconHeart } from '@/assets/icons';
 import { IssueGet } from '@/global/apis/entity';
 import { trackNowHotIssueClick, trackNowHotIssueOpen } from '@/analytics/now.events';
 
@@ -31,7 +31,7 @@ const PopularIssues = ({ popularIssues }: Props) => {
 
   return (
     <View>
-      <View className="px-16 pt-24 pb-28">
+      <View className="px-16 pb-28 pt-24">
         <FontText text="지금 인기 이슈" className="text-20 leading-25" fontWeight="600" />
       </View>
 

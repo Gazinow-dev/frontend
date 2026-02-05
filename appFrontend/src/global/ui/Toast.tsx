@@ -1,7 +1,6 @@
 import { View } from 'react-native';
 import { FontText } from '.';
-import ToastCheck from '@assets/icons/toast_check.svg';
-import ToastWarning from '@assets/icons/toast_warning.svg';
+import { IconToastCheck, IconToastWarning } from '@/assets/icons';
 
 interface Props {
   text: string;
@@ -20,8 +19,8 @@ const Toast = ({ text, isWarning }: Props) => {
         borderRadius: 999,
       }}
     >
-      {isWarning ? <ToastWarning /> : <ToastCheck />}
-      <FontText text={text} className="ml-10 text-white text-14" fontWeight="500" />
+      {isWarning ? <IconToastWarning /> : <IconToastCheck />}
+      <FontText text={text} className="ml-10 text-14 text-white" fontWeight="500" />
     </View>
   );
 };

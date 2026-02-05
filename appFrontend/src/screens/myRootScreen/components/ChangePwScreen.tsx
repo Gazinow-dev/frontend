@@ -5,12 +5,10 @@ import { FontText, Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import MyTabModal from '@/global/components/MyTabModal';
 import { debounce } from 'lodash';
-import XCircle from '@assets/icons/x-circle-standard.svg';
-import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
-import IconCheck from '@assets/icons/check_green.svg';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import { useChangePasswordMutation, useCheckPasswordMutation } from '../apis/hooks';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { IconValid, IconChevronLeft, IconInvalid } from '@/assets/icons';
 
 const ChangePwScreen = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -143,7 +141,7 @@ const ChangePwScreen = () => {
         />
         {curPassword !== '' && (
           <View className="mb-10 ml-9 mt-6 flex-row items-center">
-            {isPwRight ? <IconCheck stroke={COLOR.LIGHT_GREEN} /> : <XCircle width={14} />}
+            {isPwRight ? <IconValid color={COLOR.LIGHT_GREEN} /> : <IconInvalid />}
             <FontText
               text={isPwRight ? ' 비밀번호가 확인되었습니다' : ' 비밀번호가 틀립니다'}
               className={cn('text-12 leading-14', {
@@ -166,7 +164,7 @@ const ChangePwScreen = () => {
         />
         {isNewEqualsToOld && changePassword !== '' && (
           <View className="mb-10 ml-9 mt-6 flex-row items-center">
-            <XCircle height={14} />
+            <IconInvalid />
             <FontText
               text=" 기존 비밀번호는 사용할 수 없어요"
               className="text-12 leading-14 text-light-red"
@@ -176,7 +174,7 @@ const ChangePwScreen = () => {
         )}
         {!isNewEqualsToOld && changePassword !== '' && (
           <View className="mb-10 ml-9 mt-6 flex-row items-center">
-            <IconCheck stroke={lengValidColor} />
+            <IconValid color={lengValidColor} />
             <FontText
               className="mr-12 text-12"
               text=" 8자-20자 이내"
@@ -185,7 +183,7 @@ const ChangePwScreen = () => {
                 color: lengValidColor,
               }}
             />
-            <IconCheck stroke={comValidColor} className="ml-12" />
+            <IconValid color={comValidColor} className="ml-12" />
             <FontText
               text=" 영어, 숫자, 특수문자 포함"
               className="text-12"
@@ -208,9 +206,9 @@ const ChangePwScreen = () => {
         {confirmPassword !== '' && changePassword !== '' && (
           <View className="ml-9 mt-6 flex-row items-center">
             {confirmPassword !== changePassword ? (
-              <XCircle width={14} />
+              <IconInvalid />
             ) : (
-              <IconCheck stroke={COLOR.LIGHT_GREEN} />
+              <IconValid color={COLOR.LIGHT_GREEN} />
             )}
             <FontText
               text={

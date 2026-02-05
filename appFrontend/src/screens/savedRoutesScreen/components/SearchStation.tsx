@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelect } from '@/store';
 import { getSeletedStation } from '@/store/modules/stationSearchModule';
 import { useAddRecentSearch, useGetSearchHistory, useSearchStationName } from '@/global/apis/hooks';
 import { useState } from 'react';
-import IconXCircleFill from '@assets/icons/x_circle_fill.svg';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -14,11 +13,9 @@ import {
   View,
 } from 'react-native';
 import { subwayReturnLineName } from '@/global/utils/subwayLine';
-import IconLocationPin from '@assets/icons/location_pin.svg';
 import AddNewRouteHeader from './AddNewRouteHeader';
 import { useNewRouteNavigation } from '@/navigation/NewRouteNavigation';
-import IconClock from '@assets/icons/clock.svg';
-import NoResultIcon from '@/assets/icons/no_result_icon.svg';
+import { IconClock, IconLocationPin, IconNoResult, IconCrossCircle } from '@/assets/icons';
 import {
   trackMapBookmark3ArrivalChoice,
   trackMapBookmark3DepartureChoice,
@@ -96,7 +93,7 @@ const SearchStation = () => {
             autoFocus
           />
           <TouchableOpacity hitSlop={20} onPress={() => setSearchTextValue('')}>
-            <IconXCircleFill width={19.5} />
+            <IconCrossCircle />
           </TouchableOpacity>
         </View>
 
@@ -140,7 +137,7 @@ const SearchStation = () => {
             {/* 입력어가 있고 && 검색 결과가 없으면 없음 표시 */}
             {searchResultData.length < 1 && (
               <View className="flex-1 items-center justify-center gap-17">
-                <NoResultIcon />
+                <IconNoResult />
                 <FontText
                   text="검색 결과가 없습니다!"
                   className="text-18 leading-23 text-gray-ddd"

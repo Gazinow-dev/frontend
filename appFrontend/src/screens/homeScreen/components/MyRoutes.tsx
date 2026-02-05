@@ -9,13 +9,12 @@ import { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
 import RetryLoad from '@/global/components/RetryLoad';
-import IconInfo from '@/assets/icons/info.svg';
+import { IconCross, IconInfo } from '@/assets/icons';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/configureStore';
 import { getTomorrowPushNotiOnStatusFetch } from '@/screens/myRootScreen/apis/func';
 import IssueKeywordIcon from '@/global/components/IssueKeywordIcon';
 import { COLOR } from '@/global/constants';
-import IconX from '@assets/icons/cross_x.svg';
 import { Shadow } from 'react-native-shadow-2';
 import { trackMapBookmark1 } from '@/analytics/map.events';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
@@ -64,7 +63,7 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: Props) => {
   const renderMyRoutes = () => {
     if ((isVerifiedUser === 'success auth' && isLoadingSavedRoutes) || isRefreshing) {
       return (
-        <View className="items-center justify-center h-200">
+        <View className="h-200 items-center justify-center">
           <LoadingCircle />
         </View>
       );
@@ -100,10 +99,10 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: Props) => {
       {isInfoVisible && (
         <Pressable
           onPress={() => setInfoVisible(false)}
-          className="absolute inset-0 z-10 w-screen h-screen bg-amber-20"
+          className="bg-amber-20 absolute inset-0 z-10 h-screen w-screen"
         />
       )}
-      <View className="relative bg-white rounded-14">
+      <View className="relative rounded-14 bg-white">
         <View className="flex-row items-center justify-between p-16 pt-20">
           <View className="flex-row gap-4">
             <FontText
@@ -149,11 +148,11 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: Props) => {
                   />
                 </View>
                 <TouchableOpacity onPress={showInfoHandler} hitSlop={20}>
-                  <IconX />
+                  <IconCross />
                 </TouchableOpacity>
               </View>
 
-              <View className="flex-1 h-1 bg-gray-beb" />
+              <View className="h-1 flex-1 bg-gray-beb" />
 
               <View className="space-y-10">
                 <View className="flex-row items-center gap-10">

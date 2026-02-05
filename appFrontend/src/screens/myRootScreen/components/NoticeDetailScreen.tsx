@@ -5,7 +5,7 @@ import { getNoticeDetail } from '../apis/func';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontText } from '@/global/ui';
 import { TouchableOpacity, View } from 'react-native';
-import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
+import { IconChevronLeft } from '@assets/icons';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import dayjs from 'dayjs';
 import { LoadingScreen, NetworkErrorScreen } from '@/global/components';

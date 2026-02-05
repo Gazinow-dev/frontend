@@ -1,8 +1,7 @@
 import React from 'react';
 import { FontText } from '@/global/ui';
 import { TouchableOpacity, View } from 'react-native';
-import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
-import IconCrossX from '@assets/icons/cross_x.svg';
+import { IconChevronLeft, IconCross } from '@/assets/icons';
 import { useNewRouteNavigation } from '@/navigation/NewRouteNavigation';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
 
@@ -25,7 +24,7 @@ const AddNewRouteHeader = () => {
           homeNavigation.popToTop();
         }}
       >
-        <IconCrossX />
+        <IconCross />
       </TouchableOpacity>
     </View>
   );

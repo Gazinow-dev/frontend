@@ -3,7 +3,7 @@ import { IssueCarrousel, SwapStation, MyRoutes } from './components';
 import { useCallback, useEffect, useState } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 import { useTryAuthorization } from './hooks';
-import IconBell from '@assets/icons/bell.svg';
+import { IconBell } from '@/assets/icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
@@ -68,7 +68,7 @@ const HomeScreen = () => {
           <TouchableOpacity onPress={authStateHandler} hitSlop={20} className="relative">
             {(unreadData?.unreadNotificationCount ?? 0) > 0 &&
               isVerifiedUser === 'success auth' && (
-                <View className="absolute z-10 w-10 h-10 rounded-full right-2 top-2 border-1 border-gray-9f9 bg-light-red" />
+                <View className="absolute right-2 top-2 z-10 h-10 w-10 rounded-full border-1 border-gray-9f9 bg-light-red" />
               )}
             <IconBell />
           </TouchableOpacity>

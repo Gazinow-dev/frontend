@@ -5,9 +5,7 @@ import { debounce } from 'lodash';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { FontText } from '@/global/ui';
-import IconComment from '@assets/icons/icon-chat-bubble-mono.svg';
-import IconHeart from '@assets/icons/icon-heart-mono.svg';
-// import ModalReportWrongInfo from './ModalReportWrongInfo';
+import { IconHeart, IconComment as IconComment } from '@/assets/icons';
 import { deletePostLike, postLike } from '../api/func';
 import { useMutation, useQueryClient } from 'react-query';
 import { IssueGet } from '@/global/apis/entity';
@@ -73,10 +71,10 @@ const IssueContent = ({ issueData, setIsOpenLoginModal }: Props) => {
       /> */}
 
       <View className="px-16">
-        <FontText text={startIssueDate} className="mt-16 mb-12 text-14 text-gray-999" />
+        <FontText text={startIssueDate} className="mb-12 mt-16 text-14 text-gray-999" />
         <FontText text={title} className="text-20 leading-26" fontWeight="500" />
-        <View className="h-1 my-28 bg-gray-beb" />
-        <FontText text={content} className="text-black leading-25" />
+        <View className="my-28 h-1 bg-gray-beb" />
+        <FontText text={content} className="leading-25 text-black" />
         <View className="h-28" />
 
         <View className="flex-row justify-between py-8">
@@ -104,7 +102,7 @@ const IssueContent = ({ issueData, setIsOpenLoginModal }: Props) => {
         </View>
       </View>
 
-      <View className="h-16 mt-12 bg-gray-9f9" />
+      <View className="mt-12 h-16 bg-gray-9f9" />
       <View className="h-8" />
     </View>
   );

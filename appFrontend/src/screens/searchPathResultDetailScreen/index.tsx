@@ -8,8 +8,7 @@ import { Path, SubPath } from '@/global/apis/entity';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
 import { COLOR } from '@/global/constants';
 import { useMutation, useQueryClient } from 'react-query';
-import IconBookmark from '@assets/icons/bookmark.svg';
-import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
+import { IconBookmark, IconChevronLeft } from '@/assets/icons';
 import { useAppSelect } from '@/store';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { showToast } from '@/global/utils/toast';
@@ -89,8 +88,6 @@ const SearchPathResultDetailScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity hitSlop={20} onPress={bookmarkHandler} disabled={isLoading}>
             <IconBookmark
-              width={24}
-              height={24}
               stroke={isBookmarking ? 'none' : COLOR.GRAY_999}
               strokeWidth={2}
               fill={isBookmarking ? COLOR.LIGHT_BLUE : 'transparent'}

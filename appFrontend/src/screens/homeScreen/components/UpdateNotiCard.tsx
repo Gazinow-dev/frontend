@@ -1,7 +1,7 @@
 import { FontText } from '@/global/ui';
 import { Pressable, View } from 'react-native';
 import { NotiHistoryContent } from '@/global/apis/entity';
-import IconApp from '@assets/icons/app_icon_AOS.svg';
+import { IconLogoGAZI } from '@/assets/icons';
 import cn from 'classname';
 import { COLOR } from '@/global/constants';
 import { useRootNavigation } from '@/navigation/RootNavigation';
@@ -40,8 +40,8 @@ const UpdateNotiCard = ({ item, index }: Props) => {
       onPress={handleCard}
       key={`${index}_${issueId}`}
     >
-      <IconApp />
-      <View className="flex-1 ml-12 mr-32 space-y-4">
+      <IconLogoGAZI />
+      <View className="ml-12 mr-32 flex-1 space-y-4">
         <FontText text="[앱 업데이트 안내]" className="text-12 leading-15 text-gray-999" />
         <FontText
           text={notificationTitle}

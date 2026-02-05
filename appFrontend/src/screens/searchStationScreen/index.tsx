@@ -14,13 +14,15 @@ import {
   View,
 } from 'react-native';
 import { Input } from '@/global/ui';
-import IconLocationPin from '@assets/icons/location_pin.svg';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
-import IconClock from '@assets/icons/clock.svg';
-import IconLeftArrow from '@assets/icons/left_arrow_sharp.svg';
-import IconXCircleFill from '@assets/icons/x_circle_fill.svg';
+import {
+  IconArrowLeftSharp,
+  IconClock,
+  IconLocationPin,
+  IconNoResult,
+  IconCrossCircle,
+} from '@/assets/icons';
 import { RawSubwayLineName } from '@/global/apis/entity';
-import NoResultIcon from '@/assets/icons/no_result_icon.svg';
 import { trackMapSearchArrivalChoice, trackMapSearchDepartureChoice } from '@/analytics/map.events';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -95,7 +97,7 @@ const SearchStationScreen = () => {
       >
         <View className="mx-16 mt-16 flex-row items-center rounded-28 border border-[#d4d4d4] py-4 pl-[18.25px] pr-16">
           <TouchableOpacity hitSlop={20} onPress={() => navigation.goBack()}>
-            <IconLeftArrow />
+            <IconArrowLeftSharp />
           </TouchableOpacity>
           <Input
             value={searchTextValue}
@@ -107,14 +109,14 @@ const SearchStationScreen = () => {
             className="ml-16 mr-[31.2px] h-36 flex-1"
           />
           <TouchableOpacity hitSlop={20} onPress={deleteInputText}>
-            <IconXCircleFill />
+            <IconCrossCircle />
           </TouchableOpacity>
         </View>
 
         {/* 입력어가 있고 && 검색 결과가 없으면 없음 표시 */}
         {!!searchTextValue && searchResultData.length < 1 && (
           <View className="flex-1 items-center justify-center gap-17">
-            <NoResultIcon />
+            <IconNoResult />
             <FontText text="검색 결과가 없습니다!" className="text-18 leading-23 text-gray-ddd" />
           </View>
         )}

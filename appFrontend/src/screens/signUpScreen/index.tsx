@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { CompleteStep, EmailStep, NicknameStep, PasswordStep } from './components';
 import { useAuthNavigation } from '@/navigation/AuthNavigation';
-import IconArrowLeft from '@assets/icons/arrow-left.svg';
+import { IconArrowLeft } from '@assets/icons';
 import { SignUpParams } from './apis/entity';
 import { trackRegisterStart } from '@/analytics/register.events';
 import { SafeAreaView } from 'react-native-safe-area-context';

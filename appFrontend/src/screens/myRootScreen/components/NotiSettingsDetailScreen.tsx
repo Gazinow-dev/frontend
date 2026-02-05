@@ -1,7 +1,7 @@
 import { SubwaySimplePath } from '@/global/components';
 import { FontText, Toggle } from '@/global/ui';
 import { Pressable, TouchableOpacity, View } from 'react-native';
-import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
+import { IconChevronLeft } from '@assets/icons';
 import { useRoute } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import cn from 'classname';
@@ -26,6 +26,7 @@ const NotiSettingsDetailScreen = () => {
   const params = useRoute().params as RootStackParamList['MyPageNavigation']['params'];
   if (!params) return;
   const { myRoutes, prevScreen } = params;
+  if (!myRoutes) return;
 
   const { pathNotiData } = useGetPathNotiQuery(myRoutes.id);
   const [isPushNotificationOn, setIsPushNotificationOn] = useState<boolean>(false);

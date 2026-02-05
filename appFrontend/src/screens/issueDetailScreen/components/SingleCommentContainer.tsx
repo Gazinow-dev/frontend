@@ -2,7 +2,7 @@ import { FontText } from '@/global/ui';
 import { Platform, TouchableOpacity, View } from 'react-native';
 import { useCallback, useState } from 'react';
 import ModalReportComment from './ModalReportComment';
-import IconHeart from '@assets/icons/icon-heart-mono.svg';
+import { IconHeart } from '@/assets/icons';
 import BottomSheetCommentExtraOptions from './BottomSheetCommentExtraOptions';
 import { debounce } from 'lodash';
 import { CommentContent } from '@/global/apis/entity';
@@ -40,7 +40,7 @@ const SingleCommentContainer = ({ item, setIsOpenLoginModal }: Props) => {
   );
 
   return (
-    <View className="px-16 mt-36">
+    <View className="mt-36 px-16">
       <BottomSheetCommentExtraOptions
         commentDetail={item}
         setIsOpenModalReportComment={setIsOpenModalReportComment}
@@ -55,7 +55,7 @@ const SingleCommentContainer = ({ item, setIsOpenLoginModal }: Props) => {
         issueCommentId={issueCommentId}
       />
 
-      <View className="flex-row items-center mb-4 space-x-4">
+      <View className="mb-4 flex-row items-center space-x-4">
         <FontText text={createdBy} className="text-13 leading-19 text-[#6D7582]" fontWeight="500" />
         <View className="h-2 w-2 rounded-full bg-[#6D7582]" />
         <FontText text={agoTime} className="text-13 leading-19 text-gray-999" />
@@ -63,7 +63,7 @@ const SingleCommentContainer = ({ item, setIsOpenLoginModal }: Props) => {
 
       <FontText text={issueCommentContent} className="leading-24" />
 
-      <View className="flex-row justify-between mt-12">
+      <View className="mt-12 flex-row justify-between">
         <TouchableOpacity
           className={'w-64 flex-row space-x-4 ' + (Platform.OS === 'ios' ? 'items-center' : '')}
           onPress={commentLikeHandler}

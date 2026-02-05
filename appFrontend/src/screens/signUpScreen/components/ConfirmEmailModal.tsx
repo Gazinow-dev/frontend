@@ -12,10 +12,9 @@ import {
   View,
 } from 'react-native';
 import { TimerType } from './EmailStep';
-import IconXCircle from '@assets/icons/x-circle-standard.svg';
+import { IconArrowLeft, IconInvalid } from '@assets/icons';
 import StepButton from '../ui/StepButton';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-import IconArrowLeft from '@assets/icons/arrow-left.svg';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
 import { trackRegisterAuthSend } from '@/analytics/register.events';
 
@@ -120,7 +119,7 @@ const ConfirmEmailModal = ({
               </View>
 
               <View className="ml-[10.17] mt-7 flex-row items-center">
-                {isNotPass && <IconXCircle width={14} height={14} />}
+                {isNotPass && <IconInvalid />}
                 <View className="w-3" />
                 <FontText
                   text={

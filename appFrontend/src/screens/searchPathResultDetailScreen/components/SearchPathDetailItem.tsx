@@ -5,12 +5,10 @@ import { FontText } from '@/global/ui';
 import { subwayLineColor } from '@/global/utils';
 import { SubPath } from '@/global/apis/entity';
 import { COLOR } from '@/global/constants';
-import IconWalkHuman from '@assets/icons/walk_human.svg';
-import IconRightArrowHead from '@assets/icons/right_arrow_head.svg';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { useAppDispatch } from '@/store';
 import { getIssueId } from '@/store/modules';
-import IconDownArrowHead from '@assets/icons/down_arrow_head.svg';
+import { IconChevronDown, IconChevronRight3, IconWalkingHuman } from '@/assets/icons';
 import IssueKeywordIcon from '@/global/components/IssueKeywordIcon';
 
 interface Props {
@@ -37,7 +35,7 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: Props) => {
         {/* 점과 선 */}
         <View>
           <View
-            className="w-20 h-20 rounded-full"
+            className="h-20 w-20 rounded-full"
             style={{
               backgroundColor: subwayLineColor(data.stationCode),
             }}
@@ -51,7 +49,7 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: Props) => {
             }}
           />
         </View>
-        <View className="flex-1 ml-16">
+        <View className="ml-16 flex-1">
           <FontText
             text={data.stations[0].stationName}
             className="text-18"
@@ -60,7 +58,7 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: Props) => {
               color: subwayLineColor(data.stationCode),
             }}
           />
-          <View className="flex-row items-center mt-4">
+          <View className="mt-4 flex-row items-center">
             <FontText text={data.way + ' 방향'} className="text-13 text-gray-999" />
             {data.direct && <FontText text=" 급행" className="text-12 text-[#EB5147]" />}
             <FontText
@@ -82,7 +80,7 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: Props) => {
                 navigation.navigate('IssueStack', { screen: 'IssueDetail' });
               }}
             >
-              <View className="mt-4 mr-8">
+              <View className="mr-8 mt-4">
                 <IssueKeywordIcon
                   width={18}
                   height={18}
@@ -90,7 +88,7 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: Props) => {
                   color={subwayLineColor(data.stationCode)}
                 />
               </View>
-              <View className="flex-1 mr-8">
+              <View className="mr-8 flex-1">
                 <FontText
                   text={issue.title}
                   numberOfLines={1}
@@ -104,14 +102,14 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: Props) => {
                 />
               </View>
               <View className="justify-center">
-                <IconRightArrowHead className="mb-2" color={COLOR.GRAY_999} />
+                <IconChevronRight3 className="mb-2" color={COLOR.GRAY_999} />
               </View>
             </TouchableOpacity>
           ))}
 
           <TouchableOpacity
             activeOpacity={0.5}
-            className="flex-row items-center mt-8 w-140"
+            className="mt-8 w-140 flex-row items-center"
             onPress={() => setIsOpenPathList((prev) => !prev)}
             disabled={data.stations.length < 3}
             hitSlop={20}
@@ -130,7 +128,7 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: Props) => {
               className="text-13 text-purple-54f"
             />
             {data.stations.length > 2 && (
-              <IconDownArrowHead
+              <IconChevronDown
                 className="ml-4"
                 width={10}
                 height={10}
@@ -152,7 +150,7 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: Props) => {
                       })}
                     >
                       <View
-                        className="w-12 h-12 mr-20 bg-white border-2 rounded-12"
+                        className="mr-20 h-12 w-12 rounded-12 border-2 bg-white"
                         style={{
                           borderColor: subwayLineColor(data.stationCode),
                         }}
@@ -169,7 +167,7 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: Props) => {
       {/* 도착역 */}
       <View className="relative z-[99999] flex-row">
         <View
-          className="w-20 h-20 rounded-full"
+          className="h-20 w-20 rounded-full"
           style={{
             backgroundColor: subwayLineColor(data.stationCode),
           }}
@@ -188,7 +186,7 @@ const SearchPathDetailItem = ({ data, isLastLane, lineLength }: Props) => {
       {!isLastLane && (
         <View className="ml-[-25px] mt-[-20px] flex-row items-center">
           <View className="mt-18">
-            <IconWalkHuman width={24} height={24} />
+            <IconWalkingHuman width={24} height={24} />
           </View>
           <View className="overflow-hidden">
             <View className="z-[-1] ml-9 h-60 w-4 bg-gray-ddd" />

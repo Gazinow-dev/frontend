@@ -1,18 +1,18 @@
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import IconChevronLeft from '@assets/icons/icon_chevron-left.svg';
+import { IconChevronLeft } from '@assets/icons';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
 
 const LoadingScreen = () => {
   const navigation = useRootNavigation();
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <TouchableOpacity className="p-16 w-30" hitSlop={20} onPress={() => navigation.goBack()}>
+      <TouchableOpacity className="w-30 p-16" hitSlop={20} onPress={() => navigation.goBack()}>
         <IconChevronLeft />
       </TouchableOpacity>
 
-      <View className="items-center justify-center flex-1 bg-white">
+      <View className="flex-1 items-center justify-center bg-white">
         <LoadingCircle />
       </View>
     </SafeAreaView>

@@ -7,7 +7,7 @@ import { SubwaySimplePath } from '@/global/components';
 import { Path, SubPath } from '@/global/apis/entity';
 import { View, Keyboard, TouchableOpacity } from 'react-native';
 import { KeyboardAvoidingView, Platform } from 'react-native';
-import XCircle from '@assets/icons/x-circle-standard.svg';
+import { IconInvalid } from '@/assets/icons';
 import AddNewRouteHeader from './AddNewRouteHeader';
 import { useRoute } from '@react-navigation/native';
 import { showToast } from '@/global/utils/toast';
@@ -104,7 +104,7 @@ const SaveNewRoute = () => {
           <View className="flex-row justify-between">
             {isDuplicatedName ? (
               <View className="ml-9 h-14 flex-row items-center">
-                <XCircle width={14} />
+                <IconInvalid />
                 <FontText
                   text={errorMessage}
                   className="ml-4 text-12 leading-14 text-light-red"

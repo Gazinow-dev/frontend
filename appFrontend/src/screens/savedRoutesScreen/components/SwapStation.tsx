@@ -3,7 +3,7 @@ import { ARRIVAL_STATION, DEPARTURE_STATION } from '@/global/constants';
 import { useAppDispatch, useAppSelect } from '@/store';
 import { getSeletedStation, getStationType, initialize } from '@/store/modules';
 import type { StationDataTypes } from '@/store/modules';
-import IconSwapChange from '@assets/icons/swap_change.svg';
+import { IconSwapChange } from '@/assets/icons';
 import { TouchableOpacity, View } from 'react-native';
 import AddNewRouteHeader from './AddNewRouteHeader';
 import { useNewRouteNavigation } from '@/navigation/NewRouteNavigation';
@@ -85,8 +85,8 @@ const SwapStation = ({ setSelectedStation }: Props) => {
   return (
     <Wrapper className={route.name === 'Swap' ? 'flex-1 bg-white' : ''}>
       <AddNewRouteHeader />
-      <View className="flex-row items-center px-16 bg-white pb-45 pt-28">
-        <View className="flex-1 gap-8 mr-15">
+      <View className="flex-row items-center bg-white px-16 pb-45 pt-28">
+        <View className="mr-15 flex-1 gap-8">
           {renderStationButton(selectedStation.departure, DEPARTURE_STATION)}
           {renderStationButton(selectedStation.arrival, ARRIVAL_STATION)}
         </View>
