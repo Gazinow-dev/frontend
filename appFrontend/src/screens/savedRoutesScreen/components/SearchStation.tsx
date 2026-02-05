@@ -5,14 +5,20 @@ import { getSeletedStation } from '@/store/modules/stationSearchModule';
 import { useAddRecentSearch, useGetSearchHistory, useSearchStationName } from '@/global/apis/hooks';
 import { useState } from 'react';
 import IconXCircleFill from '@assets/icons/x_circle_fill.svg';
-import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { subwayReturnLineName } from '@/global/utils/subwayLine';
 import IconLocationPin from '@assets/icons/location_pin.svg';
 import AddNewRouteHeader from './AddNewRouteHeader';
 import { useNewRouteNavigation } from '@/navigation/NewRouteNavigation';
 import IconClock from '@assets/icons/clock.svg';
 import NoResultIcon from '@/assets/icons/no_result_icon.svg';
-import NoResultText from '@/assets/icons/no_result_text.svg';
 import {
   trackMapBookmark3ArrivalChoice,
   trackMapBookmark3DepartureChoice,
@@ -73,100 +79,108 @@ const SearchStation = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <AddNewRouteHeader />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        className="flex-1"
+      >
+        <AddNewRouteHeader />
 
-      <View className="mx-16 mt-20 flex-row items-center rounded-28 border-1 border-[#d4d4d4] px-18 py-4">
-        <Input
-          className="flex-1 h-36"
-          value={searchTextValue}
-          placeholder={`${stationType}을 검색해보세요`}
-          placeholderTextColor={COLOR.GRAY_BE}
-          inputMode="search"
-          onChangeText={changeSearchText}
-          autoFocus
-        />
-        <TouchableOpacity hitSlop={20} onPress={() => setSearchTextValue('')}>
-          <IconXCircleFill width={19.5} />
-        </TouchableOpacity>
-      </View>
-
-      {!searchTextValue ? (
-        <View className="flex-1 pt-18">
-          <View style={{ paddingLeft: 16 }}>
-            <FontText text="최근검색" className="text-14 text-[#757575]" />
-          </View>
-
-          <ScrollView className="mt-18" keyboardShouldPersistTaps="handled">
-            {historyData?.map(({ stationName, stationLine }, idx) => (
-              <Pressable
-                style={({ pressed }) => ({
-                  backgroundColor: pressed ? COLOR.GRAY_E5 : 'transparent',
-                  flexDirection: 'row',
-                  paddingVertical: 12,
-                  paddingLeft: 16,
-                  borderBottomWidth: 1,
-                  borderColor: COLOR.GRAY_EB,
-                  gap: 7,
-                })}
-                onPress={() => stationBtnHandler({ stationName, stationLine })}
-                key={`${stationName}_${idx}`}
-              >
-                <IconClock />
-                <View>
-                  <FontText
-                    text={stationName.split('(')[0]}
-                    className="text-black"
-                    fontWeight="500"
-                  />
-                  <View className="h-3" />
-                  <FontText text={stationLine!} className="text-14 text-gray-999" />
-                </View>
-              </Pressable>
-            ))}
-          </ScrollView>
+        <View className="mx-16 mt-20 flex-row items-center rounded-28 border-1 border-[#d4d4d4] px-18 py-4">
+          <Input
+            className="h-36 flex-1"
+            value={searchTextValue}
+            placeholder={`${stationType}을 검색해보세요`}
+            placeholderTextColor={COLOR.GRAY_BE}
+            inputMode="search"
+            onChangeText={changeSearchText}
+            autoFocus
+          />
+          <TouchableOpacity hitSlop={20} onPress={() => setSearchTextValue('')}>
+            <IconXCircleFill width={19.5} />
+          </TouchableOpacity>
         </View>
-      ) : (
-        <View className="flex-1">
-          {/* 입력어가 있고 && 검색 결과가 없으면 없음 표시 */}
-          {searchResultData.length < 1 && (
-            <View className="items-center justify-center flex-1 gap-17">
-              <NoResultIcon />
-              <NoResultText />
+
+        {!searchTextValue ? (
+          <View className="flex-1 pt-18">
+            <View style={{ paddingLeft: 16 }}>
+              <FontText text="최근검색" className="text-14 text-[#757575]" />
             </View>
-          )}
-          {/* 입력어가 있고 && 검색 결과가 있으면 결과 표시 */}
-          {searchResultData.length > 0 && (
-            <ScrollView className="mt-28" keyboardShouldPersistTaps="handled">
-              {searchResultData.map(({ stationName, stationLine }, idx) => (
+
+            <ScrollView className="mt-18" keyboardShouldPersistTaps="handled">
+              {historyData?.map(({ stationName, stationLine }, idx) => (
                 <Pressable
                   style={({ pressed }) => ({
                     backgroundColor: pressed ? COLOR.GRAY_E5 : 'transparent',
                     flexDirection: 'row',
-                    paddingHorizontal: 16,
                     paddingVertical: 12,
+                    paddingLeft: 16,
                     borderBottomWidth: 1,
                     borderColor: COLOR.GRAY_EB,
                     gap: 7,
                   })}
-                  key={idx}
-                  onPress={() => stationBtnHandler({ stationLine, stationName })}
+                  onPress={() => stationBtnHandler({ stationName, stationLine })}
+                  key={`${stationName}_${idx}`}
                 >
-                  <IconLocationPin />
+                  <IconClock />
                   <View>
                     <FontText
                       text={stationName.split('(')[0]}
-                      className="text-black leading-21"
+                      className="text-black"
                       fontWeight="500"
                     />
                     <View className="h-3" />
-                    <FontText text={stationLine!} className="text-14 leading-21 text-gray-999" />
+                    <FontText text={stationLine!} className="text-14 text-gray-999" />
                   </View>
                 </Pressable>
               ))}
             </ScrollView>
-          )}
-        </View>
-      )}
+          </View>
+        ) : (
+          <View className="flex-1">
+            {/* 입력어가 있고 && 검색 결과가 없으면 없음 표시 */}
+            {searchResultData.length < 1 && (
+              <View className="flex-1 items-center justify-center gap-17">
+                <NoResultIcon />
+                <FontText
+                  text="검색 결과가 없습니다!"
+                  className="text-18 leading-23 text-gray-ddd"
+                />
+              </View>
+            )}
+            {/* 입력어가 있고 && 검색 결과가 있으면 결과 표시 */}
+            {searchResultData.length > 0 && (
+              <ScrollView className="mt-28" keyboardShouldPersistTaps="handled">
+                {searchResultData.map(({ stationName, stationLine }, idx) => (
+                  <Pressable
+                    style={({ pressed }) => ({
+                      backgroundColor: pressed ? COLOR.GRAY_E5 : 'transparent',
+                      flexDirection: 'row',
+                      paddingHorizontal: 16,
+                      paddingVertical: 12,
+                      borderBottomWidth: 1,
+                      borderColor: COLOR.GRAY_EB,
+                      gap: 7,
+                    })}
+                    key={idx}
+                    onPress={() => stationBtnHandler({ stationLine, stationName })}
+                  >
+                    <IconLocationPin />
+                    <View>
+                      <FontText
+                        text={stationName.split('(')[0]}
+                        className="leading-21 text-black"
+                        fontWeight="500"
+                      />
+                      <View className="h-3" />
+                      <FontText text={stationLine!} className="text-14 leading-21 text-gray-999" />
+                    </View>
+                  </Pressable>
+                ))}
+              </ScrollView>
+            )}
+          </View>
+        )}
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
