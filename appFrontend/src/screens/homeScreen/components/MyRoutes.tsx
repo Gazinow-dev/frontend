@@ -18,17 +18,20 @@ import { COLOR } from '@/global/constants';
 import IconX from '@assets/icons/cross_x.svg';
 import { Shadow } from 'react-native-shadow-2';
 import { trackMapBookmark1 } from '@/analytics/map.events';
-interface MyRoutesProps {
+import LoadingCircle from '@/global/components/animations/LoadingCircle';
+
+interface Props {
   isVerifiedUser: 'success auth' | 'fail auth' | 'yet';
   isRefreshing: boolean;
   setIsRefreshing: (isRefreshing: boolean) => void;
 }
 
-const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: MyRoutesProps) => {
+const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: Props) => {
   const navigation = useRootNavigation();
   const homeNavigation = useHomeNavigation();
 
-  const { myRoutes, getSavedRoutesRefetch, isSavedRoutesError } = useGetSavedRoutesQuery();
+  const { myRoutes, getSavedRoutesRefetch, isLoadingSavedRoutes, isSavedRoutesError } =
+    useGetSavedRoutesQuery();
   const queryClient = useQueryClient();
 
   const { email } = useSelector((state: RootState) => state.auth);
@@ -59,6 +62,13 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: MyRoutesPro
   }, [isRefreshing]);
 
   const renderMyRoutes = () => {
+    if ((isVerifiedUser === 'success auth' && isLoadingSavedRoutes) || isRefreshing) {
+      return (
+        <View className="items-center justify-center h-200">
+          <LoadingCircle />
+        </View>
+      );
+    }
     if (isVerifiedUser !== 'success auth') {
       return <NonLoggedIn />;
     }
@@ -90,10 +100,10 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: MyRoutesPro
       {isInfoVisible && (
         <Pressable
           onPress={() => setInfoVisible(false)}
-          className="bg-amber-20 absolute inset-0 z-10 h-screen w-screen"
+          className="absolute inset-0 z-10 w-screen h-screen bg-amber-20"
         />
       )}
-      <View className="relative rounded-14 bg-white">
+      <View className="relative bg-white rounded-14">
         <View className="flex-row items-center justify-between p-16 pt-20">
           <View className="flex-row gap-4">
             <FontText
@@ -143,7 +153,7 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: MyRoutesPro
                 </TouchableOpacity>
               </View>
 
-              <View className="h-1 flex-1 bg-gray-beb" />
+              <View className="flex-1 h-1 bg-gray-beb" />
 
               <View className="space-y-10">
                 <View className="flex-row items-center gap-10">
