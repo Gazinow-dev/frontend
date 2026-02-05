@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { FlatList, Modal, TouchableOpacity, View } from 'react-native';
-import { FontText, Space } from '@/global/ui';
+import { FontText } from '@/global/ui';
 import { useRoute } from '@react-navigation/native';
 import NewRouteSaveModal from './components/NewRouteSaveModal';
 import SearchPathDetailItem from './components/SearchPathDetailItem';
@@ -142,7 +142,7 @@ const SearchPathResultDetailScreen = () => {
         <View className="flex-row items-center justify-between pl-10">
           <View>
             <FontText text="평균 소요시간" className="text-13 text-gray-999" fontWeight="500" />
-            <View className="mt-2 flex-row">
+            <View className="mt-2 flex-row space-x-8">
               <FontText
                 text={
                   resultData.totalTime > 60
@@ -155,8 +155,6 @@ const SearchPathResultDetailScreen = () => {
                 className="text-28"
                 fontWeight="700"
               />
-
-              <Space width={8} />
 
               <View>
                 <View className="flex-1" />

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import cn from 'classname';
 import { KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View } from 'react-native';
-import { FontText, Input, Space } from '@/global/ui';
+import { FontText, Input } from '@/global/ui';
 import { setEncryptedStorage } from '@/global/utils';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { SignInFormTypes } from './apis/entity';
