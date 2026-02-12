@@ -8,6 +8,7 @@
     "android:dev-debug": "adb reverse tcp:9090 tcp:9090 && ENVFILE=.env.development react-native run-android -- --reset-cache",
     "android:development": "ENVFILE=.env.development react-native run-android -- --reset-cache",
     "android:production": "ENVFILE=.env.production react-native run-android -- --reset-cache",
+    "clean": "rm -rf node_modules yarn.lock && yarn cache clean && yarn install && cd ios && rm -rf Pods Podfile.lock build && pod install && cd .. && cd android && ./gradlew clean && cd ..",
     "ios:development": "ENVFILE=.env.development react-native run-ios -- --reset-cache",
     "ios:production": "ENVFILE=.env.production react-native run-ios -- --reset-cache",
     "lint": "eslint .",
