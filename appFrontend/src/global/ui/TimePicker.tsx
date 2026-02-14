@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
-interface TimePickerProps {
+interface Props {
   setSelectedTime: (time: string) => void;
 }
 
-const TimePicker = ({ setSelectedTime }: TimePickerProps) => {
+const TimePicker = ({ setSelectedTime }: Props) => {
   const [date, setDate] = useState(new Date());
 
   setSelectedTime(`${date.getHours()}:${date.getMinutes()}`);
@@ -14,7 +14,7 @@ const TimePicker = ({ setSelectedTime }: TimePickerProps) => {
   return (
     <View className="border-b-1 border-gray-beb bg-gray-9f9">
       <DatePicker
-        className="h-144 my-5 w-full rounded-8 bg-gray-9f9"
+        className="w-full my-5 h-144 rounded-8 bg-gray-9f9"
         date={date}
         onDateChange={setDate}
         locale="ko-KR"

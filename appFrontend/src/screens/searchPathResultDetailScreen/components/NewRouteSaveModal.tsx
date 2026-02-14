@@ -1,7 +1,7 @@
-import { FontText, Input, Space } from '@/global/ui';
+import { FontText, Input } from '@/global/ui';
 import cn from 'classname';
 import { COLOR } from '@/global/constants';
-import { KeyboardAvoidingView, Modal, Platform, Pressable, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, Platform, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { SubwaySimplePath } from '@/global/components';
 import { useSavedSubwayRoute } from '@/global/apis/hooks';
@@ -10,19 +10,16 @@ import { useQueryClient } from 'react-query';
 import { showToast } from '@/global/utils/toast';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { trackMapSearchBookmarkFinish, trackMapSearchBookmarkName } from '@/analytics/map.events';
+import { TouchableOpacity } from 'react-native';
 
-interface NewRouteSaveModalProps {
+interface Props {
   freshData: Path;
   closeModal: () => void;
   onBookmark: () => void;
   setMyPathId: (id: number) => void;
 }
-const NewRouteSaveModal = ({
-  freshData,
-  closeModal,
-  onBookmark,
-  setMyPathId,
-}: NewRouteSaveModalProps) => {
+
+const NewRouteSaveModal = ({ freshData, closeModal, onBookmark, setMyPathId }: Props) => {
   const queryClient = useQueryClient();
   const navigation = useRootNavigation();
 
@@ -63,7 +60,6 @@ const NewRouteSaveModal = ({
   });
 
   const saveHandler = () => {
-    if (routeName.length === 0) return;
     mutate({
       ...freshData,
       roadName: routeName,
@@ -78,75 +74,37 @@ const NewRouteSaveModal = ({
     <Modal visible onRequestClose={closeModal} transparent>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={{
-          backgroundColor: 'rgba(0, 0, 0, 0.60)',
-          flex: 1,
-          position: 'relative',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minWidth: 296,
-        }}
+        className="min-w-296 flex-1 items-center justify-center bg-black/60"
       >
-        <View
-          style={{
-            backgroundColor: COLOR.WHITE,
-            paddingVertical: 28,
-            paddingHorizontal: 24,
-            borderRadius: 12,
-            alignItems: 'center',
-            maxWidth: 296,
-            width: '100%',
-          }}
-        >
-          <FontText text="새 경로 저장" className="text-18" fontWeight="600" />
-
-          <View style={{ width: '100%', marginVertical: 4 }}>
-            <SubwaySimplePath
-              pathData={freshData.subPaths}
-              arriveStationName={freshData.lastEndStation}
-              betweenPathMargin={16}
-              isHideIsuue
-            />
-          </View>
+        <View className="w-4/5 items-center space-y-20 rounded-12 bg-white px-24 py-28">
+          <FontText text="새 경로 저장" className="text-18 leading-23" fontWeight="600" />
 
           <View className="w-full">
-            <FontText text="새 경로 이름" className="text-14" fontWeight="500" />
-            <View
-              style={{
-                borderRadius: 5,
-                backgroundColor: COLOR.GRAY_F9,
-                width: '100%',
-                paddingLeft: 15,
-                paddingTop: 12.31,
-                paddingBottom: 10.69,
-                marginTop: 5.48,
-                marginBottom: 8.31,
-              }}
-            >
+            <View className="mb-16 px-12">
+              <SubwaySimplePath
+                pathData={freshData.subPaths}
+                arriveStationName={freshData.lastEndStation}
+                betweenPathMargin={16}
+                isHideIsuue
+              />
+            </View>
+
+            <FontText text="새 경로 이름" className="text-14 leading-21" fontWeight="500" />
+            <View className="mb-8 mt-5 rounded-5 bg-gray-9f9 pb-10 pl-15 pt-12">
               <Input
                 placeholder="경로 이름을 입력하세요"
                 placeholderTextColor={COLOR.GRAY_999}
                 value={routeName}
+                maxLength={10}
                 onChangeText={(text) => {
-                  if (text.length <= 10) {
-                    setIsDuplicatedError(false);
-                    setRouteName(text);
-                  }
+                  setIsDuplicatedError(false);
+                  setRouteName(text);
                 }}
-                style={{
-                  fontSize: 14,
-                  fontWeight: '500',
-                  lineHeight: 16,
-                }}
+                className="text-14 font-medium leading-16"
               />
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
+
+            <View className="flex-row items-center justify-between">
               <FontText
                 text={errorMessage}
                 className={cn('text-12 text-transparent', {
@@ -162,23 +120,22 @@ const NewRouteSaveModal = ({
             </View>
           </View>
 
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>
-            <Pressable
-              className="items-center flex-1 py-12 border rounded-5 border-gray-999"
+          <View className="flex-row space-x-8">
+            <TouchableOpacity
+              className="flex-1 items-center rounded-5 border border-gray-999 py-12"
               onPress={closeModal}
             >
-              <FontText text="취소" className="text-14 text-gray-999" fontWeight="600" />
-            </Pressable>
-            <Space width={8} />
-            <Pressable
+              <FontText text="취소" className="text-14 leading-21 text-gray-999" fontWeight="600" />
+            </TouchableOpacity>
+            <TouchableOpacity
               className={cn('flex-1 items-center rounded-5 bg-black-717 py-12', {
                 'bg-gray-ddd': isLoading || isDuplicatedError || routeName.length < 1,
               })}
               onPress={saveHandler}
-              disabled={isLoading || isDuplicatedError}
+              disabled={isLoading || isDuplicatedError || routeName.length < 1}
             >
-              <FontText text="확인" className="text-white text-14" fontWeight="600" />
-            </Pressable>
+              <FontText text="확인" className="text-14 leading-21 text-white" fontWeight="600" />
+            </TouchableOpacity>
           </View>
         </View>
       </KeyboardAvoidingView>

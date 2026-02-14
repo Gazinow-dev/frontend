@@ -7,7 +7,7 @@ import { SubwaySimplePath } from '@/global/components';
 import { Path, SubPath } from '@/global/apis/entity';
 import { View, Keyboard, TouchableOpacity } from 'react-native';
 import { KeyboardAvoidingView, Platform } from 'react-native';
-import XCircle from '@assets/icons/x-circle-standard.svg';
+import { IconInvalid } from '@/assets/icons';
 import AddNewRouteHeader from './AddNewRouteHeader';
 import { useRoute } from '@react-navigation/native';
 import { showToast } from '@/global/utils/toast';
@@ -79,8 +79,8 @@ const SaveNewRoute = () => {
     >
       <SafeAreaView className="flex-1 bg-white" edges={['top']}>
         <AddNewRouteHeader />
-        <View className="flex-1 px-16 bg-white">
-          <View className="mt-32 mx-33 mb-22">
+        <View className="flex-1 bg-white px-16">
+          <View className="mx-33 mb-22 mt-32">
             <SubwaySimplePath
               pathData={freshSubPathData}
               arriveStationName={resultData.lastEndStation}
@@ -90,11 +90,11 @@ const SaveNewRoute = () => {
           </View>
           <FontText text="새 경로 이름" className="text-14 leading-21" fontWeight="500" />
           <Input
-            className="px-16 py-12 my-7 rounded-5 bg-gray-9f9"
+            className="my-7 rounded-5 bg-gray-9f9 px-16 py-12"
             placeholder="경로 이름을 입력하세요"
             value={roadName}
+            maxLength={10}
             onChangeText={(text) => {
-              if (text.length > 10) return;
               setRoadName(text);
               setIsDuplicatedName(false);
             }}
@@ -103,8 +103,8 @@ const SaveNewRoute = () => {
           />
           <View className="flex-row justify-between">
             {isDuplicatedName ? (
-              <View className="flex-row items-center ml-9 h-14">
-                <XCircle width={14} />
+              <View className="ml-9 h-14 flex-row items-center">
+                <IconInvalid />
                 <FontText
                   text={errorMessage}
                   className="ml-4 text-12 leading-14 text-light-red"
@@ -135,7 +135,7 @@ const SaveNewRoute = () => {
           }}
           disabled={!roadName || isLoading || isDuplicatedName}
         >
-          <FontText text="완료" className="text-white text-17" fontWeight="600" />
+          <FontText text="완료" className="text-17 text-white" fontWeight="600" />
         </TouchableOpacity>
       </SafeAreaView>
     </KeyboardAvoidingView>

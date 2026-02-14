@@ -2,7 +2,7 @@ import { FontText } from '@/global/ui';
 import { Platform, TouchableOpacity, View } from 'react-native';
 import { useCallback, useState } from 'react';
 import ModalReportComment from './ModalReportComment';
-import IconHeart from '@assets/icons/icon-heart-mono.svg';
+import { IconHeart } from '@/assets/icons';
 import BottomSheetCommentExtraOptions from './BottomSheetCommentExtraOptions';
 import { debounce } from 'lodash';
 import { CommentContent } from '@/global/apis/entity';
@@ -10,12 +10,12 @@ import { useMutation, useQueryClient } from 'react-query';
 import { deleteCommentLike, postCommentLike } from '../api/func';
 import { useAppSelect } from '@/store';
 
-interface CommentProps {
+interface Props {
   item: CommentContent;
   setIsOpenLoginModal: (value: boolean) => void;
 }
 
-const SingleCommentContainer = ({ item, setIsOpenLoginModal }: CommentProps) => {
+const SingleCommentContainer = ({ item, setIsOpenLoginModal }: Props) => {
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
   const queryClient = useQueryClient();
   const { issueCommentContent, createdBy, agoTime, likesCount, liked, issueCommentId } = item;
@@ -40,7 +40,7 @@ const SingleCommentContainer = ({ item, setIsOpenLoginModal }: CommentProps) => 
   );
 
   return (
-    <View className="px-16 mt-36">
+    <View className="mt-36 px-16">
       <BottomSheetCommentExtraOptions
         commentDetail={item}
         setIsOpenModalReportComment={setIsOpenModalReportComment}
@@ -55,17 +55,17 @@ const SingleCommentContainer = ({ item, setIsOpenLoginModal }: CommentProps) => 
         issueCommentId={issueCommentId}
       />
 
-      <View className="flex-row items-center mb-4 space-x-4">
-        <FontText text={createdBy} className="text-[#6D7582] text-13 leading-19" fontWeight="500" />
-        <View className="bg-[#6D7582] w-2 h-2 rounded-full" />
-        <FontText text={agoTime} className="text-gray-999 text-13 leading-19" />
+      <View className="mb-4 flex-row items-center space-x-4">
+        <FontText text={createdBy} className="text-13 leading-19 text-[#6D7582]" fontWeight="500" />
+        <View className="h-2 w-2 rounded-full bg-[#6D7582]" />
+        <FontText text={agoTime} className="text-13 leading-19 text-gray-999" />
       </View>
 
       <FontText text={issueCommentContent} className="leading-24" />
 
-      <View className="flex-row justify-between mt-12">
+      <View className="mt-12 flex-row justify-between">
         <TouchableOpacity
-          className={'flex-row w-64 space-x-4 ' + (Platform.OS === 'ios' ? 'items-center' : '')}
+          className={'w-64 flex-row space-x-4 ' + (Platform.OS === 'ios' ? 'items-center' : '')}
           onPress={commentLikeHandler}
           activeOpacity={0.5}
           hitSlop={30}
@@ -79,9 +79,9 @@ const SingleCommentContainer = ({ item, setIsOpenLoginModal }: CommentProps) => 
           hitSlop={20}
           onPress={() => setIsOpenBottomSheet(true)}
         >
-          <View className="bg-[#D1D6DB] w-3 h-3 rounded-full" />
-          <View className="bg-[#D1D6DB] w-3 h-3 rounded-full" />
-          <View className="bg-[#D1D6DB] w-3 h-3 rounded-full" />
+          <View className="h-3 w-3 rounded-full bg-[#D1D6DB]" />
+          <View className="h-3 w-3 rounded-full bg-[#D1D6DB]" />
+          <View className="h-3 w-3 rounded-full bg-[#D1D6DB]" />
         </TouchableOpacity>
       </View>
     </View>

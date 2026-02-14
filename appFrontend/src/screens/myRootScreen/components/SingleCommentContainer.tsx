@@ -5,13 +5,13 @@ import { useAppDispatch } from '@/store';
 import { FontText } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { CommentContent } from '@/global/apis/entity';
-import IconHeart from '@assets/icons/icon-heart-mono.svg';
+import { IconHeart } from '@/assets/icons';
 
-interface CommentProps {
+interface Props {
   item: CommentContent;
 }
 
-const SingleCommentContainer = ({ item }: CommentProps) => {
+const SingleCommentContainer = ({ item }: Props) => {
   const { issueCommentContent, issueId, agoTime, likesCount } = item;
   const navigation = useRootNavigation();
   const dispatch = useAppDispatch();
@@ -31,11 +31,11 @@ const SingleCommentContainer = ({ item }: CommentProps) => {
       }}
     >
       <View className="space-y-4">
-        <FontText text={agoTime} className="text-gray-999 text-13 leading-19" />
+        <FontText text={agoTime} className="text-13 leading-19 text-gray-999" />
         <FontText text={issueCommentContent} className="leading-24" numberOfLines={2} />
       </View>
 
-      <View className={'flex-row w-64 space-x-4 ' + (Platform.OS === 'ios' ? 'items-center' : '')}>
+      <View className={'w-64 flex-row space-x-4 ' + (Platform.OS === 'ios' ? 'items-center' : '')}>
         <IconHeart color="#D1D6DB" />
         <FontText text={'' + likesCount} className="text-13 leading-19 text-gray-999" />
       </View>

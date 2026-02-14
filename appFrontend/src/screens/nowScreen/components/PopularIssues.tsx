@@ -6,15 +6,15 @@ import { useAppDispatch } from '@/store';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import dayjs from 'dayjs';
 import cn from 'classname';
-import IconHeart from '@/assets/icons/icon-heart-mono.svg';
+import { IconHeart } from '@/assets/icons';
 import { IssueGet } from '@/global/apis/entity';
 import { trackNowHotIssueClick, trackNowHotIssueOpen } from '@/analytics/now.events';
 
-interface PopularIssuesProps {
+interface Props {
   popularIssues: IssueGet[];
 }
 
-const PopularIssues = ({ popularIssues }: PopularIssuesProps) => {
+const PopularIssues = ({ popularIssues }: Props) => {
   if (popularIssues.length < 1) return null;
 
   const dispatch = useAppDispatch();

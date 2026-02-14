@@ -2,10 +2,7 @@ import { useCallback, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { FontText, Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
-import IconXCircle from '@assets/icons/x-circle-standard.svg';
-import IconCheck from '@assets/icons/check_green.svg';
-import IconXCircleFill from '@assets/icons/x_circle_fill.svg';
-import IconCrossX from '@assets/icons/cross_x.svg';
+import { IconValid, IconCross, IconInvalid, IconCrossCircle } from '@/assets/icons';
 import { useAppDispatch } from '@/store';
 import { saveUserInfo } from '@/store/modules';
 import { useSelector } from 'react-redux';
@@ -86,7 +83,7 @@ const ChangeNickNameScreen = () => {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row items-center justify-between p-16">
         <TouchableOpacity hitSlop={20} onPress={() => myPageNavigation.goBack()}>
-          <IconCrossX width={24} className="mr-12" />
+          <IconCross className="mr-12" />
         </TouchableOpacity>
         <FontText text="닉네임 수정" className="text-18 leading-23" fontWeight="500" />
         <View className="flex-1" />
@@ -105,10 +102,10 @@ const ChangeNickNameScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <View className="flex-1 px-16 bg-gray-9f9">
+      <View className="flex-1 bg-gray-9f9 px-16">
         <View className="mb-8 mt-34 flex-row items-center rounded-5 border-1 border-[#d4d4d4] bg-white px-16 py-8">
           <Input
-            className="flex-1 h-36"
+            className="h-36 flex-1"
             value={newNickname}
             placeholder={`새 닉네임을 입력하세요`}
             placeholderTextColor={COLOR.GRAY_999}
@@ -117,16 +114,16 @@ const ChangeNickNameScreen = () => {
             autoFocus
           />
           <TouchableOpacity onPress={handleDelete} hitSlop={20}>
-            <IconXCircleFill width={19.5} />
+            <IconCrossCircle width={19.5} />
           </TouchableOpacity>
         </View>
 
         {isNicknameValid !== null && newNickname !== '' && (
           <View className="flex-row pl-9">
             {isNicknameValid ? (
-              <IconCheck stroke={COLOR.LIGHT_GREEN} className="mr-4" />
+              <IconValid color={COLOR.LIGHT_GREEN} className="mr-4" />
             ) : (
-              <IconXCircle width={14} className="mr-4" />
+              <IconInvalid className="mr-4" />
             )}
             <FontText
               text={isNicknameValid ? '사용 가능한 닉네임입니다' : errorMessage}

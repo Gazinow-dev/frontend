@@ -2,11 +2,9 @@ import { COLOR } from '@/global/constants';
 import { FontText } from '@/global/ui';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Animated, Dimensions, Modal, Pressable, TouchableOpacity, View } from 'react-native';
-import IconCheck from '@assets/icons/check.svg';
+import { IconValid, IconCross, IconChevronRight3 } from '@assets/icons';
 import { WebView } from 'react-native-webview';
 import StepButton from '../ui/StepButton';
-import IconX from '@assets/icons/cross_x.svg';
-import IconRightArrowHead from '@assets/icons/right_arrow_head.svg';
 import { trackRegisterPassword } from '@/analytics/register.events';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -14,12 +12,12 @@ type AgreeTermsType = '약관 전체 동의' | '(필수) 서비스 약관 동의
 
 const listData: AgreeTermsType[] = ['(필수) 서비스 약관 동의', '(필수) 개인정보 수집 동의'];
 
-interface SubscribeTermsModalProps {
+interface Props {
   setStep: () => void;
   closeModal: () => void;
 }
 
-const SubscribeTermsModal = ({ setStep, closeModal }: SubscribeTermsModalProps) => {
+const SubscribeTermsModal = ({ setStep, closeModal }: Props) => {
   const height = Dimensions.get('window').height;
 
   const animRef = useRef(new Animated.Value(height)).current;
@@ -76,22 +74,25 @@ const SubscribeTermsModal = ({ setStep, closeModal }: SubscribeTermsModalProps) 
   };
 
   useEffect(() => {
-    Animated.timing(animRef, {
+    const animation = Animated.timing(animRef, {
       toValue: 0,
       duration: 600,
       useNativeDriver: true,
-    }).start();
+    });
 
+    animation.start();
     trackRegisterPassword();
+
+    return () => animation.stop();
   }, []);
 
   return (
     <Modal visible onRequestClose={!!openUrl ? () => setOpenUrl('') : closeModal} transparent>
       {!!openUrl ? (
         <SafeAreaView className="flex-1">
-          <View className="pb-10 pl-16 bg-white border-b-1 border-gray-ddd pt-13">
+          <View className="border-b-1 border-gray-ddd bg-white pb-10 pl-16 pt-13">
             <TouchableOpacity hitSlop={20} onPress={() => setOpenUrl('')}>
-              <IconX width={24} height={24} />
+              <IconCross />
             </TouchableOpacity>
           </View>
           <WebView source={{ uri: openUrl }} />
@@ -110,11 +111,11 @@ const SubscribeTermsModal = ({ setStep, closeModal }: SubscribeTermsModalProps) 
             >
               <Pressable
                 hitSlop={10}
-                className="flex-row items-center pl-10 mb-15 rounded-5 bg-gray-9f9 py-13"
+                className="mb-15 flex-row items-center rounded-5 bg-gray-9f9 py-13 pl-10"
                 onPress={allChangeAgreeTerms}
               >
-                <View className="items-center justify-center mr-10 h-22 w-22 rounded-3 bg-gray-3e3">
-                  {isCheckAll && <IconCheck width={18} height={18} color={COLOR.WHITE} />}
+                <View className="mr-10 h-22 w-22 items-center justify-center rounded-3 bg-gray-3e3">
+                  {isCheckAll && <IconValid width={18} height={18} color={COLOR.WHITE} />}
                 </View>
                 <FontText text="약관 전체 동의" className="text-14" fontWeight="600" />
               </Pressable>
@@ -124,19 +125,19 @@ const SubscribeTermsModal = ({ setStep, closeModal }: SubscribeTermsModalProps) 
                   <Pressable
                     key={text}
                     hitSlop={10}
-                    className="flex-row items-center justify-between pl-10 mb-24"
+                    className="mb-24 flex-row items-center justify-between pl-10"
                     onPress={() => changeAgreeTerms(text)}
                   >
                     <View className="flex-row items-center">
-                      <View className="items-center justify-center mr-10 h-22 w-22 rounded-3 bg-gray-3e3">
+                      <View className="mr-10 h-22 w-22 items-center justify-center rounded-3 bg-gray-3e3">
                         {agreeTerms.includes(text) && (
-                          <IconCheck width={18} height={18} color={COLOR.WHITE} />
+                          <IconValid width={18} height={18} color={COLOR.WHITE} />
                         )}
                       </View>
                       <FontText text={text} className="test-14" fontWeight="600" />
                     </View>
                     <TouchableOpacity hitSlop={20} onPress={() => webViewHandler(text)}>
-                      <IconRightArrowHead width={12} height={12} color={COLOR.GRAY_CA} />
+                      <IconChevronRight3 width={12} height={12} color={COLOR.GRAY_CA} />
                     </TouchableOpacity>
                   </Pressable>
                 ))}

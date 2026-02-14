@@ -1,14 +1,13 @@
-import { COLOR } from '@/global/constants';
 import { FontText } from '@/global/ui';
 import { Image, View } from 'react-native';
 import StepButton from '../ui/StepButton';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 
-interface CompleteStepProps {
+interface Props {
   nickname: string;
 }
 
-const CompleteStep = ({ nickname }: CompleteStepProps) => {
+const CompleteStep = ({ nickname }: Props) => {
   const navigation = useRootNavigation();
 
   return (
@@ -20,7 +19,7 @@ const CompleteStep = ({ nickname }: CompleteStepProps) => {
       />
 
       <View className="items-center flex-1 mt-52">
-        <Image source={require('../../../assets/images/clap_3d.png')} className="w-328 h-342" />
+        <Image source={require('../../../assets/images/clap_3d.png')} className="h-342 w-328" />
       </View>
 
       <StepButton

@@ -3,7 +3,7 @@ import { ARRIVAL_STATION, DEPARTURE_STATION } from '@/global/constants';
 import { useAppDispatch, useAppSelect } from '@/store';
 import { getSeletedStation, getStationType, initialize } from '@/store/modules';
 import type { StationDataTypes } from '@/store/modules';
-import IconSwapChange from '@assets/icons/swap_change.svg';
+import { IconSwapChange } from '@/assets/icons';
 import { TouchableOpacity, View } from 'react-native';
 import AddNewRouteHeader from './AddNewRouteHeader';
 import { useNewRouteNavigation } from '@/navigation/NewRouteNavigation';
@@ -20,13 +20,14 @@ export interface SelectedStationTypes {
   departure: StationDataTypes;
   arrival: StationDataTypes;
 }
-interface SwapStationProps {
-  setSelectedStation: React.Dispatch<React.SetStateAction<SelectedStationTypes>>;
-}
 
 type StationTypes = typeof DEPARTURE_STATION | typeof ARRIVAL_STATION;
 
-const SwapStation = ({ setSelectedStation }: SwapStationProps) => {
+interface Props {
+  setSelectedStation: React.Dispatch<React.SetStateAction<SelectedStationTypes>>;
+}
+
+const SwapStation = ({ setSelectedStation }: Props) => {
   const route = useRoute();
   const newRouteNavigation = useNewRouteNavigation();
   const dispatch = useAppDispatch();
@@ -79,11 +80,13 @@ const SwapStation = ({ setSelectedStation }: SwapStationProps) => {
     }));
   };
 
+  const Wrapper = route.name === 'Swap' ? SafeAreaView : View;
+
   return (
-    <SafeAreaView className={cn({ 'flex-1 bg-white': route.name === 'Swap' })}>
+    <Wrapper className={route.name === 'Swap' ? 'flex-1 bg-white' : ''}>
       <AddNewRouteHeader />
-      <View className="flex-row items-center px-16 bg-white pb-45 pt-28">
-        <View className="flex-1 gap-8 mr-15">
+      <View className="flex-row items-center bg-white px-16 pb-45 pt-28">
+        <View className="mr-15 flex-1 gap-8">
           {renderStationButton(selectedStation.departure, DEPARTURE_STATION)}
           {renderStationButton(selectedStation.arrival, ARRIVAL_STATION)}
         </View>
@@ -91,7 +94,7 @@ const SwapStation = ({ setSelectedStation }: SwapStationProps) => {
           <IconSwapChange width={24} />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </Wrapper>
   );
 };
 

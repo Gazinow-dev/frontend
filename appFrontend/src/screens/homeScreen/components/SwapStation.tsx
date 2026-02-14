@@ -1,12 +1,11 @@
 import { Shadow } from 'react-native-shadow-2';
 import cn from 'classname';
-
 import { COLOR, ARRIVAL_STATION, DEPARTURE_STATION } from '@/global/constants';
 import { useAppDispatch, useAppSelect } from '@/store';
 import { getStationType, initialize, swapStation } from '@/store/modules';
 import type { StationDataTypes } from '@/store/modules';
 import { TouchableOpacity, View } from 'react-native';
-import IconSwapChange from '@assets/icons/swap_change.svg';
+import { IconSwapChange } from '@/assets/icons';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { useFocusEffect } from '@react-navigation/native';
 import { FontText } from '@/global/ui';
@@ -56,7 +55,7 @@ const SwapStation = () => {
     >
       <View className="flex-1 gap-12">
         <TouchableOpacity
-          className="justify-center pl-10 h-49 rounded-8 bg-gray-9f9"
+          className="h-49 justify-center rounded-8 bg-gray-9f9 pl-10"
           onPress={() => navigateSearchStation(DEPARTURE_STATION)}
         >
           <FontText
@@ -71,7 +70,7 @@ const SwapStation = () => {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          className="justify-center pl-10 h-49 rounded-8 bg-gray-9f9"
+          className="h-49 justify-center rounded-8 bg-gray-9f9 pl-10"
           onPress={() => navigateSearchStation(ARRIVAL_STATION)}
         >
           <FontText

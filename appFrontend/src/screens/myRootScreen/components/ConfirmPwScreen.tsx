@@ -3,7 +3,7 @@ import { Alert, KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'r
 import { FontText, Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
 import { useRootNavigation } from '@/navigation/RootNavigation';
-import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
+import { IconChevronLeft } from '@assets/icons';
 import { removeEncryptedStorage } from '@/global/utils';
 import { debounce } from 'lodash';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
@@ -64,13 +64,13 @@ const ConfirmPwScreen = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       className="flex-1"
     >
-      <SafeAreaView className="flex-1 px-16 bg-white" edges={['top']}>
+      <SafeAreaView className="flex-1 bg-white px-16" edges={['top']}>
         <TouchableOpacity
-          className="flex-row items-center h-56 w-30"
+          className="h-56 w-30 flex-row items-center"
           onPress={() => myPageNavigation.goBack()}
           hitSlop={20}
         >
-          <IconLeftArrowHead width={24} color="#3F3F46" />
+          <IconChevronLeft />
         </TouchableOpacity>
 
         <View className="flex-1">
@@ -87,7 +87,7 @@ const ConfirmPwScreen = () => {
           />
 
           <Input
-            className="px-16 py-12 my-7 rounded-5 bg-gray-f2"
+            className="my-7 rounded-5 bg-gray-f2 px-16 py-12"
             placeholder="비밀번호를 입력해주세요"
             value={passwordInput}
             onChangeText={(text) => handleCurPasswordChange(text)}
@@ -104,7 +104,7 @@ const ConfirmPwScreen = () => {
           onPress={() => deleteAccountMutate()}
           disabled={!isPwRight}
         >
-          <FontText text="탈퇴하기" className="text-white text-17" fontWeight="600" />
+          <FontText text="탈퇴하기" className="text-17 text-white" fontWeight="600" />
         </TouchableOpacity>
       </SafeAreaView>
     </KeyboardAvoidingView>

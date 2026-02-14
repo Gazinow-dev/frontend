@@ -4,13 +4,13 @@ import { FontText } from '@/global/ui';
 import { subwayLineColor, pathSubwayLineName, subwayNameCutting } from '@/global/utils';
 import { StationCode } from '@/global/apis/entity';
 
-interface PathLineNumNameProps {
+interface Props {
   stationCode: StationCode;
   direct: boolean;
   stationName: string;
 }
 
-const PathLineNumName = ({ stationCode, direct, stationName }: PathLineNumNameProps) => {
+const PathLineNumName = ({ stationCode, direct, stationName }: Props) => {
   return (
     <View
       style={{

@@ -11,12 +11,12 @@ import { useQueryClient } from 'react-query';
 import { COLOR } from '@/global/constants';
 import { trackMapBannerClick } from '@/analytics/map.events';
 
-interface IssueCarrouselProps {
+interface Props {
   isRefreshing: boolean;
   setIsRefreshing: (isRefreshing: boolean) => void;
 }
 
-const IssueCarrousel = ({ isRefreshing, setIsRefreshing }: IssueCarrouselProps) => {
+const IssueCarrousel = ({ isRefreshing, setIsRefreshing }: Props) => {
   const navigation = useRootNavigation();
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();

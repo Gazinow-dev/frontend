@@ -1,14 +1,12 @@
 import { View } from 'react-native';
-import type { TextInput } from 'react-native/types';
 import { FontText, Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useEmailConfirm } from '../apis/hooks';
 import ConfirmEmailModal from './ConfirmEmailModal';
 import useBackgroundInterval from '../hooks/useBackgroundInterval';
 import StepButton from '../ui/StepButton';
-import IconCheck from '@assets/icons/check.svg';
-import IconXCircle from '@assets/icons/x-circle-standard.svg';
+import { IconValid, IconInvalid } from '@assets/icons';
 
 const emailValidation = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/);
 
@@ -17,15 +15,13 @@ export interface TimerType {
   seconds: number;
 }
 
-interface EmailStepProps {
+interface Props {
   emailValue: string;
   setStep: () => void;
   changeEmailValue: (value: string) => void;
 }
 
-const EmailStep = ({ emailValue, setStep, changeEmailValue }: EmailStepProps) => {
-  const inputRef = useRef<TextInput>(null);
-
+const EmailStep = ({ emailValue, setStep, changeEmailValue }: Props) => {
   const { authNumber, resetAuthNumber, emailConfirmMutate, isLoading } = useEmailConfirm({
     onSuccess: () => {
       setIsOpenConfirmModal(true);
@@ -102,17 +98,17 @@ const EmailStep = ({ emailValue, setStep, changeEmailValue }: EmailStepProps) =>
       )}
 
       <View className="flex-1">
-        <View className="gap-10 mb-51">
+        <View className="mb-51 gap-10">
           <FontText text="회원가입" className="text-24" fontWeight="700" />
           <FontText
             text="본인인증을 위한 이메일을 입력해주세요"
-            className="text-13 text-gray-9999"
+            className="text-gray-9999 text-13"
           />
         </View>
 
         <View className="flex-1">
           <FontText text="Email" className="text-14 text-gray-183" fontWeight="500" />
-          <View className="justify-center pl-16 mt-6 mb-8 bg-gray-f2 py-13 rounded-5">
+          <View className="mb-8 mt-6 justify-center rounded-5 bg-gray-f2 py-13 pl-16">
             <Input
               isBlur={isOpenConfirmModal}
               value={emailValue}
@@ -124,10 +120,10 @@ const EmailStep = ({ emailValue, setStep, changeEmailValue }: EmailStepProps) =>
               className="h-25"
             />
           </View>
-          <View className="flex-row items-center ml-9">
+          <View className="ml-9 flex-row items-center">
             {!errorMessage && isValidEmail && (
               <>
-                <IconCheck width={14} height={14} color={COLOR.LIGHT_GREEN} />
+                <IconValid width={14} height={14} color={COLOR.LIGHT_GREEN} />
                 <View className="w-3" />
                 <FontText
                   text="올바른 이메일 형식입니다"
@@ -138,7 +134,7 @@ const EmailStep = ({ emailValue, setStep, changeEmailValue }: EmailStepProps) =>
             )}
             {!errorMessage && !isValidEmail && emailValue && (
               <>
-                <IconXCircle width={14} height={14} />
+                <IconInvalid />
                 <View className="w-3" />
                 <FontText
                   text="올바른 이메일 형식이 아닙니다"
@@ -149,7 +145,7 @@ const EmailStep = ({ emailValue, setStep, changeEmailValue }: EmailStepProps) =>
             )}
             {errorMessage && (
               <>
-                <IconXCircle width={14} height={14} />
+                <IconInvalid />
                 <View className="w-3" />
                 <FontText text={errorMessage} className="text-12 text-light-red" fontWeight="500" />
               </>

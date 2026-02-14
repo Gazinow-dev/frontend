@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Keyboard, Pressable, TouchableOpacity, View } from 'react-native';
 import { Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
-import IconArrowUp from '@assets/icons/up_arrow.svg';
+import { IconArrowUp } from '@assets/icons';
 import cn from 'classname';
 import { postComment } from '../api/func';
 import { useMutation, useQueryClient } from 'react-query';
@@ -12,13 +12,13 @@ import { showToast } from '@/global/utils/toast';
 import { AxiosError } from 'axios';
 import { trackNowComments } from '@/analytics/now.events';
 
-interface CommentInputProps {
+interface Props {
   issueData: IssueGet;
   issueId: number;
   setIsOpenLoginModal: (value: boolean) => void;
 }
 
-const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: CommentInputProps) => {
+const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: Props) => {
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
   const queryClient = useQueryClient();
 
@@ -36,6 +36,9 @@ const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: CommentInputP
       setCommentText('');
       queryClient.invalidateQueries('getCommentsOnAIssue');
       queryClient.invalidateQueries('getMyComments');
+      queryClient.invalidateQueries('getAllIssues');
+      queryClient.invalidateQueries('getIssuesByLane');
+      queryClient.invalidateQueries('getPopularIssues');
     },
     onError: (error: AxiosError) => {
       if (error.response?.status === 422) showToast('postFailureByForbiddenWord');

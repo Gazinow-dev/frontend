@@ -15,7 +15,7 @@ import {
   getAllIssuesFetch,
   getIssuesByLaneFetch,
 } from '@/global/apis/func';
-import { RawSubwayLineName, MyRoutesType, SubwayStrEnd } from './entity';
+import { RawSubwayLineName, SubwayStrEnd } from './entity';
 import { subwayFreshLineName } from '@/global/utils';
 import { useAppSelect } from '@/store';
 import { useMemo } from 'react';
@@ -150,17 +150,15 @@ export const useGetSearchRoutesQuery = () => {
 /**
  * 저장한 지하철 경로 조회 훅
  */
-export const useGetSavedRoutesQuery = ({
-  onSuccess,
-}: { onSuccess?: (data: MyRoutesType[]) => void } = {}) => {
+export const useGetSavedRoutesQuery = () => {
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
-  const { data, refetch, isError } = useQuery(['getRoads'], getSavedRoutesFetch, {
+  const { data, refetch, isLoading, isError } = useQuery(['getRoads'], getSavedRoutesFetch, {
     enabled: isVerifiedUser === 'success auth',
-    onSuccess,
   });
   return {
     myRoutes: data,
     getSavedRoutesRefetch: refetch,
+    isLoadingSavedRoutes: isLoading,
     isSavedRoutesError: isError,
   };
 };
@@ -192,7 +190,7 @@ export const useGetAllIssuesQuery = () => {
  * 이슈 노선별 조회 훅
  */
 export const useGetIssuesByLaneQuery = (line: string) => {
-  const { data, refetch, fetchNextPage, hasNextPage } = useInfiniteQuery(
+  const { data, refetch, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery(
     ['getIssuesByLane', line],
     ({ pageParam = 0 }) => getIssuesByLaneFetch({ page: pageParam, line }),
     {
@@ -208,6 +206,7 @@ export const useGetIssuesByLaneQuery = (line: string) => {
     laneIssuesRefetch: refetch,
     fetchLaneIssuesNextPage: fetchNextPage,
     laneIssuesHasNextPage: hasNextPage,
+    isLoadingLaneIssues: isLoading,
   };
 };
 
@@ -238,7 +237,7 @@ export const useGetPopularIssuesAtMain = () => {
  * 이슈 노선별 조회 훅
  */
 export const useGetNotiHistoriesQuery = () => {
-  const { data, refetch, fetchNextPage, hasNextPage, isError } = useInfiniteQuery(
+  const { data, refetch, fetchNextPage, hasNextPage, isLoading, isError } = useInfiniteQuery(
     'getNotiHistoryFetch',
     ({ pageParam = 0 }) => getNotiHistoryFetch(pageParam),
     {
@@ -248,5 +247,5 @@ export const useGetNotiHistoriesQuery = () => {
       },
     },
   );
-  return { data, refetch, fetchNextPage, hasNextPage, isError };
+  return { data, refetch, fetchNextPage, hasNextPage, isLoading, isError };
 };

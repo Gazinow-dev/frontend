@@ -314,3 +314,23 @@ export const updateNotiReadStatus = async (notificationId: number) => {
     throw error;
   }
 };
+
+/**
+ * 안 읽은 알림 수 조회 axios
+ */
+export const getUnreadNotiCount = async () => {
+  try {
+    const res = await authServiceAPI.get<{ data: { unreadNotificationCount: number } }>(
+      `/api/v1/notification/count`,
+    );
+    return res.data.data;
+  } catch (err) {
+    const error = err as AxiosError;
+    Sentry.captureException({
+      target: '안 읽은 알림 수 조회',
+      input: { request: error.request },
+      output: { status: error.response?.status, error: error.message, response: error.response },
+    });
+    throw error;
+  }
+};

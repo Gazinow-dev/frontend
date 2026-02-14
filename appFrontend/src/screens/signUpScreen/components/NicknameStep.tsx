@@ -9,8 +9,7 @@ import { useAppDispatch } from '@/store';
 import { getAuthorizationState, saveUserInfo } from '@/store/modules';
 import StepButton from '../ui/StepButton';
 import { setEncryptedStorage } from '@/global/utils';
-import IconCheck from '@assets/icons/check.svg';
-import IconXCircle from '@assets/icons/x-circle-standard.svg';
+import { IconValid, IconInvalid } from '@assets/icons';
 import { SignUpParams } from '../apis/entity';
 import messaging from '@react-native-firebase/messaging';
 import React from 'react';
@@ -18,19 +17,14 @@ import { trackRegisterFinish, trackRegisterTerms } from '@/analytics/register.ev
 import { trackLogin } from '@/analytics/auth.events';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-interface NicknameStepProps {
+interface Props {
   nicknameValue: string;
   signUpData: SignUpParams;
   changeNicknameValue: (value: string) => void;
   setStep: () => void;
 }
 
-const NicknameStep = ({
-  nicknameValue,
-  signUpData,
-  changeNicknameValue,
-  setStep,
-}: NicknameStepProps) => {
+const NicknameStep = ({ nicknameValue, signUpData, changeNicknameValue, setStep }: Props) => {
   const dispatch = useAppDispatch();
 
   const [checkMessage, setCheckMessage] = useState<string>('');
@@ -44,7 +38,7 @@ const NicknameStep = ({
       await setEncryptedStorage('refresh_token', refreshToken);
       await AsyncStorage.removeItem('isSocialLoggedIn');
       trackRegisterFinish('email');
-      trackLogin({ type: 'email', userId: memberId });
+      trackLogin({ type: 'email', userId: memberId, email });
       setStep();
     },
   });
@@ -91,8 +85,8 @@ const NicknameStep = ({
         />
       </View>
 
-      <View className="flex-1 mt-40">
-        <View className="justify-center pl-16 mt-6 mb-8 rounded-5 bg-gray-f2 py-13">
+      <View className="mt-40 flex-1">
+        <View className="mb-8 mt-6 justify-center rounded-5 bg-gray-f2 py-13 pl-16">
           <Input
             value={nicknameValue}
             placeholder="닉네임 입력"
@@ -103,13 +97,13 @@ const NicknameStep = ({
           />
         </View>
 
-        <View className="flex-row items-center ml-9">
+        <View className="ml-9 flex-row items-center">
           {checkMessage && (
             <>
               {data?.state === 200 ? (
-                <IconCheck width={14} height={14} color={COLOR.LIGHT_GREEN} />
+                <IconValid width={14} height={14} color={COLOR.LIGHT_GREEN} />
               ) : (
-                <IconXCircle width={14} height={14} />
+                <IconInvalid />
               )}
               <View className="w-3" />
               <FontText
@@ -124,7 +118,7 @@ const NicknameStep = ({
           )}
           {!!nicknameValue && nicknameValue.length < 2 && (
             <>
-              <IconXCircle width={14} height={14} />
+              <IconInvalid />
               <View className="w-3" />
               <FontText
                 text="2~7글자 입력해주세요"

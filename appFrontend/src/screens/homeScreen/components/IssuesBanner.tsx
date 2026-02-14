@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontText } from '@/global/ui';
 import { SubPath } from '@/global/apis/entity';
-import MoreBtn from '@/assets/icons/moreBtn.svg';
+import { IconChevronRight2 } from '@/assets/icons';
 import { useAppDispatch } from '@/store';
 import { getIssueId } from '@/store/modules';
 import { useRootNavigation } from '@/navigation/RootNavigation';
@@ -9,12 +9,12 @@ import { TouchableOpacity } from 'react-native';
 import cn from 'classname';
 import { trackMapBookmarkIssueCheck, trackMapSearchIssueCheck } from '@/analytics/map.events';
 
-interface IssuesBannerProps {
+interface Props {
   subPaths: SubPath[];
   isHomeScreen?: boolean;
 }
 
-const IssuesBanner = ({ subPaths, isHomeScreen }: IssuesBannerProps) => {
+const IssuesBanner = ({ subPaths, isHomeScreen }: Props) => {
   const issues = subPaths.filter((subPath) => !!subPath.issueSummary.length);
   if (issues.length < 1) return null;
 
@@ -59,7 +59,7 @@ const IssuesBanner = ({ subPaths, isHomeScreen }: IssuesBannerProps) => {
             fontWeight="600"
             numberOfLines={1}
           />
-          <MoreBtn />
+          <IconChevronRight2 />
         </TouchableOpacity>
       ))}
     </>

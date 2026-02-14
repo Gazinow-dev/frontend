@@ -8,16 +8,15 @@ import dayjs from 'dayjs';
 import { Pressable, View } from 'react-native';
 import cn from 'classname';
 import { rawLineNameToNowCapsuleText } from '@/global/utils/subwayLine';
-import IconHeart from '@/assets/icons/icon-heart-mono.svg';
-import IconComment from '@/assets/icons/icon-chat-bubble-mono.svg';
+import { IconHeart, IconComment as IconComment } from '@/assets/icons';
 import { IssueGet } from '@/global/apis/entity';
 import { trackNowTotalIssueClick } from '@/analytics/now.events';
 
-interface SingleIssueContainerProps {
+interface Props {
   issue: IssueGet;
 }
 
-const SingleIssueContainer = ({ issue }: SingleIssueContainerProps) => {
+const SingleIssueContainer = ({ issue }: Props) => {
   const dispatch = useAppDispatch();
   const navigation = useRootNavigation();
 
@@ -97,11 +96,11 @@ const SingleIssueContainer = ({ issue }: SingleIssueContainerProps) => {
         <FontText text={content} className="text-14 text-[#6A6A6A]" numberOfLines={2} />
 
         <View className="flex-row items-center space-x-8">
-          <View className="flex-row items-center w-48 space-x-4">
+          <View className="w-48 flex-row items-center space-x-4">
             <IconHeart color="#D1D6DB" width={18} height={18} />
             <FontText text={'' + likeCount} className="text-13 leading-19 text-gray-999" />
           </View>
-          <View className="flex-row items-center w-48 space-x-4">
+          <View className="w-48 flex-row items-center space-x-4">
             <IconComment width={18} height={18} />
             <FontText text={'' + commentCount} className="text-13 leading-19 text-gray-999" />
           </View>

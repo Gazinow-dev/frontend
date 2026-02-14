@@ -7,13 +7,13 @@ import { Pressable, View } from 'react-native';
 import IssuesBanner from './IssuesBanner';
 import cn from 'classname';
 
-interface RouteItemProps {
+interface Props {
   route: MyRoutesType;
   hasIssues: boolean;
   isLastItem: boolean;
 }
 
-const RouteItem = ({ route, hasIssues, isLastItem }: RouteItemProps) => {
+const RouteItem = ({ route, hasIssues, isLastItem }: Props) => {
   const homeNavigation = useHomeNavigation();
 
   const filteredTotalTime =

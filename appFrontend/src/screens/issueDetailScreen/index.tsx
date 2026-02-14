@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
+import { IconChevronLeft } from '@assets/icons';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { FontText } from '@/global/ui';
 import SingleCommentContainer from './components/SingleCommentContainer';
@@ -17,8 +17,8 @@ import { useAppSelect } from '@/store';
 import CommentInput from './components/CommentInput';
 import MyTabModal from '@/global/components/MyTabModal';
 import RetryLoad from '@/global/components/RetryLoad';
-import NetworkErrorScreen from '@/global/components/NetworkErrorScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { LoadingScreen, NetworkErrorScreen } from '@/global/components';
 
 const IssueDetailScreen = () => {
   const navigation = useRootNavigation();
@@ -28,13 +28,14 @@ const IssueDetailScreen = () => {
   const issueId = useAppSelect((state) => state.subwaySearch.issueId);
   if (!issueId) return null;
 
-  const { issueData, refetchIssue, isIssueError } = useGetIssue({ issueId });
+  const { issueData, refetchIssue, isLoadingIssue, isIssueError } = useGetIssue({ issueId });
 
   const {
     commentsOnAIssue,
     commentsOnAIssueHasNextPage,
     commentsOnAIssueRefetch,
     fetchCommentsOnAIssueNextPage,
+    isLoadingComment,
     isCommentError,
   } = useGetCommentsOnAIssue({ issueId });
 
@@ -42,9 +43,12 @@ const IssueDetailScreen = () => {
     return commentsOnAIssue?.pages.flatMap((page) => page.content);
   }, [commentsOnAIssue]);
 
-  if (isIssueError || !issueData)
-    return <NetworkErrorScreen retryFn={refetchIssue} isShowBackBtn />;
-
+  if (isLoadingIssue || isLoadingComment) {
+    return <LoadingScreen />;
+  }
+  if (isIssueError || !issueData) {
+    return <NetworkErrorScreen retryFn={refetchIssue} />;
+  }
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -63,8 +67,8 @@ const IssueDetailScreen = () => {
           cancelText="취소"
         />
 
-        <TouchableOpacity className="p-16 w-30" hitSlop={20} onPress={() => navigation.goBack()}>
-          <IconLeftArrowHead color="#3F3F46" height={24} />
+        <TouchableOpacity className="w-30 p-16" hitSlop={20} onPress={() => navigation.goBack()}>
+          <IconChevronLeft />
         </TouchableOpacity>
 
         <FlatList
@@ -79,11 +83,7 @@ const IssueDetailScreen = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ flexGrow: 1 }}
           ListHeaderComponent={
-            <IssueContent
-              issueData={issueData}
-              refetchIssue={refetchIssue}
-              setIsOpenLoginModal={setIsOpenLoginModal}
-            />
+            <IssueContent issueData={issueData} setIsOpenLoginModal={setIsOpenLoginModal} />
           }
           ListFooterComponent={
             flattenedCommentData && flattenedCommentData?.length > 0 ? (
@@ -93,11 +93,11 @@ const IssueDetailScreen = () => {
           ListEmptyComponent={
             // TODO: 로딩 디자인 나오면 로직 수정
             !flattenedCommentData || isCommentError ? (
-              <View className="items-center justify-center flex-1">
+              <View className="flex-1 items-center justify-center">
                 <RetryLoad retryFn={commentsOnAIssueRefetch} />
               </View>
             ) : (
-              <View className="items-center justify-center flex-1 py-100">
+              <View className="flex-1 items-center justify-center py-100">
                 <FontText text="등록된 댓글이 없어요" className="text-[#DEDEDE]" />
               </View>
             )

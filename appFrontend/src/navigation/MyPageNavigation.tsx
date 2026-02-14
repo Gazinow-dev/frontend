@@ -15,6 +15,8 @@ import PersonalTermsScreen from '@/screens/myRootScreen/components/PersonalTerms
 import Toast from 'react-native-toast-message';
 import toastConfig from '@global/utils/ToastConfig';
 import MyCommentsScreen from '@/screens/myRootScreen/components/MyCommentsScreen';
+import NoticesScreen from '@/screens/myRootScreen/components/NoticesScreen';
+import NoticeDetailScreen from '@/screens/myRootScreen/components/NoticeDetailScreen';
 
 const Stack = createStackNavigator<MyPageStackParamList>();
 
@@ -35,6 +37,8 @@ const MyPageNavigation = () => {
         <Stack.Screen name="ManageAccountScreen" component={ManageAccountScreen} />
         <Stack.Screen name="NotiSettingsScreen" component={NotiSettingsScreen} />
         <Stack.Screen name="NotiSettingsDetailScreen" component={NotiSettingsDetailScreen} />
+        <Stack.Screen name="NoticesScreen" component={NoticesScreen} />
+        <Stack.Screen name="NoticeDetailScreen" component={NoticeDetailScreen} />
         <Stack.Screen name="SubscribeTermsScreen" component={SubscribeTermsScreen} />
         <Stack.Screen name="PersonalTermsScreen" component={PersonalTermsScreen} />
       </Stack.Navigator>

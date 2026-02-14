@@ -7,11 +7,9 @@ import { SubwaySimplePath } from '@/global/components';
 import { useGetSearchPaths } from '@/global/apis/hooks';
 import { useAppSelect } from '@/store';
 import { StationDataTypes } from '@/store/modules';
-import React from 'react';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
 import SwapStation from './components/SwapStation';
-import IconRightArrowHead from '@assets/icons/right_arrow_head.svg';
-import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
+import { IconChevronLeft, IconChevronRight3 } from '@assets/icons';
 import { Path } from '@/global/apis/entity';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
 import { IssuesBanner } from '../homeScreen/components';
@@ -52,25 +50,25 @@ const SearchPathResultScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top']}>
-      <View className="flex-row p-16 border-b-16 border-gray-f2 pb-15 pl-22">
-        <TouchableOpacity className="mt-4 mr-16" onPress={() => homeNavigation.goBack()}>
-          <IconLeftArrowHead color="#3F3F46" />
+      <View className="flex-row border-b-16 border-gray-f2 p-16 pb-15 pl-22">
+        <TouchableOpacity className="mr-16 mt-4" onPress={() => homeNavigation.goBack()}>
+          <IconChevronLeft />
         </TouchableOpacity>
         <SwapStation selectedStation={selectedStationRedux} />
       </View>
       {isLoading && (
-        <View className="items-center justify-center flex-1">
-          <LoadingCircle width={40} height={40} />
+        <View className="flex-1 items-center justify-center">
+          <LoadingCircle size={40} />
         </View>
       )}
       {!data && !isLoading && (
-        <View className="items-center justify-center flex-1 bg-white">
+        <View className="flex-1 items-center justify-center bg-white">
           <FontText text="검색 결과가 없어요" className="text-gray-999" />
         </View>
       )}
       {data && (
         <>
-          <View className="px-16 bg-white border-b-1 border-gray-beb py-14">
+          <View className="border-b-1 border-gray-beb bg-white px-16 py-14">
             <FontText
               text={'오늘 ' + dayjs().format('A HH시 mm분') + ' 기준'}
               className="text-purple-54f"
@@ -98,10 +96,10 @@ const SearchPathResultScreen = () => {
                   />
                   <View className="flex-row items-center">
                     <FontText text="세부정보" className="mr-4 text-13 text-gray-999" />
-                    <IconRightArrowHead color={COLOR.GRAY_999} />
+                    <IconChevronRight3 color={COLOR.GRAY_999} />
                   </View>
                 </View>
-                <FontText text={pathTime(item)} className="mt-4 mb-16 text-20" fontWeight="600" />
+                <FontText text={pathTime(item)} className="mb-16 mt-4 text-20" fontWeight="600" />
 
                 <SubwaySimplePath
                   pathData={item.subPaths}

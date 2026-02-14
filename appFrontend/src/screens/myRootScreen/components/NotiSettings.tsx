@@ -3,8 +3,6 @@ import cn from 'classname';
 import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
-import MoreBtn from '@/assets/icons/moreBtn.svg';
-import IconExclamation from '@assets/icons/circle_exclamation_mark.svg';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/configureStore';
@@ -27,6 +25,8 @@ import {
   trackMyNotiTomorrowOn,
 } from '@/analytics/my.events';
 import { trackMapBookmark1 } from '@/analytics/map.events';
+import LoadingCircle from '@/global/components/animations/LoadingCircle';
+import { IconExclamationMark, IconChevronRight2 } from '@/assets/icons';
 
 const NotiSettings = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -48,43 +48,55 @@ const NotiSettings = () => {
   );
 
   // 토글 on/off 설정
-  const { mutate: setPushNotiOnMutate } = useMutation(setPushNotiOnFetch, {
-    onSuccess: async (_, provider) => {
-      if (provider.alertAgree) {
-        trackMyNotiPushOn();
-      } else {
-        trackMyNotiPushOff();
-      }
-      await queryClient.invalidateQueries(['getPushNotiOnStatus']);
-      await queryClient.invalidateQueries(['getTomorrowPushNotiOnStatus']);
-      await queryClient.invalidateQueries(['getDetailPushNotiOnStatus']);
+  const { mutate: setPushNotiOnMutate, isLoading: isLoadingPushNotiToggle } = useMutation(
+    setPushNotiOnFetch,
+    {
+      onSuccess: async (_, provider) => {
+        if (provider.alertAgree) {
+          trackMyNotiPushOn();
+        } else {
+          trackMyNotiPushOff();
+        }
+        await queryClient.invalidateQueries(['getPushNotiOnStatus']);
+        await queryClient.invalidateQueries(['getTomorrowPushNotiOnStatus']);
+        await queryClient.invalidateQueries(['getDetailPushNotiOnStatus']);
+      },
     },
-  });
-  const { mutate: setTomorrowPushNotiOnMutate } = useMutation(setTomorrowPushNotiOnFetch, {
-    onSuccess: async (_, provider) => {
-      if (provider.alertAgree) {
-        trackMyNotiTomorrowOn();
-      } else {
-        trackMyNotiTomorrowOff();
-      }
-      await queryClient.invalidateQueries(['getTomorrowPushNotiOnStatus']);
-    },
-  });
-  const { mutate: setDetailPushNotiOnMutate } = useMutation(setDetailPushNotiOnFetch, {
-    onSuccess: async (_, provider) => {
-      if (provider.alertAgree) {
-        trackMyNotiLineOn();
-      } else {
-        trackMyNotiLineOff();
-      }
-      await queryClient.invalidateQueries(['getDetailPushNotiOnStatus']);
-    },
-  });
+  );
+  const { mutate: setTomorrowPushNotiOnMutate, isLoading: isLoadingTomorrowPushNotiToggle } =
+    useMutation(setTomorrowPushNotiOnFetch, {
+      onSuccess: async (_, provider) => {
+        if (provider.alertAgree) {
+          trackMyNotiTomorrowOn();
+        } else {
+          trackMyNotiTomorrowOff();
+        }
+        await queryClient.invalidateQueries(['getTomorrowPushNotiOnStatus']);
+      },
+    });
+  const { mutate: setDetailPushNotiOnMutate, isLoading: isLoadingDetailPushNotiToggle } =
+    useMutation(setDetailPushNotiOnFetch, {
+      onSuccess: async (_, provider) => {
+        if (provider.alertAgree) {
+          trackMyNotiLineOn();
+        } else {
+          trackMyNotiLineOff();
+        }
+        await queryClient.invalidateQueries(['getDetailPushNotiOnStatus']);
+      },
+    });
 
   return (
     <>
+      {(isLoadingPushNotiToggle ||
+        isLoadingTomorrowPushNotiToggle ||
+        isLoadingDetailPushNotiToggle) && (
+        <View className="absolute h-full w-full items-center justify-center">
+          <LoadingCircle />
+        </View>
+      )}
       <View className="h-1 bg-gray-beb" />
-      <View className="flex-row items-center justify-between mx-16 h-53">
+      <View className="mx-16 h-53 flex-row items-center justify-between">
         <FontText
           text="푸시 알림 받기"
           className={cn({
@@ -99,7 +111,7 @@ const NotiSettings = () => {
       </View>
       <View className="h-20 bg-gray-9f9" />
       <>
-        <View className="flex-row items-center justify-between mx-16 h-72">
+        <View className="mx-16 h-72 flex-row items-center justify-between">
           <View className="gap-6">
             <FontText
               text="내일 이슈 미리 알림"
@@ -128,7 +140,7 @@ const NotiSettings = () => {
         <View className="h-1 bg-gray-beb" />
       </>
       <>
-        <View className="flex-row items-center justify-between mx-16 h-72">
+        <View className="mx-16 h-72 flex-row items-center justify-between">
           <View className="gap-6">
             <FontText
               text="경로별 상세 설정"
@@ -173,7 +185,7 @@ const NotiSettings = () => {
                 <FontText text={myRoutes.roadName} className="text-gray-999" fontWeight="500" />
                 <View className="flex-row items-center">
                   <FontText text="편집" className="text-13 leading-19 text-gray-999" />
-                  <MoreBtn height={19} className="ml-4" />
+                  <IconChevronRight2 height={19} className="ml-4" />
                 </View>
               </Pressable>
               <View className="h-1 bg-gray-beb" />
@@ -182,9 +194,9 @@ const NotiSettings = () => {
         </ScrollView>
       )}
       {isDetailPushNotiOn && myRoutes && myRoutes.length < 1 && (
-        <View className="items-center py-16 mx-16 mt-20 rounded-12 bg-gray-9f9">
+        <View className="mx-16 mt-20 items-center rounded-12 bg-gray-9f9 py-16">
           <View className="flex-row items-center">
-            <IconExclamation />
+            <IconExclamationMark />
             <FontText className="pl-5 text-14 text-gray-999" text={'저장한 경로가 아직 없어요'} />
           </View>
           <TouchableOpacity

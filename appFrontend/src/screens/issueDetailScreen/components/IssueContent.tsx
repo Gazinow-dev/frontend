@@ -5,35 +5,44 @@ import { debounce } from 'lodash';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { FontText } from '@/global/ui';
-import IconComment from '@assets/icons/icon-chat-bubble-mono.svg';
-import IconHeart from '@assets/icons/icon-heart-mono.svg';
-// import ModalReportWrongInfo from './ModalReportWrongInfo';
+import { IconHeart, IconComment as IconComment } from '@/assets/icons';
 import { deletePostLike, postLike } from '../api/func';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { IssueGet } from '@/global/apis/entity';
 
 dayjs.locale('ko');
 dayjs.extend(relativeTime);
 
-interface IssueContentProps {
+interface Props {
   issueData: IssueGet;
-  refetchIssue: () => void;
   setIsOpenLoginModal: (value: boolean) => void;
 }
 
-const IssueContent = ({ issueData, refetchIssue, setIsOpenLoginModal }: IssueContentProps) => {
+const IssueContent = ({ issueData, setIsOpenLoginModal }: Props) => {
   const { title, content, like, likeCount, commentCount, id } = issueData;
 
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
 
+  const queryClient = useQueryClient();
+
   const [isOpenModalReportWrongInfo, setIsOpenModalReportWrongInfo] = useState<boolean>(false);
 
   const { mutate: doLikeMutate } = useMutation(postLike, {
-    onSuccess: () => refetchIssue(),
+    onSuccess: () => {
+      queryClient.invalidateQueries('issue');
+      queryClient.invalidateQueries('getAllIssues');
+      queryClient.invalidateQueries('getIssuesByLane');
+      queryClient.invalidateQueries('getPopularIssues');
+    },
   });
 
   const { mutate: deleteLikeMutate } = useMutation(deletePostLike, {
-    onSuccess: () => refetchIssue(),
+    onSuccess: () => {
+      queryClient.invalidateQueries('issue');
+      queryClient.invalidateQueries('getAllIssues');
+      queryClient.invalidateQueries('getIssuesByLane');
+      queryClient.invalidateQueries('getPopularIssues');
+    },
   });
 
   const likeHandler = useCallback(
@@ -62,16 +71,16 @@ const IssueContent = ({ issueData, refetchIssue, setIsOpenLoginModal }: IssueCon
       /> */}
 
       <View className="px-16">
-        <FontText text={startIssueDate} className="mt-16 mb-12 text-14 text-gray-999" />
+        <FontText text={startIssueDate} className="mb-12 mt-16 text-14 text-gray-999" />
         <FontText text={title} className="text-20 leading-26" fontWeight="500" />
-        <View className="h-1 my-28 bg-gray-beb" />
-        <FontText text={content} className="text-black leading-25" />
+        <View className="my-28 h-1 bg-gray-beb" />
+        <FontText text={content} className="leading-25 text-black" />
         <View className="h-28" />
 
         <View className="flex-row justify-between py-8">
           <View className="flex-row space-x-8">
             <TouchableOpacity
-              className={'flex-row w-64 space-x-4 ' + (Platform.OS === 'ios' ? 'items-center' : '')}
+              className={'w-64 flex-row space-x-4 ' + (Platform.OS === 'ios' ? 'items-center' : '')}
               onPress={likeHandler}
               activeOpacity={0.5}
               hitSlop={30}
@@ -80,7 +89,7 @@ const IssueContent = ({ issueData, refetchIssue, setIsOpenLoginModal }: IssueCon
               <FontText text={'' + likeCount} className="text-13 text-gray-999" />
             </TouchableOpacity>
             <View
-              className={'flex-row w-64 space-x-4 ' + (Platform.OS === 'ios' ? 'items-center' : '')}
+              className={'w-64 flex-row space-x-4 ' + (Platform.OS === 'ios' ? 'items-center' : '')}
             >
               <IconComment />
               <FontText text={'' + commentCount} className="text-13 text-gray-999" />
@@ -93,7 +102,7 @@ const IssueContent = ({ issueData, refetchIssue, setIsOpenLoginModal }: IssueCon
         </View>
       </View>
 
-      <View className="h-16 mt-12 bg-gray-9f9" />
+      <View className="mt-12 h-16 bg-gray-9f9" />
       <View className="h-8" />
     </View>
   );

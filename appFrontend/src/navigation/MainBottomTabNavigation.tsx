@@ -6,10 +6,7 @@ import cn from 'classname';
 import { COLOR, HOME, MY_ROOT } from '@/global/constants';
 import HomeNavigation from './HomeNavigation';
 import NowScreen from '@screens/nowScreen';
-import IconFocusedMap from '@assets/icons/tab_map.svg';
-import IconUnFocusedMap from '@assets/icons/tab_map_border.svg';
-import IconNow from '@assets/icons/tab_now.svg';
-import IconMy from '@assets/icons/tab_my.svg';
+import { IconTabMap, IconTabMapBorder, IconTabMy, IconTabNow } from '@/assets/icons';
 import { FontText } from '@/global/ui';
 import { Pressable, StatusBar } from 'react-native';
 import { MyPageNavigation } from '.';
@@ -95,7 +92,7 @@ const MainBottomTabNavigation = () => {
                 fontWeight={focused ? '600' : '400'}
               />
             ),
-            tabBarIcon: ({ focused }) => <>{focused ? <IconFocusedMap /> : <IconUnFocusedMap />}</>,
+            tabBarIcon: ({ focused }) => <>{focused ? <IconTabMap /> : <IconTabMapBorder />}</>,
           }}
         />
         <Tab.Screen
@@ -123,7 +120,7 @@ const MainBottomTabNavigation = () => {
               />
             ),
             tabBarIcon: ({ focused }) => (
-              <IconNow
+              <IconTabNow
                 color={focused ? COLOR.LIGHT_BLUE : 'transparent'}
                 strokeWidth={focused ? 0 : 1}
                 stroke={COLOR.GRAY_7D}
@@ -156,7 +153,7 @@ const MainBottomTabNavigation = () => {
               />
             ),
             tabBarIcon: ({ focused }) => (
-              <IconMy
+              <IconTabMy
                 color={focused ? COLOR.LIGHT_BLUE : 'transparent'}
                 strokeWidth={focused ? 0 : 1}
                 stroke={COLOR.GRAY_7D}

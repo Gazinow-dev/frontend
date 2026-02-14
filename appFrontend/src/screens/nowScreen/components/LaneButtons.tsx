@@ -12,12 +12,12 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useMemo } from 'react';
 import { trackNowTotalIssueLine } from '@/analytics/now.events';
 
-interface LaneButtonsProps {
+interface Props {
   activeButton: NowScreenCapsules;
   setActiveButton: (activeButton: NowScreenCapsules) => void;
 }
 
-const LaneButtons = ({ activeButton, setActiveButton }: LaneButtonsProps) => {
+const LaneButtons = ({ activeButton, setActiveButton }: Props) => {
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
 
   // 내가 저장한 경로의 노선만 가져옴
@@ -41,13 +41,13 @@ const LaneButtons = ({ activeButton, setActiveButton }: LaneButtonsProps) => {
   const otherStations: FreshSubwayLineName[] = allLines.filter((line) => !myLines?.includes(line));
 
   return (
-    <View className="bg-white pt-16">
+    <View className="pt-16 bg-white">
       <ScrollView
         //TODO: iOS 측면 그라데이션
         fadingEdgeLength={130}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        className="space-x-12 pb-12 pt-4"
+        className="pt-4 pb-12 space-x-12"
       >
         <View className="w-4" />
         {['전체', ...myLines, ...otherStations].map((capsule) => (

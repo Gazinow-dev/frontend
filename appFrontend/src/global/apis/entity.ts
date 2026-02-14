@@ -234,7 +234,7 @@ export interface NotiHistoryContent {
   notificationTitle: string;
   notificationBody: string;
   agoTime: string;
-  keyword: IssueKeywords;
+  keyword: IssueKeywords | '관리자';
   read: boolean;
 }
 

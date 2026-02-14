@@ -57,7 +57,7 @@ const SelectNewRoute = () => {
       <View className="flex-1 pb-10">
         {isLoading && (
           <View className="items-center mt-200">
-            <LoadingCircle width={40} height={40} />
+            <LoadingCircle size={40} />
           </View>
         )}
         {!data && !isLoading && (
