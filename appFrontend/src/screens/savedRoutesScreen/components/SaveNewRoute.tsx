@@ -79,8 +79,8 @@ const SaveNewRoute = () => {
     >
       <SafeAreaView className="flex-1 bg-white" edges={['top']}>
         <AddNewRouteHeader />
-        <View className="flex-1 bg-white px-16">
-          <View className="mx-33 mb-22 mt-32">
+        <View className="flex-1 px-16 bg-white">
+          <View className="mt-32 mb-40 mx-33">
             <SubwaySimplePath
               pathData={freshSubPathData}
               arriveStationName={resultData.lastEndStation}
@@ -90,7 +90,7 @@ const SaveNewRoute = () => {
           </View>
           <FontText text="새 경로 이름" className="text-14 leading-21" fontWeight="500" />
           <Input
-            className="my-7 rounded-5 bg-gray-9f9 px-16 py-12"
+            className="px-16 py-12 my-7 rounded-5 bg-gray-9f9"
             placeholder="경로 이름을 입력하세요"
             value={roadName}
             maxLength={10}
@@ -103,7 +103,7 @@ const SaveNewRoute = () => {
           />
           <View className="flex-row justify-between">
             {isDuplicatedName ? (
-              <View className="ml-9 h-14 flex-row items-center">
+              <View className="flex-row items-center ml-9 h-14">
                 <IconInvalid />
                 <FontText
                   text={errorMessage}
@@ -135,7 +135,7 @@ const SaveNewRoute = () => {
           }}
           disabled={!roadName || isLoading || isDuplicatedName}
         >
-          <FontText text="완료" className="text-17 text-white" fontWeight="600" />
+          <FontText text="완료" className="text-white text-17" fontWeight="600" />
         </TouchableOpacity>
       </SafeAreaView>
     </KeyboardAvoidingView>

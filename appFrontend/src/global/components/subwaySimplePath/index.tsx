@@ -51,7 +51,7 @@ const SubwaySimplePath = ({
 
   return (
     <View
-      style={{ marginBottom: isOverNameLength || isBottomPathsDirect ? 32 : 16, marginTop: 16 }}
+      style={{ paddingBottom: isOverNameLength || isBottomPathsDirect ? 16 : 0, paddingTop: 25 }}
     >
       <View
         style={{

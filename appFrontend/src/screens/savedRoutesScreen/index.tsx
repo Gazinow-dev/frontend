@@ -81,10 +81,10 @@ const SavedRoutesScreen = () => {
         <FontText text="저장경로 편집" className="text-18 leading-23" fontWeight="500" />
       </View>
       <ScrollView>
-        <View className="mx-16 rounded-15 bg-white">
+        <View className="mx-16 bg-white rounded-15">
           {myRoutes?.map((item) => (
-            <View className="border-b-1 border-gray-beb px-16 pb-8 pt-20" key={item.id}>
-              <View className="mb-24 flex-row items-center justify-between">
+            <View className="px-16 pt-20 pb-24 border-b-1 border-gray-beb" key={item.id}>
+              <View className="flex-row items-center justify-between">
                 <FontText text={item.roadName} className="text-18 leading-23" fontWeight="600" />
                 <View className="flex-row gap-20">
                   <TouchableOpacity onPress={() => handleSetNoti(item)} hitSlop={20}>
@@ -95,6 +95,9 @@ const SavedRoutesScreen = () => {
                   </TouchableOpacity>
                 </View>
               </View>
+
+              <View className="h-16" />
+
               <SubwaySimplePath
                 pathData={item.subPaths}
                 arriveStationName={item.lastEndStation}

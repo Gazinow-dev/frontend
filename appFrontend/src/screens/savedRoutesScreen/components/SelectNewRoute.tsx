@@ -75,7 +75,7 @@ const SelectNewRoute = () => {
                     backgroundColor: pressed ? COLOR.GRAY_E5 : 'transparent',
                     paddingHorizontal: 16,
                     paddingTop: 20,
-                    paddingBottom: 8,
+                    paddingBottom: 24,
                   })}
                   onPress={() => {
                     setSelectedRoutePath(item);

@@ -74,13 +74,13 @@ const NewRouteSaveModal = ({ freshData, closeModal, onBookmark, setMyPathId }: P
     <Modal visible onRequestClose={closeModal} transparent>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        className="min-w-296 flex-1 items-center justify-center bg-black/60"
+        className="items-center justify-center flex-1 min-w-296 bg-black/60"
       >
-        <View className="w-4/5 items-center space-y-20 rounded-12 bg-white px-24 py-28">
+        <View className="items-center w-4/5 px-24 space-y-20 bg-white rounded-12 py-28">
           <FontText text="새 경로 저장" className="text-18 leading-23" fontWeight="600" />
 
           <View className="w-full">
-            <View className="mb-16 px-12">
+            <View className="px-12 mb-20">
               <SubwaySimplePath
                 pathData={freshData.subPaths}
                 arriveStationName={freshData.lastEndStation}
@@ -90,7 +90,7 @@ const NewRouteSaveModal = ({ freshData, closeModal, onBookmark, setMyPathId }: P
             </View>
 
             <FontText text="새 경로 이름" className="text-14 leading-21" fontWeight="500" />
-            <View className="mb-8 mt-5 rounded-5 bg-gray-9f9 pb-10 pl-15 pt-12">
+            <View className="pt-12 pb-10 mt-5 mb-8 rounded-5 bg-gray-9f9 pl-15">
               <Input
                 placeholder="경로 이름을 입력하세요"
                 placeholderTextColor={COLOR.GRAY_999}
@@ -100,7 +100,7 @@ const NewRouteSaveModal = ({ freshData, closeModal, onBookmark, setMyPathId }: P
                   setIsDuplicatedError(false);
                   setRouteName(text);
                 }}
-                className="text-14 font-medium leading-16"
+                className="font-medium text-14 leading-16"
               />
             </View>
 
@@ -122,7 +122,7 @@ const NewRouteSaveModal = ({ freshData, closeModal, onBookmark, setMyPathId }: P
 
           <View className="flex-row space-x-8">
             <TouchableOpacity
-              className="flex-1 items-center rounded-5 border border-gray-999 py-12"
+              className="items-center flex-1 py-12 border rounded-5 border-gray-999"
               onPress={closeModal}
             >
               <FontText text="취소" className="text-14 leading-21 text-gray-999" fontWeight="600" />
@@ -134,7 +134,7 @@ const NewRouteSaveModal = ({ freshData, closeModal, onBookmark, setMyPathId }: P
               onPress={saveHandler}
               disabled={isLoading || isDuplicatedError || routeName.length < 1}
             >
-              <FontText text="확인" className="text-14 leading-21 text-white" fontWeight="600" />
+              <FontText text="확인" className="text-white text-14 leading-21" fontWeight="600" />
             </TouchableOpacity>
           </View>
         </View>
