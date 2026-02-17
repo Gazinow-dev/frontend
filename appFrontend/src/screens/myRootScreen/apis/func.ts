@@ -188,6 +188,18 @@ export const disablePathNotiFetch = async (id: number) => {
 };
 
 /**
+ * 알림 설정 활성화 axios
+ */
+export const enablePathNotiSettingsFetch = async (notiSettings: NotiSettingsType) => {
+  try {
+    await authServiceAPI.post(`/api/v1/notification/enable`, notiSettings);
+  } catch (err) {
+    const error = err as AxiosError;
+    throw error;
+  }
+};
+
+/**
  * 알림 설정 수정 axios
  */
 export const updatePathNotiSettingsFetch = async (notiSettings: NotiSettingsType) => {

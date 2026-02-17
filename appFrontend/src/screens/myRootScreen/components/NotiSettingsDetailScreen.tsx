@@ -11,7 +11,11 @@ import { rawTimeToReqTimeFormat } from '../util/timeFormatChange';
 import { showToast } from '@/global/utils/toast';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { useMutation } from 'react-query';
-import { disablePathNotiFetch, updatePathNotiSettingsFetch } from '../apis/func';
+import {
+  disablePathNotiFetch,
+  enablePathNotiSettingsFetch,
+  updatePathNotiSettingsFetch,
+} from '../apis/func';
 import { AxiosError } from 'axios';
 import {
   DepArrNameAlert,
@@ -75,15 +79,24 @@ const NotiSettingsDetailScreen = () => {
     name: myRoutes.roadName,
   };
 
-  const handleAfterSuccess = (trackData: DepArrNameAlert) => {
-    if (prevScreen === 'SaveModal') {
-      trackMapSearchBookmarkSetting(trackData);
-      navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
-      return;
-    }
+  const buildOnTrackData = (provider: {
+    dayTimeRanges: { day: string; fromTime: string; toTime: string }[];
+  }): DepArrNameAlert => ({
+    ...routeInfo,
+    alarm: 'on' as const,
+    starttime: provider.dayTimeRanges[0].fromTime.replace(':', ''),
+    finishtime: provider.dayTimeRanges[0].toTime.replace(':', ''),
+    day: provider.dayTimeRanges.map(({ day }) => day).join(', '),
+  });
 
-    if (prevScreen === 'SaveScreen') {
-      trackMapBookmark6Setting(trackData);
+  const handleAfterSuccess = (trackData: DepArrNameAlert) => {
+    showToast('saveNotiSettingsSuccess');
+
+    const shouldReset = prevScreen === 'SaveModal' || prevScreen === 'SaveScreen';
+    if (shouldReset) {
+      if (prevScreen === 'SaveModal') trackMapSearchBookmarkSetting(trackData);
+      else trackMapBookmark6Setting(trackData);
+
       navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
       return;
     }
@@ -91,35 +104,30 @@ const NotiSettingsDetailScreen = () => {
     navigation.goBack();
   };
 
-  const handle400Error = (error: AxiosError) => {
-    if (error.response?.status === 400) {
-      showToast('saveNotiSettingsFailed');
-    }
+  const mutationOptions = {
+    onSuccess: (_: unknown, provider: any) => {
+      handleAfterSuccess(buildOnTrackData(provider));
+    },
+    onError: (error: AxiosError) => {
+      showToast(
+        error.response?.status === 400 ? 'notiSettingsTimeError' : 'saveNotiSettingsFailed',
+      );
+    },
   };
 
   // 완료 버튼 클릭 시 요청 전송
-  const { mutate: updatePathNotiSettingsMutate } = useMutation(updatePathNotiSettingsFetch, {
-    onSuccess: (_, provider) => {
-      const trackData = {
-        ...routeInfo,
-        alarm: 'on' as const,
-        starttime: provider.dayTimeRanges[0].fromTime.replace(':', ''),
-        finishtime: provider.dayTimeRanges[0].toTime.replace(':', ''),
-        day: provider.dayTimeRanges.map(({ day }) => day).join(', '),
-      };
-      handleAfterSuccess(trackData);
-    },
-    onError: handle400Error,
-  });
+  const { mutate: enablePathNotiSettingsMutate } = useMutation(
+    enablePathNotiSettingsFetch,
+    mutationOptions,
+  );
+  const { mutate: updatePathNotiSettingsMutate } = useMutation(
+    updatePathNotiSettingsFetch,
+    mutationOptions,
+  );
+
   const { mutate: disablePathNotiMutate } = useMutation(disablePathNotiFetch, {
-    onSuccess: () => {
-      const trackData = {
-        ...routeInfo,
-        alarm: 'off' as const,
-      };
-      handleAfterSuccess(trackData);
-    },
-    onError: handle400Error,
+    onSuccess: () => handleAfterSuccess({ ...routeInfo, alarm: 'off' as const }),
+    onError: () => showToast('saveNotiSettingsFailed'),
   });
 
   const createNotiSettingsBody = (selectedDays: string[], myRoutesId: number) => {
@@ -137,8 +145,10 @@ const NotiSettingsDetailScreen = () => {
     const notiSettings = createNotiSettingsBody(selectedDays, myRoutes.id);
     if (!isPushNotificationOn) {
       disablePathNotiMutate(myRoutes.id);
-    } else {
+    } else if (pathNotiData?.enabled) {
       updatePathNotiSettingsMutate(notiSettings);
+    } else {
+      enablePathNotiSettingsMutate(notiSettings);
     }
   };
 
