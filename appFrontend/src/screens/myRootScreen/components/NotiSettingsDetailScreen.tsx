@@ -137,14 +137,14 @@ const NotiSettingsDetailScreen = () => {
     const notiSettings = createNotiSettingsBody(selectedDays, myRoutes.id);
     if (!isPushNotificationOn) {
       disablePathNotiMutate(myRoutes.id);
-    } else if (pathNotiData?.enabled) {
+    } else {
       updatePathNotiSettingsMutate(notiSettings);
     }
   };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="h-56 flex-row items-center justify-between px-16">
+      <View className="flex-row items-center justify-between h-56 px-16">
         <TouchableOpacity hitSlop={20} onPress={() => navigation.goBack()}>
           <IconChevronLeft />
         </TouchableOpacity>
@@ -156,8 +156,8 @@ const NotiSettingsDetailScreen = () => {
         <View className="w-24" />
       </View>
 
-      <View className="mt-20 flex-1 bg-white">
-        <View className="mx-50 mb-40">
+      <View className="flex-1 mt-20 bg-white">
+        <View className="mb-40 mx-50">
           <SubwaySimplePath
             pathData={myRoutes.subPaths}
             arriveStationName={myRoutes.lastEndStation}
@@ -166,7 +166,7 @@ const NotiSettingsDetailScreen = () => {
           />
         </View>
 
-        <View className="h-53 flex-row items-center justify-between border-b-1 border-gray-beb px-16">
+        <View className="flex-row items-center justify-between px-16 h-53 border-b-1 border-gray-beb">
           <FontText text="푸시 알림 on" />
           <Toggle isOn={isPushNotificationOn} onToggle={handlePushNotificationOnToggle} />
         </View>
@@ -180,7 +180,7 @@ const NotiSettingsDetailScreen = () => {
               setSavedEndTime={setSavedEndTime}
             />
 
-            <View className="border-b-1 border-gray-beb bg-white px-16 py-12">
+            <View className="px-16 py-12 bg-white border-b-1 border-gray-beb">
               <FontText text="반복 요일" />
               <View className="flex-row justify-between pt-16">
                 {days.map((day) => (
@@ -216,7 +216,7 @@ const NotiSettingsDetailScreen = () => {
         onPress={saveSettingsHandler}
         disabled={isPushNotificationOn && selectedDays.length === 0}
       >
-        <FontText text="완료" className="text-17 text-white" fontWeight="600" />
+        <FontText text="완료" className="text-white text-17" fontWeight="600" />
       </TouchableOpacity>
     </SafeAreaView>
   );
