@@ -9,7 +9,9 @@ export type ToastType =
   | 'nickNameChanged'
   | 'socialLoginSuccess'
   | 'socialLoginFailed'
+  | 'saveNotiSettingsSuccess'
   | 'saveNotiSettingsFailed'
+  | 'notiSettingsTimeError'
   | 'reportSuccess'
   | 'alreadyReported'
   | 'commentDeleted'
@@ -25,7 +27,11 @@ const ToastConfig = {
   nickNameChanged: () => <Toast text="닉네임이 변경되었어요" />,
   socialLoginSuccess: () => <Toast text="소셜로그인 성공" />,
   socialLoginFailed: () => <Toast text="소셜로그인에 실패했어요" isWarning />,
+  saveNotiSettingsSuccess: () => <Toast text="알림 설정이 저장되었어요" />,
   saveNotiSettingsFailed: () => (
+    <Toast text="알림 설정에 실패했어요. 다시 시도해 주세요." isWarning />
+  ),
+  notiSettingsTimeError: () => (
     <Toast text="저장 불가: 시작시간보다 종료시간이 더 빨라요" isWarning />
   ),
   reportSuccess: () => <Toast text="댓글을 신고했어요" />,
