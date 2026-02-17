@@ -12,7 +12,7 @@
     "ios:development": "ENVFILE=.env.development react-native run-ios -- --reset-cache",
     "ios:production": "ENVFILE=.env.production react-native run-ios -- --reset-cache",
     "lint": "eslint .",
-    "start": "react-native start",
+    "start": "react-native start --reset-cache",
     "test": "jest",
     "i": "yarn && cd ios && pod install && cd .."
   },
