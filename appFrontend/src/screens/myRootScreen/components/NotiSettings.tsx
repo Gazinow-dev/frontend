@@ -27,6 +27,7 @@ import {
 import { trackMapBookmark1 } from '@/analytics/map.events';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
 import { IconExclamationMark, IconChevronRight2 } from '@/assets/icons';
+import { LoadingScreen } from '@/global/components';
 
 const NotiSettings = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -86,121 +87,109 @@ const NotiSettings = () => {
       },
     });
 
+  if (isPushNotiOn == null || isTomorrowPushNotiOn == null || isDetailPushNotiOn == null) {
+    return <LoadingScreen />;
+  }
   return (
     <>
       {(isLoadingPushNotiToggle ||
         isLoadingTomorrowPushNotiToggle ||
         isLoadingDetailPushNotiToggle) && (
-        <View className="absolute h-full w-full items-center justify-center">
+        <View className="absolute items-center justify-center w-full h-full">
           <LoadingCircle />
         </View>
       )}
-      <View className="h-1 bg-gray-beb" />
-      <View className="mx-16 h-53 flex-row items-center justify-between">
-        <FontText
-          text="푸시 알림 받기"
-          className={cn({
-            'text-gray-ebe': !isPushNotiOn,
-          })}
-          fontWeight="600"
-        />
+
+      <View className="flex-row items-center justify-between px-16 border-t border-gray-beb py-19">
+        <FontText text="푸시 알림 받기" fontWeight="600" />
         <Toggle
-          isOn={isPushNotiOn!}
+          isOn={isPushNotiOn}
           onToggle={() => setPushNotiOnMutate({ email, alertAgree: !isPushNotiOn })}
         />
       </View>
+
       <View className="h-20 bg-gray-9f9" />
-      <>
-        <View className="mx-16 h-72 flex-row items-center justify-between">
-          <View className="gap-6">
-            <FontText
-              text="내일 이슈 미리 알림"
-              className={cn({
-                'text-gray-ebe': !isTomorrowPushNotiOn,
-              })}
-              fontWeight="500"
-            />
 
-            <FontText
-              text="내일 예정된 이슈가 있다면, 오늘 미리 알려드려요"
-              className={cn('text-12 leading-14 text-gray-999', {
-                'text-gray-ebe': !isTomorrowPushNotiOn,
-              })}
-              fontWeight="400"
-            />
-          </View>
-          <Toggle
-            isOn={isTomorrowPushNotiOn!}
-            onToggle={() =>
-              setTomorrowPushNotiOnMutate({ email, alertAgree: !isTomorrowPushNotiOn })
-            }
-            disabled={!isPushNotiOn}
+      <View className="flex-row items-center justify-between p-16 border-b border-gray-beb">
+        <View className="space-y-6">
+          <FontText
+            text="내일 이슈 미리 알림"
+            className={cn('text-purple-54f', {
+              'text-gray-ebe': !isPushNotiOn,
+            })}
+            fontWeight="500"
+          />
+          <FontText
+            text="내일 예정된 이슈가 있다면, 오늘 미리 알려드려요"
+            className={cn('text-12 leading-14 text-gray-999', {
+              'text-gray-ebe': !isPushNotiOn,
+            })}
           />
         </View>
-        <View className="h-1 bg-gray-beb" />
-      </>
-      <>
-        <View className="mx-16 h-72 flex-row items-center justify-between">
-          <View className="gap-6">
-            <FontText
-              text="경로별 상세 설정"
-              className={cn({
-                'text-gray-ebe': !isDetailPushNotiOn,
-              })}
-              fontWeight="500"
-            />
+        <Toggle
+          isOn={isTomorrowPushNotiOn}
+          onToggle={() => setTomorrowPushNotiOnMutate({ email, alertAgree: !isTomorrowPushNotiOn })}
+          disabled={!isPushNotiOn}
+        />
+      </View>
 
-            <FontText
-              text={`경로마다 알림 받고싶은 시간을 설정할 수 있어요\n설정하지 않으면 모든 시간에 알림을 보내드려요`}
-              className={cn('text-12 leading-14 text-gray-999', {
-                'text-gray-ebe': !isDetailPushNotiOn,
-              })}
-              fontWeight="400"
-            />
-          </View>
-          <Toggle
-            isOn={isDetailPushNotiOn!}
-            onToggle={() => setDetailPushNotiOnMutate({ email, alertAgree: !isDetailPushNotiOn })}
-            disabled={!isPushNotiOn}
+      <View className="flex-row items-center justify-between p-16 border-b border-gray-beb">
+        <View className="space-y-6">
+          <FontText
+            text="경로별 상세 설정"
+            className={cn('text-purple-54f', {
+              'text-gray-ebe': !isPushNotiOn,
+            })}
+            fontWeight="500"
+          />
+          <FontText
+            text={`경로마다 알림 받고싶은 시간을 설정할 수 있어요 \n설정하지 않으면 모든 시간에 알림을 보내드려요`}
+            className={cn('text-12 leading-15 text-gray-999', {
+              'text-gray-ebe': !isPushNotiOn,
+            })}
           />
         </View>
-        <View className="h-1 bg-gray-beb" />
-      </>
+        <Toggle
+          isOn={isDetailPushNotiOn}
+          onToggle={() => setDetailPushNotiOnMutate({ email, alertAgree: !isDetailPushNotiOn })}
+          disabled={!isPushNotiOn}
+        />
+      </View>
+
       {isDetailPushNotiOn && myRoutes && myRoutes.length > 0 && (
         <ScrollView>
           {myRoutes.map((myRoutes, index) => (
-            <View key={myRoutes.roadName + index}>
-              <Pressable
-                style={({ pressed }) => ({
-                  backgroundColor: pressed ? COLOR.GRAY_E5 : 'transparent',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  paddingLeft: 24,
-                  paddingRight: 16,
-                  height: 53,
-                })}
-                onPress={() => myPageNavigation.push('NotiSettingsDetailScreen', { myRoutes })}
-              >
-                <FontText text={myRoutes.roadName} className="text-gray-999" fontWeight="500" />
-                <View className="flex-row items-center">
-                  <FontText text="편집" className="text-13 leading-19 text-gray-999" />
-                  <IconChevronRight2 height={19} className="ml-4" />
-                </View>
-              </Pressable>
-              <View className="h-1 bg-gray-beb" />
-            </View>
+            <Pressable
+              key={myRoutes.roadName + index}
+              style={({ pressed }) => ({
+                backgroundColor: pressed ? COLOR.GRAY_E5 : 'transparent',
+                borderBottomWidth: 1,
+                borderBottomColor: COLOR.GRAY_EB,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: 16,
+                paddingLeft: 24,
+              })}
+              onPress={() => myPageNavigation.push('NotiSettingsDetailScreen', { myRoutes })}
+            >
+              <FontText text={myRoutes.roadName} className="text-gray-999" fontWeight="500" />
+              <View className="flex-row items-center space-x-4">
+                <FontText text="편집" className="text-13 leading-19 text-gray-999" />
+                <IconChevronRight2 />
+              </View>
+            </Pressable>
           ))}
         </ScrollView>
       )}
+
       {isDetailPushNotiOn && myRoutes && myRoutes.length < 1 && (
-        <View className="mx-16 mt-20 items-center rounded-12 bg-gray-9f9 py-16">
-          <View className="flex-row items-center">
+        <View className="items-center py-16 mx-16 mt-20 space-y-8 rounded-12 bg-gray-9f9">
+          <View className="flex-row items-center space-x-4">
             <IconExclamationMark />
-            <FontText className="pl-5 text-14 text-gray-999" text={'저장한 경로가 아직 없어요'} />
+            <FontText text="저장한 경로가 아직 없어요" className="text-14 text-gray-999" />
           </View>
           <TouchableOpacity
-            className="mt-8"
             onPress={() => {
               trackMapBookmark1();
               rootNavigation.navigate('NewRouteNavigation', { screen: 'SavedRoutes' });
@@ -208,10 +197,9 @@ const NotiSettings = () => {
           >
             <FontText
               text="내 경로 저장하고 알림받기"
-              className="text-13 text-gray-999"
+              className="underline text-13 text-gray-999"
               fontWeight="600"
             />
-            <View className="border-b-[1.5px] border-b-gray-999" />
           </TouchableOpacity>
         </View>
       )}
