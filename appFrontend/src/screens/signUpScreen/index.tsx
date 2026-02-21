@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform, TouchableOpacity, View } from 'react-native';
 import { CompleteStep, EmailStep, NicknameStep, PasswordStep } from './components';
-import { COLOR } from '@/global/constants';
 import { useAuthNavigation } from '@/navigation/AuthNavigation';
-import IconLeftArrow from '@assets/icons/left_arrow_round.svg';
+import { IconArrowLeft } from '@assets/icons';
 import { SignUpParams } from './apis/entity';
+import { trackRegisterStart } from '@/analytics/register.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export type SignUpStepType = 'email' | 'password' | 'nickname' | 'complete';
 
@@ -41,17 +42,22 @@ const SignUpScreen = () => {
     }
   };
 
+  useEffect(() => {
+    trackRegisterStart();
+  }, []);
+
   return (
     <SafeAreaView className="flex-1 bg-gray-9f9">
-      <View className="flex-1 px-16 pt-30">
-        <TouchableOpacity
-          hitSlop={10}
-          className="mb-43 w-30"
-          disabled={step === 'complete'}
-          onPress={backStepHandler}
-        >
-          <IconLeftArrow color={step === 'complete' ? 'transparent' : COLOR.BASIC_BLACK} />
-        </TouchableOpacity>
+      <View className="flex-1 px-16">
+        <View className="mb-43 mt-30">
+          {step === 'complete' ? (
+            <View className="h-24" />
+          ) : (
+            <TouchableOpacity hitSlop={10} onPress={backStepHandler}>
+              <IconArrowLeft />
+            </TouchableOpacity>
+          )}
+        </View>
 
         <KeyboardAvoidingView
           className="flex-1"

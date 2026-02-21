@@ -3,6 +3,7 @@ export interface SignUpResponse {
   nickName: string;
   accessToken: string;
   refreshToken: string;
+  memberId: number;
 }
 
 export interface SignUpParams {

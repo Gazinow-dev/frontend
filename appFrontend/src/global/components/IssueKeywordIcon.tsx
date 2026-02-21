@@ -1,14 +1,16 @@
+import {
+  IconIssueAccident,
+  IconIssueConstruction,
+  IconIssueCrowded,
+  IconIssueDelayed,
+  IconIssueEvent,
+  IconIssueNaturalDisaster,
+  IconIssueProtest,
+} from '@/assets/icons';
 import { IssueKeywords } from '@/global/apis/entity';
-import IconAccident from '@assets/icons/path_accident.svg';
-import IconCrowded from '@assets/icons/path_crowded.svg';
-import IconDelayed from '@assets/icons/path_delayed.svg';
-import IconEvent from '@assets/icons/path_event.svg';
-import IconNaturalDisaster from '@assets/icons/path_natural_disaster.svg';
-import IconProtest from '@assets/icons/path_protest.svg';
-import IconConstruction from '@assets/icons/path_construction.svg';
 import { View } from 'react-native';
 
-interface IssueKeywordIconProps {
+interface Props {
   keyword: IssueKeywords;
   color: string;
   width: number;
@@ -16,7 +18,7 @@ interface IssueKeywordIconProps {
   isPath?: boolean;
 }
 
-const IssueKeywordIcon = ({ keyword, color, width, height, isPath }: IssueKeywordIconProps) => {
+const IssueKeywordIcon = ({ keyword, color, width, height, isPath }: Props) => {
   return (
     <View style={{ alignItems: 'center', position: 'relative', bottom: isPath ? 6 : 0 }}>
       {isPath && (
@@ -35,15 +37,15 @@ const IssueKeywordIcon = ({ keyword, color, width, height, isPath }: IssueKeywor
           }}
         />
       )}
-      {keyword === '공사' && <IconConstruction width={width} height={height} color={color} />}
+      {keyword === '공사' && <IconIssueConstruction width={width} height={height} color={color} />}
       {keyword === '자연재해' && (
-        <IconNaturalDisaster width={width} height={height} color={color} />
+        <IconIssueNaturalDisaster width={width} height={height} color={color} />
       )}
-      {keyword === '연착' && <IconDelayed width={width} height={height} color={color} />}
-      {keyword === '사고' && <IconAccident width={width} height={height} color={color} />}
-      {keyword === '혼잡' && <IconCrowded width={width} height={height} color={color} />}
-      {keyword === '시위' && <IconProtest width={width} height={height} color={color} />}
-      {keyword === '행사' && <IconEvent width={width} height={height} color={color} />}
+      {keyword === '연착' && <IconIssueDelayed width={width} height={height} color={color} />}
+      {keyword === '사고' && <IconIssueAccident width={width} height={height} color={color} />}
+      {keyword === '혼잡' && <IconIssueCrowded width={width} height={height} color={color} />}
+      {keyword === '시위' && <IconIssueProtest width={width} height={height} color={color} />}
+      {keyword === '행사' && <IconIssueEvent width={width} height={height} color={color} />}
     </View>
   );
 };

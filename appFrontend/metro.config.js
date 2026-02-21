@@ -4,6 +4,10 @@ const {
   createSentryMetroSerializer
 } = require("@sentry/react-native/dist/js/tools/sentryMetroSerializer");
 
+const {
+  withSentryConfig
+} = require("@sentry/react-native/metro");
+
 const defaultConfig = getDefaultConfig(__dirname);
 const {assetExts, sourceExts} = defaultConfig.resolver;
 
@@ -28,4 +32,4 @@ const config = {
   }
 };
 
-module.exports = mergeConfig(defaultConfig, config);
+module.exports = withSentryConfig(mergeConfig(defaultConfig, config));

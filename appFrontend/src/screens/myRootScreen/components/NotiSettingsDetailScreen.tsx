@@ -1,28 +1,36 @@
 import { SubwaySimplePath } from '@/global/components';
 import { FontText, Toggle } from '@/global/ui';
-import { Pressable, SafeAreaView, TouchableOpacity, View } from 'react-native';
-import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
+import { Pressable, TouchableOpacity, View } from 'react-native';
+import { IconChevronLeft } from '@assets/icons';
 import { useRoute } from '@react-navigation/native';
-import { MyRoutesType } from '@/global/apis/entity';
 import { useEffect, useState } from 'react';
 import cn from 'classname';
 import SetNotiTimesBtn from './SetNotiTimesBtn';
-import {
-  useAddPathNotiSettingsMutation,
-  useDisablePathNotiMutation,
-  useGetPathNotiQuery,
-  usePathUpdateNotiSettingsMutation,
-} from '../apis/hooks';
+import { useGetPathNotiQuery } from '../apis/hooks';
 import { rawTimeToReqTimeFormat } from '../util/timeFormatChange';
 import { showToast } from '@/global/utils/toast';
 import { useRootNavigation } from '@/navigation/RootNavigation';
+import { useMutation } from 'react-query';
+import {
+  disablePathNotiFetch,
+  enablePathNotiSettingsFetch,
+  updatePathNotiSettingsFetch,
+} from '../apis/func';
+import { AxiosError } from 'axios';
+import {
+  DepArrNameAlert,
+  trackMapBookmark6Setting,
+  trackMapSearchBookmarkSetting,
+} from '@/analytics/map.events';
+import { RootStackParamList } from '@/navigation/types/navigation';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const NotiSettingsDetailScreen = () => {
   const navigation = useRootNavigation();
-  const { myRoutes, isRightAfterAddingNewPath } = useRoute().params as {
-    myRoutes: MyRoutesType;
-    isRightAfterAddingNewPath?: boolean;
-  };
+  const params = useRoute().params as RootStackParamList['MyPageNavigation']['params'];
+  if (!params) return;
+  const { myRoutes, prevScreen } = params;
+  if (!myRoutes) return;
 
   const { pathNotiData } = useGetPathNotiQuery(myRoutes.id);
   const [isPushNotificationOn, setIsPushNotificationOn] = useState<boolean>(false);
@@ -63,31 +71,63 @@ const NotiSettingsDetailScreen = () => {
     });
   };
 
+  const routeInfo = {
+    station_departure: myRoutes.subPaths[0].stations[0].stationName,
+    station_arrival: myRoutes.subPaths.at(-1)?.stations.at(-1)?.stationName!,
+    line_departure: myRoutes.subPaths[0].name,
+    line_arrival: myRoutes.subPaths.at(-1)?.name!,
+    name: myRoutes.roadName,
+  };
+
+  const buildOnTrackData = (provider: {
+    dayTimeRanges: { day: string; fromTime: string; toTime: string }[];
+  }): DepArrNameAlert => ({
+    ...routeInfo,
+    alarm: 'on' as const,
+    starttime: provider.dayTimeRanges[0].fromTime.replace(':', ''),
+    finishtime: provider.dayTimeRanges[0].toTime.replace(':', ''),
+    day: provider.dayTimeRanges.map(({ day }) => day).join(', '),
+  });
+
+  const handleAfterSuccess = (trackData: DepArrNameAlert) => {
+    showToast('saveNotiSettingsSuccess');
+
+    const shouldReset = prevScreen === 'SaveModal' || prevScreen === 'SaveScreen';
+    if (shouldReset) {
+      if (prevScreen === 'SaveModal') trackMapSearchBookmarkSetting(trackData);
+      else trackMapBookmark6Setting(trackData);
+
+      navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
+      return;
+    }
+
+    navigation.goBack();
+  };
+
+  const mutationOptions = {
+    onSuccess: (_: unknown, provider: any) => {
+      handleAfterSuccess(buildOnTrackData(provider));
+    },
+    onError: (error: AxiosError) => {
+      showToast(
+        error.response?.status === 400 ? 'notiSettingsTimeError' : 'saveNotiSettingsFailed',
+      );
+    },
+  };
+
   // 완료 버튼 클릭 시 요청 전송
-  const { addPathNotiSettingsMutate } = useAddPathNotiSettingsMutation({
-    onSuccess: async () => navigation.goBack(),
-    onError: async (error) => {
-      if (error.response?.status == 400) {
-        showToast('saveNotiSettingsFailed');
-      }
-    },
-  });
-  const { updatePathNotiSettingsMutate } = usePathUpdateNotiSettingsMutation({
-    onSuccess: async () => {
-      if (isRightAfterAddingNewPath) {
-        navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
-      } else {
-        navigation.goBack();
-      }
-    },
-    onError: async (error) => {
-      if (error.response?.status == 400) {
-        showToast('saveNotiSettingsFailed');
-      }
-    },
-  });
-  const { disablePathNotiMutate } = useDisablePathNotiMutation({
-    onSuccess: async () => navigation.goBack(),
+  const { mutate: enablePathNotiSettingsMutate } = useMutation(
+    enablePathNotiSettingsFetch,
+    mutationOptions,
+  );
+  const { mutate: updatePathNotiSettingsMutate } = useMutation(
+    updatePathNotiSettingsFetch,
+    mutationOptions,
+  );
+
+  const { mutate: disablePathNotiMutate } = useMutation(disablePathNotiFetch, {
+    onSuccess: () => handleAfterSuccess({ ...routeInfo, alarm: 'off' as const }),
+    onError: () => showToast('saveNotiSettingsFailed'),
   });
 
   const createNotiSettingsBody = (selectedDays: string[], myRoutesId: number) => {
@@ -108,7 +148,7 @@ const NotiSettingsDetailScreen = () => {
     } else if (pathNotiData?.enabled) {
       updatePathNotiSettingsMutate(notiSettings);
     } else {
-      addPathNotiSettingsMutate(notiSettings);
+      enablePathNotiSettingsMutate(notiSettings);
     }
   };
 
@@ -116,7 +156,7 @@ const NotiSettingsDetailScreen = () => {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row items-center justify-between h-56 px-16">
         <TouchableOpacity hitSlop={20} onPress={() => navigation.goBack()}>
-          <IconLeftArrowHead color="#3F3F46" width={24} />
+          <IconChevronLeft />
         </TouchableOpacity>
         <FontText
           text={`${myRoutes.roadName} 알림설정`}
@@ -156,7 +196,7 @@ const NotiSettingsDetailScreen = () => {
                 {days.map((day) => (
                   <Pressable
                     key={day}
-                    className={cn('w-40 h-40 rounded-full items-center justify-center', {
+                    className={cn('h-40 w-40 items-center justify-center rounded-full', {
                       'bg-purple-54f': selectedDays.includes(day),
                       'bg-gray-f2': !selectedDays.includes(day),
                     })}
@@ -180,7 +220,7 @@ const NotiSettingsDetailScreen = () => {
       </View>
 
       <TouchableOpacity
-        className={cn('h-48 mx-16 mb-41 rounded-5 items-center justify-center bg-black-717', {
+        className={cn('mx-16 mb-41 h-48 items-center justify-center rounded-5 bg-black-717', {
           'bg-gray-ddd': isPushNotificationOn && selectedDays.length === 0,
         })}
         onPress={saveSettingsHandler}

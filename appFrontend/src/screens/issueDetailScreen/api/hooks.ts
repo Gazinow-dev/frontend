@@ -7,14 +7,19 @@ import { useAppSelect } from '@/store';
  */
 export const useGetIssue = ({ issueId }: { issueId: number | null }) => {
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
-  const { data, isLoading, refetch } = useQuery(
+  const { data, refetch, isLoading, isError } = useQuery(
     ['issue', issueId],
     () => getIssueDetail({ params: { id: issueId }, isVerifiedUser }),
     {
       enabled: !!issueId,
     },
   );
-  return { issueData: data, isLoadingIssue: isLoading, refetchIssue: refetch };
+  return {
+    issueData: data,
+    refetchIssue: refetch,
+    isLoadingIssue: isLoading,
+    isIssueError: isError,
+  };
 };
 
 /**
@@ -22,7 +27,7 @@ export const useGetIssue = ({ issueId }: { issueId: number | null }) => {
  */
 export const useGetCommentsOnAIssue = ({ issueId }: { issueId: number }) => {
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
-  const { data, refetch, fetchNextPage, hasNextPage } = useInfiniteQuery(
+  const { data, refetch, fetchNextPage, hasNextPage, isLoading, isError } = useInfiniteQuery(
     ['getCommentsOnAIssue', issueId],
     ({ pageParam = 0 }) =>
       getCommentsOnAIssueFetch({ isVerifiedUser, params: { issueId: issueId, page: pageParam } }),
@@ -39,5 +44,7 @@ export const useGetCommentsOnAIssue = ({ issueId }: { issueId: number }) => {
     commentsOnAIssueRefetch: refetch,
     fetchCommentsOnAIssueNextPage: fetchNextPage,
     commentsOnAIssueHasNextPage: hasNextPage,
+    isLoadingComment: isLoading,
+    isCommentError: isError,
   };
 };

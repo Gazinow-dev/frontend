@@ -44,7 +44,12 @@ export const checkNicknameFetch = async (nickname: string) => {
 /**
  * 회원가입 axios
  */
-export const signUpFetch = async (data: { email: string; password: string; nickName: string }) => {
+export const signUpFetch = async (data: {
+  email: string;
+  password: string;
+  nickName: string;
+  firebaseToken: string;
+}) => {
   try {
     const res = await publicServiceAPI.post<{
       data: SignUpResponse;

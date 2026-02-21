@@ -2,12 +2,12 @@ import { Text } from 'react-native';
 import type { TextProps } from 'react-native/types';
 import cn from 'classname';
 
-interface FontTextProps extends TextProps {
+interface Props extends TextProps {
   text: string;
   fontWeight?: '400' | '500' | '600' | '700';
 }
 
-const FontText = ({ text, fontWeight = '400', className, ...props }: FontTextProps) => {
+const FontText = ({ text, fontWeight = '400', className, ...props }: Props) => {
   return (
     <Text
       allowFontScaling

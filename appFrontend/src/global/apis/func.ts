@@ -153,7 +153,7 @@ export const searchPathSaveFetch = async (data: SaveMyRoutesType) => {
 /**
  * 저장된 지하철 경로 삭제 axios
  */
-export const searchPathDeleteFetch = async (params: { id: number | null }) => {
+export const myPathDeleteFetch = async (params: { id: number }) => {
   try {
     const res = await authServiceAPI.delete('/api/v1/my_find_road/delete_route', { params });
     return res.data.data;
@@ -242,7 +242,7 @@ export const getIssuesByLaneFetch = async (params: { page: number; line: string 
 };
 
 /**
- * 이슈 추천순 조회 axios
+ * now탭 인기 이슈 조회 axios
  */
 export const getPopularIssuesFetch = async () => {
   try {
@@ -251,7 +251,25 @@ export const getPopularIssuesFetch = async () => {
   } catch (err) {
     const error = err as AxiosError;
     Sentry.captureException({
-      target: '도움돼요 순 이슈 조회',
+      target: 'now탭 인기 이슈 조회',
+      input: { request: error.request },
+      output: { status: error.response?.status, error: error.message, response: error.response },
+    });
+    throw error;
+  }
+};
+
+/**
+ * 홈화면 캐러셀 인기 이슈 조회 axios
+ */
+export const getPopularIssuesAtMainFetch = async () => {
+  try {
+    const res = await publicServiceAPI.get<{ data: IssueGet[] }>(`/api/v1/issue/main-carousel`);
+    return res.data.data;
+  } catch (err) {
+    const error = err as AxiosError;
+    Sentry.captureException({
+      target: '홈화면 캐러셀 인기 이슈 조회',
       input: { request: error.request },
       output: { status: error.response?.status, error: error.message, response: error.response },
     });
@@ -290,6 +308,26 @@ export const updateNotiReadStatus = async (notificationId: number) => {
     const error = err as AxiosError;
     Sentry.captureException({
       target: '알림 읽음 처리',
+      input: { request: error.request },
+      output: { status: error.response?.status, error: error.message, response: error.response },
+    });
+    throw error;
+  }
+};
+
+/**
+ * 안 읽은 알림 수 조회 axios
+ */
+export const getUnreadNotiCount = async () => {
+  try {
+    const res = await authServiceAPI.get<{ data: { unreadNotificationCount: number } }>(
+      `/api/v1/notification/count`,
+    );
+    return res.data.data;
+  } catch (err) {
+    const error = err as AxiosError;
+    Sentry.captureException({
+      target: '안 읽은 알림 수 조회',
       input: { request: error.request },
       output: { status: error.response?.status, error: error.message, response: error.response },
     });

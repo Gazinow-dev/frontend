@@ -6,26 +6,25 @@ import cn from 'classname';
 import { COLOR, HOME, MY_ROOT } from '@/global/constants';
 import HomeNavigation from './HomeNavigation';
 import NowScreen from '@screens/nowScreen';
-import IconFocusedMap from '@assets/icons/tab_map.svg';
-import IconUnFocusedMap from '@assets/icons/tab_map_border.svg';
-import IconNow from '@assets/icons/tab_now.svg';
-import IconMy from '@assets/icons/tab_my.svg';
+import { IconTabMap, IconTabMapBorder, IconTabMy, IconTabNow } from '@/assets/icons';
 import { FontText } from '@/global/ui';
-import { Platform, StatusBar } from 'react-native';
+import { Pressable, StatusBar } from 'react-native';
 import { MyPageNavigation } from '.';
 import notifee, { AndroidImportance, AndroidVisibility } from '@notifee/react-native';
 import { Walkthrough } from '@/screens/homeScreen/components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useState } from 'react';
+import { trackHomeTabClick } from '@/analytics/map.events';
+import { trackNowTabClick } from '@/analytics/now.events';
+import { trackMyTabClick } from '@/analytics/my.events';
 
 const Tab = createBottomTabNavigator();
 
 const screenOption: BottomTabNavigationOptions = {
   headerShown: false,
-  tabBarItemStyle: { paddingTop: 8, paddingBottom: 7 },
   tabBarStyle: {
     backgroundColor: COLOR.GRAY_F9,
-    height: Platform.OS === 'ios' ? 79 + 5 : 49 + 5,
+    paddingVertical: 8,
   },
 };
 
@@ -73,37 +72,55 @@ const MainBottomTabNavigation = () => {
           name="homeStack"
           component={HomeNavigation}
           options={{
+            tabBarButton: (props) => (
+              <Pressable
+                className="flex-1 gap-5"
+                onPress={(e) => {
+                  trackHomeTabClick();
+                  props.onPress?.(e);
+                }}
+              >
+                {props.children}
+              </Pressable>
+            ),
             tabBarLabel: ({ focused }) => (
               <FontText
                 text="홈"
-                className={cn('text-10 mt-5', {
+                className={cn('text-center text-10 leading-12 text-gray-d7d', {
                   'text-light-blue': focused,
-                  'text-gray-d7d': !focused,
                 })}
-                fontWeight="600"
+                fontWeight={focused ? '600' : '400'}
               />
             ),
-            tabBarIcon: ({ focused }) => {
-              return <>{focused ? <IconFocusedMap /> : <IconUnFocusedMap />}</>;
-            },
+            tabBarIcon: ({ focused }) => <>{focused ? <IconTabMap /> : <IconTabMapBorder />}</>,
           }}
         />
         <Tab.Screen
           name="NowScreen"
           component={NowScreen}
           options={{
+            tabBarButton: (props) => (
+              <Pressable
+                className="flex-1 gap-5"
+                onPress={(e) => {
+                  trackNowTabClick();
+                  props.onPress?.(e);
+                }}
+              >
+                {props.children}
+              </Pressable>
+            ),
             tabBarLabel: ({ focused }) => (
               <FontText
                 text="NOW"
-                className={cn('text-10 mt-5', {
+                className={cn('text-center text-10 leading-12 text-gray-d7d', {
                   'text-light-blue': focused,
-                  'text-gray-d7d': !focused,
                 })}
-                fontWeight="600"
+                fontWeight={focused ? '600' : '400'}
               />
             ),
             tabBarIcon: ({ focused }) => (
-              <IconNow
+              <IconTabNow
                 color={focused ? COLOR.LIGHT_BLUE : 'transparent'}
                 strokeWidth={focused ? 0 : 1}
                 stroke={COLOR.GRAY_7D}
@@ -115,18 +132,28 @@ const MainBottomTabNavigation = () => {
           name={MY_ROOT}
           component={MyPageNavigation}
           options={{
+            tabBarButton: (props) => (
+              <Pressable
+                className="flex-1 gap-5"
+                onPress={(e) => {
+                  trackMyTabClick();
+                  props.onPress?.(e);
+                }}
+              >
+                {props.children}
+              </Pressable>
+            ),
             tabBarLabel: ({ focused }) => (
               <FontText
                 text="마이"
-                className={cn('text-10 mt-5', {
+                className={cn('text-center text-10 leading-12 text-gray-d7d', {
                   'text-light-blue': focused,
-                  'text-gray-d7d': !focused,
                 })}
-                fontWeight="600"
+                fontWeight={focused ? '600' : '400'}
               />
             ),
             tabBarIcon: ({ focused }) => (
-              <IconMy
+              <IconTabMy
                 color={focused ? COLOR.LIGHT_BLUE : 'transparent'}
                 strokeWidth={focused ? 0 : 1}
                 stroke={COLOR.GRAY_7D}

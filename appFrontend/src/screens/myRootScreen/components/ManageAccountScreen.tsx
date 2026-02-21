@@ -3,8 +3,8 @@ import { useRootNavigation } from '@/navigation/RootNavigation';
 import { getEncryptedStorage, removeEncryptedStorage } from '@/global/utils';
 import { FontText } from '@/global/ui';
 import MyTabModal from '@/global/components/MyTabModal';
-import { Pressable, SafeAreaView, TouchableOpacity, View } from 'react-native';
-import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
+import { Pressable, TouchableOpacity, View } from 'react-native';
+import { IconChevronLeft } from '@assets/icons';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import { showToast } from '@/global/utils/toast';
 import { useAppDispatch } from '@/store';
@@ -12,8 +12,10 @@ import { getAuthorizationState } from '@/store/modules';
 import { useLogoutMutation } from '../apis/hooks';
 import { COLOR } from '@/global/constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { trackLogout } from '@/analytics/auth.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-interface RenderMenuProps {
+interface Props {
   text: string;
   onPress: () => void;
 }
@@ -44,6 +46,7 @@ const ManageAccountScreen = () => {
       await removeEncryptedStorage('refresh_token');
       await AsyncStorage.removeItem('isSocialLoggedIn');
       dispatch(getAuthorizationState('fail auth'));
+      trackLogout();
       navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
       showToast('logout');
     },
@@ -56,7 +59,7 @@ const ManageAccountScreen = () => {
     logoutMutate({ accessToken, refreshToken });
   };
 
-  const renderMenu = ({ text, onPress }: RenderMenuProps) => (
+  const renderMenu = ({ text, onPress }: Props) => (
     <>
       <Pressable
         style={({ pressed }) => ({
@@ -78,7 +81,7 @@ const ManageAccountScreen = () => {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row items-center gap-12 p-16">
         <TouchableOpacity onPress={() => myPageNavigation.goBack()} hitSlop={20}>
-          <IconLeftArrowHead width={24} color="#3F3F46" />
+          <IconChevronLeft />
         </TouchableOpacity>
         <FontText text="계정 관리" className="text-18 leading-23" fontWeight="500" />
       </View>

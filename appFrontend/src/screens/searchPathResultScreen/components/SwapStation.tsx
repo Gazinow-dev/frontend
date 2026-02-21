@@ -1,19 +1,19 @@
 import cn from 'classname';
-
 import { ARRIVAL_STATION, DEPARTURE_STATION } from '@/global/constants';
 import { useAppDispatch } from '@/store';
 import { getSeletedStation, getStationType } from '@/store/modules';
-import { Pressable, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { SelectedStationTypes } from '..';
-import IconSwapChange from '@assets/icons/swap_change.svg';
+import { IconSwapChange } from '@/assets/icons';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { FontText } from '@/global/ui';
+import { trackMapSearchArrivalClick, trackMapSearchDepartureClick } from '@/analytics/map.events';
 
-interface SwapStationProps {
+interface Props {
   selectedStation: SelectedStationTypes;
 }
 
-const SwapStation = ({ selectedStation }: SwapStationProps) => {
+const SwapStation = ({ selectedStation }: Props) => {
   const dispatch = useAppDispatch();
   const navigation = useRootNavigation();
 
@@ -31,8 +31,9 @@ const SwapStation = ({ selectedStation }: SwapStationProps) => {
       <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
         <View style={{ flex: 1, marginRight: 15, rowGap: 8 }}>
           <TouchableOpacity
-            className="justify-center w-full pl-10 bg-gray-9f9 h-41 rounded-8 pr-15"
+            className="h-41 w-full justify-center rounded-8 bg-gray-9f9 pl-10 pr-15"
             onPress={() => {
+              trackMapSearchDepartureClick();
               dispatch(getStationType(DEPARTURE_STATION));
               navigation.navigate('IssueStack', { screen: 'SearchStation' });
             }}
@@ -49,8 +50,9 @@ const SwapStation = ({ selectedStation }: SwapStationProps) => {
             />
           </TouchableOpacity>
           <TouchableOpacity
-            className="justify-center w-full pl-10 bg-gray-9f9 h-41 rounded-8 pr-15"
+            className="h-41 w-full justify-center rounded-8 bg-gray-9f9 pl-10 pr-15"
             onPress={() => {
+              trackMapSearchArrivalClick();
               dispatch(getStationType(ARRIVAL_STATION));
               navigation.navigate('IssueStack', { screen: 'SearchStation' });
             }}

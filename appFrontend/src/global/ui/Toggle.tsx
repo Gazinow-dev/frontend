@@ -2,22 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { Animated, Easing, Pressable } from 'react-native';
 import cn from 'classname';
 
-type ToggleProps = {
+interface Props {
   isOn: boolean;
   onToggle: () => void;
   disabled?: boolean;
-};
+}
 
-const Toggle = ({ isOn, onToggle, disabled }: ToggleProps) => {
+const Toggle = ({ isOn, onToggle, disabled }: Props) => {
   const [animatedValue] = useState(new Animated.Value(isOn ? 1 : 0));
 
   useEffect(() => {
-    Animated.timing(animatedValue, {
+    const animation = Animated.timing(animatedValue, {
       toValue: isOn ? 1 : 0,
       duration: 200,
       easing: Easing.linear,
       useNativeDriver: false,
-    }).start();
+    });
+
+    animation.start();
+
+    return () => animation.stop();
   }, [isOn, animatedValue]);
 
   const translateX = animatedValue.interpolate({
@@ -27,7 +31,7 @@ const Toggle = ({ isOn, onToggle, disabled }: ToggleProps) => {
 
   return (
     <Pressable
-      className={cn('w-44 h-26 rounded-full justify-center', {
+      className={cn('h-26 w-44 justify-center rounded-full', {
         'bg-light-blue': isOn,
         'bg-[#DFDFDF]': !isOn,
       })}

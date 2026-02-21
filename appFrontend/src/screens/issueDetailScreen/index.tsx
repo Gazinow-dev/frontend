@@ -1,14 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
   RefreshControl,
-  SafeAreaView,
   TouchableOpacity,
   View,
 } from 'react-native';
-import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
+import { IconChevronLeft } from '@assets/icons';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { FontText } from '@/global/ui';
 import SingleCommentContainer from './components/SingleCommentContainer';
@@ -17,6 +16,9 @@ import { useGetCommentsOnAIssue, useGetIssue } from './api/hooks';
 import { useAppSelect } from '@/store';
 import CommentInput from './components/CommentInput';
 import MyTabModal from '@/global/components/MyTabModal';
+import RetryLoad from '@/global/components/RetryLoad';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LoadingScreen, NetworkErrorScreen } from '@/global/components';
 
 const IssueDetailScreen = () => {
   const navigation = useRootNavigation();
@@ -26,27 +28,33 @@ const IssueDetailScreen = () => {
   const issueId = useAppSelect((state) => state.subwaySearch.issueId);
   if (!issueId) return null;
 
-  const { issueData, refetchIssue } = useGetIssue({ issueId });
+  const { issueData, refetchIssue, isLoadingIssue, isIssueError } = useGetIssue({ issueId });
 
   const {
     commentsOnAIssue,
     commentsOnAIssueHasNextPage,
     commentsOnAIssueRefetch,
     fetchCommentsOnAIssueNextPage,
+    isLoadingComment,
+    isCommentError,
   } = useGetCommentsOnAIssue({ issueId });
 
-  const flattenedData = useMemo(() => {
+  const flattenedCommentData = useMemo(() => {
     return commentsOnAIssue?.pages.flatMap((page) => page.content);
   }, [commentsOnAIssue]);
 
-  if (!flattenedData || !issueData) return null;
-
+  if (isLoadingIssue || isLoadingComment) {
+    return <LoadingScreen />;
+  }
+  if (isIssueError || !issueData) {
+    return <NetworkErrorScreen retryFn={refetchIssue} />;
+  }
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       className="flex-1"
     >
-      <SafeAreaView className="flex-1 bg-white">
+      <SafeAreaView className="flex-1 bg-white pb-15" edges={['top']}>
         <MyTabModal
           isVisible={isOpenLoginModal}
           onCancel={() => setIsOpenLoginModal(false)}
@@ -59,12 +67,12 @@ const IssueDetailScreen = () => {
           cancelText="취소"
         />
 
-        <TouchableOpacity className="p-16 w-30" hitSlop={20} onPress={() => navigation.goBack()}>
-          <IconLeftArrowHead color="#3F3F46" height={24} />
+        <TouchableOpacity className="w-30 p-16" hitSlop={20} onPress={() => navigation.goBack()}>
+          <IconChevronLeft />
         </TouchableOpacity>
 
         <FlatList
-          data={flattenedData}
+          data={flattenedCommentData}
           renderItem={({ item, index }) => (
             <SingleCommentContainer
               item={item}
@@ -75,17 +83,24 @@ const IssueDetailScreen = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ flexGrow: 1 }}
           ListHeaderComponent={
-            <IssueContent
-              issueData={issueData}
-              refetchIssue={refetchIssue}
-              setIsOpenLoginModal={setIsOpenLoginModal}
-            />
+            <IssueContent issueData={issueData} setIsOpenLoginModal={setIsOpenLoginModal} />
           }
-          ListFooterComponent={flattenedData?.length > 0 ? <View className="h-64" /> : null}
+          ListFooterComponent={
+            flattenedCommentData && flattenedCommentData?.length > 0 ? (
+              <View className="h-64" />
+            ) : null
+          }
           ListEmptyComponent={
-            <View className="items-center justify-center flex-1">
-              <FontText text="등록된 댓글이 없어요" className="text-[#DEDEDE]" />
-            </View>
+            // TODO: 로딩 디자인 나오면 로직 수정
+            !flattenedCommentData || isCommentError ? (
+              <View className="flex-1 items-center justify-center">
+                <RetryLoad retryFn={commentsOnAIssueRefetch} />
+              </View>
+            ) : (
+              <View className="flex-1 items-center justify-center py-100">
+                <FontText text="등록된 댓글이 없어요" className="text-[#DEDEDE]" />
+              </View>
+            )
           }
           onEndReached={() => {
             if (commentsOnAIssueHasNextPage) {

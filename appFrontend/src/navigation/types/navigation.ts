@@ -18,11 +18,17 @@ export type RootStackParamList = {
       | 'ConfirmPwScreen'
       | 'ConfirmQuitScreen'
       | 'ManageAccountScreen'
+      | 'NoticeDetailScreen'
       | 'NotiOnScreen'
       | 'NotiSettingsScreen'
+      | 'NoticesScreen'
       | 'SubscribeTermsScreen'
       | 'PersonalTermsScreen';
-    params?: { myRoutes?: MyRoutesType; isRightAfterAddingNewPath?: boolean };
+    params?: {
+      myRoutes?: MyRoutesType;
+      prevScreen?: 'SaveModal' | 'SaveScreen';
+      noticeId?: number;
+    };
   };
   SubwayPathDetail: { state?: Path | SubPath[]; notificationId?: number | null };
 };
@@ -61,6 +67,8 @@ export type MyPageStackParamList = {
   NotiOnScreen: undefined;
   NotiSettingsScreen: undefined;
   NotiSettingsDetailScreen: { myRoutes?: MyRoutesType };
+  NoticesScreen: undefined;
+  NoticeDetailScreen: { noticeId: number };
   SubscribeTermsScreen: undefined;
   PersonalTermsScreen: undefined;
 };

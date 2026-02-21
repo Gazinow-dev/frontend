@@ -1,5 +1,6 @@
 import {
   getNotiHistoryFetch,
+  getPopularIssuesAtMainFetch,
   getPopularIssuesFetch,
   getSavedRoutesFetch,
   getSearchRoutesFetch,
@@ -9,13 +10,12 @@ import { useMutation, useQuery, useInfiniteQuery } from 'react-query';
 import {
   searchAddHistoryFetch,
   searchHistoryFetch,
-  searchPathDeleteFetch,
   searchPathSaveFetch,
   searchPathsFetch,
   getAllIssuesFetch,
   getIssuesByLaneFetch,
 } from '@/global/apis/func';
-import { RawSubwayLineName, MyRoutesType, SubwayStrEnd } from './entity';
+import { RawSubwayLineName, SubwayStrEnd } from './entity';
 import { subwayFreshLineName } from '@/global/utils';
 import { useAppSelect } from '@/store';
 import { useMemo } from 'react';
@@ -120,17 +120,6 @@ export const useSavedSubwayRoute = ({
 };
 
 /**
- * 저장한 지하철 경로 삭제 훅
- */
-export const useDeleteSavedSubwayRoute = ({ onSuccess }: { onSuccess: () => void }) => {
-  const { data, isLoading, mutate } = useMutation(searchPathDeleteFetch, {
-    onSuccess,
-  });
-
-  return { data, isLoading, deleteMutate: mutate };
-};
-
-/**
  * 최근 검색한 지하철역 기록 훅
  */
 export const useAddRecentSearch = ({
@@ -161,15 +150,17 @@ export const useGetSearchRoutesQuery = () => {
 /**
  * 저장한 지하철 경로 조회 훅
  */
-export const useGetSavedRoutesQuery = ({
-  onSuccess,
-}: { onSuccess?: (data: MyRoutesType[]) => void } = {}) => {
+export const useGetSavedRoutesQuery = () => {
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
-  const { data, refetch } = useQuery(['getRoads'], getSavedRoutesFetch, {
+  const { data, refetch, isLoading, isError } = useQuery(['getRoads'], getSavedRoutesFetch, {
     enabled: isVerifiedUser === 'success auth',
-    onSuccess,
   });
-  return { myRoutes: data, getSavedRoutesRefetch: refetch };
+  return {
+    myRoutes: data,
+    getSavedRoutesRefetch: refetch,
+    isLoadingSavedRoutes: isLoading,
+    isSavedRoutesError: isError,
+  };
 };
 
 /**
@@ -199,7 +190,7 @@ export const useGetAllIssuesQuery = () => {
  * 이슈 노선별 조회 훅
  */
 export const useGetIssuesByLaneQuery = (line: string) => {
-  const { data, refetch, fetchNextPage, hasNextPage } = useInfiniteQuery(
+  const { data, refetch, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery(
     ['getIssuesByLane', line],
     ({ pageParam = 0 }) => getIssuesByLaneFetch({ page: pageParam, line }),
     {
@@ -215,11 +206,12 @@ export const useGetIssuesByLaneQuery = (line: string) => {
     laneIssuesRefetch: refetch,
     fetchLaneIssuesNextPage: fetchNextPage,
     laneIssuesHasNextPage: hasNextPage,
+    isLoadingLaneIssues: isLoading,
   };
 };
 
 /**
- * 이슈 추천순 조회 훅
+ * now탭 인기 이슈 조회 훅
  */
 export const useGetPopularIssuesQuery = () => {
   const { data, refetch, isLoading } = useQuery(['getPopularIssues'], getPopularIssuesFetch);
@@ -231,10 +223,21 @@ export const useGetPopularIssuesQuery = () => {
 };
 
 /**
+ * 홈화면 캐러셀 인기 이슈 조회 훅
+ */
+export const useGetPopularIssuesAtMain = () => {
+  const { data, refetch } = useQuery(['getPopularIssuesAtMain'], getPopularIssuesAtMainFetch);
+  return {
+    popularIssues: data,
+    popularIssuesRefetch: refetch,
+  };
+};
+
+/**
  * 이슈 노선별 조회 훅
  */
 export const useGetNotiHistoriesQuery = () => {
-  const { data, refetch, fetchNextPage, hasNextPage } = useInfiniteQuery(
+  const { data, refetch, fetchNextPage, hasNextPage, isLoading, isError } = useInfiniteQuery(
     'getNotiHistoryFetch',
     ({ pageParam = 0 }) => getNotiHistoryFetch(pageParam),
     {
@@ -244,5 +247,5 @@ export const useGetNotiHistoriesQuery = () => {
       },
     },
   );
-  return { data, refetch, fetchNextPage, hasNextPage };
+  return { data, refetch, fetchNextPage, hasNextPage, isLoading, isError };
 };

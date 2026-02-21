@@ -10,13 +10,14 @@ import {
 import { useAppSelect } from '@/store';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useMemo } from 'react';
+import { trackNowTotalIssueLine } from '@/analytics/now.events';
 
-interface LaneButtonsProps {
+interface Props {
   activeButton: NowScreenCapsules;
   setActiveButton: (activeButton: NowScreenCapsules) => void;
 }
 
-const LaneButtons = ({ activeButton, setActiveButton }: LaneButtonsProps) => {
+const LaneButtons = ({ activeButton, setActiveButton }: Props) => {
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
 
   // 내가 저장한 경로의 노선만 가져옴
@@ -52,8 +53,11 @@ const LaneButtons = ({ activeButton, setActiveButton }: LaneButtonsProps) => {
         {['전체', ...myLines, ...otherStations].map((capsule) => (
           <TouchableOpacity
             key={capsule}
-            onPress={() => setActiveButton(capsule as NowScreenCapsules)}
-            className="px-[8.48px] py-[6.79px] rounded-17"
+            onPress={() => {
+              trackNowTotalIssueLine(capsule as NowScreenCapsules);
+              setActiveButton(capsule as NowScreenCapsules);
+            }}
+            className="rounded-17 px-[8.48px] py-[6.79px]"
             style={{
               backgroundColor:
                 activeButton === capsule

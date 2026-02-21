@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useDeletePostLike, useGetIssue, usePostLike } from "./api/hooks";
+import { useDeletePostLike, usePostLike } from "./api/hooks";
 
 import IconThumsUp from "@assets/icons/thumbs_up.svg?react";
 
@@ -12,6 +12,8 @@ import { debounce } from "lodash";
 import cn from "classnames";
 import localStorageFunc from "@global/utils/localStorage";
 import { STORAGE_ACCESS_KEY } from "@global/constants";
+import { useQuery } from "@tanstack/react-query";
+import { getIssueDetail } from "@global/apis/func";
 
 dayjs.locale("ko");
 dayjs.extend(relativeTime);
@@ -25,10 +27,17 @@ const IssueDetailPage = () => {
   // const closeModal = () => setIsOpenModal(false);
 
   const [token, setToken] = useState<string>("");
-  const { issueData, isLoadingIssue, refetchIssue } = useGetIssue({
-    id,
+
+  const {
+    data: issueData,
+    isLoading: isLoadingIssue,
+    refetch: refetchIssue,
+  } = useQuery({
+    queryKey: ["issue", id],
+    queryFn: () => getIssueDetail({ id }),
     enabled: (!!storageAccessToken && !!id) || (!!token && !!id),
   });
+
   const { doLikeMutate } = usePostLike({ onSuccess: refetchIssue });
   const { deleteLikeMutate } = useDeletePostLike({ onSuccess: refetchIssue });
 
@@ -36,7 +45,7 @@ const IssueDetailPage = () => {
     () =>
       debounce(() => {
         if (!issueData) return;
-        if (issueData.isLike) deleteLikeMutate(issueData.id);
+        if (issueData.like) deleteLikeMutate(issueData.id);
         else doLikeMutate(issueData.id);
       }, 300),
     [issueData]
@@ -92,23 +101,23 @@ const IssueDetailPage = () => {
           <button className="flex items-center" onClick={likeHandler}>
             <p
               className={cn("text-xs font-medium mr-[5px]", {
-                "text-blue": issueData?.isLike,
-                "text-gray-999": !issueData?.isLike,
+                "text-blue": issueData?.like,
+                "text-gray-999": !issueData?.like,
               })}
             >
               도움돼요
             </p>
             <div className="mr-px">
               <IconThumsUp
-                color={issueData?.isLike ? color.BLUE : color.GRAY99}
+                color={issueData?.like ? color.BLUE : color.GRAY99}
                 width={15}
                 height={15}
               />
             </div>
             <p
               className={cn("text-xs font-medium mt-[0.5px]", {
-                "text-blue": issueData?.isLike,
-                "text-gray-999": !issueData?.isLike,
+                "text-blue": issueData?.like,
+                "text-gray-999": !issueData?.like,
               })}
             >
               {issueData?.likeCount}

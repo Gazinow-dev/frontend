@@ -1,20 +1,20 @@
 import { useEffect, useMemo, useState } from 'react';
-import { FlatList, Modal, SafeAreaView, TouchableOpacity, View } from 'react-native';
-import { FontText, Space } from '@/global/ui';
+import { FlatList, Modal, TouchableOpacity, View } from 'react-native';
+import { FontText } from '@/global/ui';
 import { useRoute } from '@react-navigation/native';
 import NewRouteSaveModal from './components/NewRouteSaveModal';
 import SearchPathDetailItem from './components/SearchPathDetailItem';
-import { useDeleteSavedSubwayRoute } from '@/global/apis/hooks';
 import { Path, SubPath } from '@/global/apis/entity';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
 import { COLOR } from '@/global/constants';
 import { useMutation, useQueryClient } from 'react-query';
-import IconBookmark from '@assets/icons/bookmark.svg';
-import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
+import { IconBookmark, IconChevronLeft } from '@/assets/icons';
 import { useAppSelect } from '@/store';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { showToast } from '@/global/utils/toast';
-import { updateNotiReadStatus } from '@/global/apis/func';
+import { myPathDeleteFetch, updateNotiReadStatus } from '@/global/apis/func';
+import { trackMapBookmarkDelete } from '@/analytics/map.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface DetailData extends Path {
   id: number;
@@ -38,10 +38,17 @@ const SearchPathResultDetailScreen = () => {
 
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
 
-  const { isLoading, deleteMutate } = useDeleteSavedSubwayRoute({
+  const { mutate: deleteMutate, isLoading } = useMutation(myPathDeleteFetch, {
     onSuccess: async () => {
-      await queryClient.invalidateQueries(['getRoads']);
+      const trackData = {
+        station_departure: resultData.subPaths[0].stations[0].stationName,
+        station_arrival: resultData.subPaths.at(-1)?.stations.at(-1)?.stationName!,
+        line_departure: resultData.subPaths[0].name,
+        line_arrival: resultData.subPaths.at(-1)?.name!,
+      };
+      trackMapBookmarkDelete(trackData);
       setIsBookmarking(false);
+      await queryClient.invalidateQueries('getRoads');
       showToast('deleteRoute');
     },
   });
@@ -72,17 +79,15 @@ const SearchPathResultDetailScreen = () => {
   }, [resultData]);
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
       <View className="flex-1 px-16">
         {/* header */}
         <View className="flex-row items-center justify-between py-16">
           <TouchableOpacity hitSlop={20} onPress={() => navigation.goBack()}>
-            <IconLeftArrowHead color="#3F3F46" width={18} height={18} />
+            <IconChevronLeft />
           </TouchableOpacity>
           <TouchableOpacity hitSlop={20} onPress={bookmarkHandler} disabled={isLoading}>
             <IconBookmark
-              width={24}
-              height={24}
               stroke={isBookmarking ? 'none' : COLOR.GRAY_999}
               strokeWidth={2}
               fill={isBookmarking ? COLOR.LIGHT_BLUE : 'transparent'}
@@ -98,31 +103,31 @@ const SearchPathResultDetailScreen = () => {
               />
             ) : (
               <Modal visible onRequestClose={() => setIsSaveRouteModalOpen(false)} transparent>
-                <View className="relative items-center justify-center flex-1">
-                  <View className="bg-[#00000099] absolute top-0 w-full h-full" />
-                  <View className="absolute w-4/5 px-24 pt-32 pb-24 bg-white rounded-12">
+                <View className="relative flex-1 items-center justify-center">
+                  <View className="absolute top-0 h-full w-full bg-[#00000099]" />
+                  <View className="absolute w-4/5 rounded-12 bg-white px-24 pb-24 pt-32">
                     <FontText
                       text={`로그인하면 관심 경로의\n이슈를 알려드려요`}
                       className="text-center text-18"
                       fontWeight="600"
                     />
-                    <View className="flex-row w-full gap-x-8 mt-30">
+                    <View className="mt-30 w-full flex-row gap-x-8">
                       <TouchableOpacity
                         activeOpacity={0.5}
-                        className="items-center flex-1 py-12 border rounded-5 border-gray-999"
+                        className="flex-1 items-center rounded-5 border border-gray-999 py-12"
                         onPress={() => setIsSaveRouteModalOpen(false)}
                       >
-                        <FontText text="취소" className="text-gray-999 text-14" fontWeight="600" />
+                        <FontText text="취소" className="text-14 text-gray-999" fontWeight="600" />
                       </TouchableOpacity>
                       <TouchableOpacity
                         activeOpacity={0.5}
-                        className="items-center flex-1 py-12 rounded-5 bg-black-717"
+                        className="flex-1 items-center rounded-5 bg-black-717 py-12"
                         onPress={() => {
                           setIsSaveRouteModalOpen(false);
                           rootNavigation.navigate('AuthStack', { screen: 'Landing' });
                         }}
                       >
-                        <FontText text="로그인" className="text-white text-14" fontWeight="600" />
+                        <FontText text="로그인" className="text-14 text-white" fontWeight="600" />
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -134,7 +139,7 @@ const SearchPathResultDetailScreen = () => {
         <View className="flex-row items-center justify-between pl-10">
           <View>
             <FontText text="평균 소요시간" className="text-13 text-gray-999" fontWeight="500" />
-            <View className="flex-row mt-2">
+            <View className="mt-2 flex-row space-x-8">
               <FontText
                 text={
                   resultData.totalTime > 60
@@ -147,8 +152,6 @@ const SearchPathResultDetailScreen = () => {
                 className="text-28"
                 fontWeight="700"
               />
-
-              <Space width={8} />
 
               <View>
                 <View className="flex-1" />
@@ -166,11 +169,12 @@ const SearchPathResultDetailScreen = () => {
         </View>
 
         {/* 경계선 */}
-        <View className="h-px mt-16 mb-21 bg-gray-beb" />
+        <View className="mt-16 h-px bg-gray-beb" />
 
         <FlatList
           data={freshSubPathData}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingTop: 21 }}
           keyExtractor={(item) => {
             if (typeof item === 'string') return 'dance';
             return item.distance + 'detail' + item.sectionTime;

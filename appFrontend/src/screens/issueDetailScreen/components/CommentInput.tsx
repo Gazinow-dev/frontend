@@ -1,21 +1,24 @@
 import { useState } from 'react';
-import { Alert, Keyboard, Pressable, TouchableOpacity, View } from 'react-native';
+import { Keyboard, Pressable, TouchableOpacity, View } from 'react-native';
 import { Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
-import IconArrowUp from '@assets/icons/up_arrow.svg';
+import { IconArrowUp } from '@assets/icons';
 import cn from 'classname';
 import { postComment } from '../api/func';
 import { useMutation, useQueryClient } from 'react-query';
 import { IssueGet } from '@/global/apis/entity';
 import { useAppSelect } from '@/store';
+import { showToast } from '@/global/utils/toast';
+import { AxiosError } from 'axios';
+import { trackNowComments } from '@/analytics/now.events';
 
-interface CommentInputProps {
+interface Props {
   issueData: IssueGet;
   issueId: number;
   setIsOpenLoginModal: (value: boolean) => void;
 }
 
-const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: CommentInputProps) => {
+const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: Props) => {
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
   const queryClient = useQueryClient();
 
@@ -24,14 +27,22 @@ const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: CommentInputP
   const isBannedUser = issueData.commentRestricted;
 
   const { mutate: postCommentMutate } = useMutation(postComment, {
-    onSuccess: () => {
+    onSuccess: (_, provider) => {
+      trackNowComments({
+        title: issueData.title,
+        text: provider.issueCommentContent,
+      });
       Keyboard.dismiss();
       setCommentText('');
       queryClient.invalidateQueries('getCommentsOnAIssue');
       queryClient.invalidateQueries('getMyComments');
+      queryClient.invalidateQueries('getAllIssues');
+      queryClient.invalidateQueries('getIssuesByLane');
+      queryClient.invalidateQueries('getPopularIssues');
     },
-    onError: () => {
-      Alert.alert('댓글 등록에 실패했습니다.', '다시 시도해주세요.');
+    onError: (error: AxiosError) => {
+      if (error.response?.status === 422) showToast('postFailureByForbiddenWord');
+      else showToast('commentPostFailed');
     },
   });
 
@@ -44,10 +55,9 @@ const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: CommentInputP
   };
 
   return (
-    <View>
-      <View className="h-1 bg-gray-beb" />
+    <View className="border-t border-gray-beb">
       <Pressable
-        className="flex-row justify-between items-center max-h-83 pr-8 pl-16 rounded-12 py-10 mx-16 my-12 bg-[#F9FAFB]"
+        className="mx-16 my-12 max-h-83 flex-row items-center justify-between rounded-12 bg-[#F9FAFB] py-10 pl-16 pr-8"
         onPress={handlePressInput}
       >
         <Input
@@ -63,7 +73,7 @@ const CommentInput = ({ issueData, issueId, setIsOpenLoginModal }: CommentInputP
         />
         <TouchableOpacity
           disabled={!commentText}
-          className={cn('items-center justify-center ml-12 rounded-full w-28 h-28 bg-gray-ddd', {
+          className={cn('ml-12 h-28 w-28 items-center justify-center rounded-full bg-gray-ddd', {
             'bg-light-blue': commentText,
           })}
           hitSlop={20}

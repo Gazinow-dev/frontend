@@ -5,14 +5,16 @@ import { useSavedSubwayRoute } from '@/global/apis/hooks';
 import { useQueryClient } from 'react-query';
 import { SubwaySimplePath } from '@/global/components';
 import { Path, SubPath } from '@/global/apis/entity';
-import { View, Keyboard, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Keyboard, TouchableOpacity } from 'react-native';
 import { KeyboardAvoidingView, Platform } from 'react-native';
-import XCircle from '@assets/icons/x-circle-standard.svg';
+import { IconInvalid } from '@/assets/icons';
 import AddNewRouteHeader from './AddNewRouteHeader';
 import { useRoute } from '@react-navigation/native';
 import { showToast } from '@/global/utils/toast';
 import cn from 'classname';
 import { useRootNavigation } from '@/navigation/RootNavigation';
+import { trackMapBookmark4Name, trackMapBookmark5Finish } from '@/analytics/map.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SaveNewRoute = () => {
   const { state: resultData } = useRoute().params as { state: Path };
@@ -24,7 +26,15 @@ const SaveNewRoute = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isKeyboardVisible, setIsKeyboardVisible] = useState<boolean>(false);
 
+  const pathData = {
+    station_departure: resultData.firstStartStation,
+    station_arrival: resultData.lastEndStation,
+    line_departure: resultData.subPaths[1].name,
+    line_arrival: resultData.subPaths.at(-2)?.name!,
+  };
+
   useEffect(() => {
+    trackMapBookmark4Name(pathData);
     const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
       setIsKeyboardVisible(true);
     });
@@ -38,16 +48,21 @@ const SaveNewRoute = () => {
   }, []);
 
   const freshSubPathData: SubPath[] = useMemo(() => {
-    const subPaths = resultData?.subPaths || [];
-    return subPaths.filter((subPath) => !!subPath.stations.length);
+    if (!resultData.subPaths) return [];
+    const subPaths = resultData.subPaths;
+    return Object.values(subPaths).filter((item) => !!item.stations.length);
   }, [resultData]);
 
   const { mutate, isLoading } = useSavedSubwayRoute({
     onSuccess: async (id) => {
+      trackMapBookmark5Finish({ ...pathData, name: roadName });
       await queryClient.invalidateQueries('getRoads');
       navigation.navigate('MyPageNavigation', {
         screen: 'NotiSettingsDetailScreen',
-        params: { myRoutes: { ...resultData, id, roadName }, isRightAfterAddingNewPath: true },
+        params: {
+          myRoutes: { ...resultData, subPaths: freshSubPathData, id, roadName },
+          prevScreen: 'SaveScreen',
+        },
       });
       showToast('saveRoute');
     },
@@ -62,10 +77,10 @@ const SaveNewRoute = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       className="flex-1"
     >
-      <SafeAreaView className="flex-1 bg-white">
+      <SafeAreaView className="flex-1 bg-white" edges={['top']}>
         <AddNewRouteHeader />
         <View className="flex-1 px-16 bg-white">
-          <View className="mt-32 mx-33 mb-22">
+          <View className="mt-32 mb-40 mx-33">
             <SubwaySimplePath
               pathData={freshSubPathData}
               arriveStationName={resultData.lastEndStation}
@@ -78,8 +93,8 @@ const SaveNewRoute = () => {
             className="px-16 py-12 my-7 rounded-5 bg-gray-9f9"
             placeholder="경로 이름을 입력하세요"
             value={roadName}
+            maxLength={10}
             onChangeText={(text) => {
-              if (text.length > 10) return;
               setRoadName(text);
               setIsDuplicatedName(false);
             }}
@@ -88,11 +103,11 @@ const SaveNewRoute = () => {
           />
           <View className="flex-row justify-between">
             {isDuplicatedName ? (
-              <View className="flex-row items-center h-14 ml-9">
-                <XCircle width={14} />
+              <View className="flex-row items-center ml-9 h-14">
+                <IconInvalid />
                 <FontText
                   text={errorMessage}
-                  className="ml-4 text-12 text-light-red leading-14"
+                  className="ml-4 text-12 leading-14 text-light-red"
                   fontWeight="500"
                 />
               </View>
@@ -101,15 +116,15 @@ const SaveNewRoute = () => {
             )}
             <FontText
               text={`${roadName?.length ? roadName.length : 0}/10`}
-              className="text-12 text-gray-999 leading-14"
+              className="text-12 leading-14 text-gray-999"
             />
           </View>
         </View>
         <TouchableOpacity
-          className={cn('py-11 items-center', {
+          className={cn('items-center py-11', {
             'bg-gray-ddd': !roadName || isLoading || isDuplicatedName,
             'bg-black-717': roadName && !isLoading && !isDuplicatedName,
-            'mb-41 mx-16 rounded-5': !isKeyboardVisible,
+            'mx-16 mb-41 rounded-5': !isKeyboardVisible,
           })}
           onPress={() => {
             mutate({

@@ -1,24 +1,42 @@
-import { SafeAreaView, TouchableOpacity, View } from 'react-native';
-import { WebView } from 'react-native-webview';
-import IconCrossX from '@assets/icons/cross_x.svg';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
+import { IconChevronLeft } from '@assets/icons';
+import { FontText } from '@/global/ui';
+import { SUBSCRIBE_TERMS_VER_1 } from '@/global/constants/terms';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SubscribeTermsScreen = () => {
   const myPageNavigation = useMyPageNavigation();
+  const handleBack = () => myPageNavigation.goBack();
+
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <TouchableOpacity
-        className="pb-10 pl-16 w-60 pt-13"
-        onPress={() => myPageNavigation.goBack()}
-      >
-        <IconCrossX width="24px" />
+      <TouchableOpacity className="p-16" onPress={handleBack}>
+        <IconChevronLeft />
       </TouchableOpacity>
-      <View className="h-1 bg-gray-beb" />
-      <WebView
-        source={{
-          uri: 'https://reflective-pincushion-d6c.notion.site/ver-1-12bd734b37b34bbaa58741e7f72bbda0',
-        }}
-      />
+
+      <ScrollView contentContainerStyle={{ rowGap: 28, padding: 16 }}>
+        <FontText
+          text="가는길지금 이용약관 ver.1"
+          fontWeight="500"
+          className="text-20 leading-[130%] tracking-normal"
+        />
+        <View className="h-1 bg-gray-beb" />
+        {SUBSCRIBE_TERMS_VER_1.map(({ title, body }, idx) => (
+          <View key={idx} className="space-y-8">
+            <FontText text={title} fontWeight="600" />
+            <View className="space-y-8">
+              {body.map((detail, idx) => (
+                <FontText
+                  key={idx}
+                  text={detail}
+                  className="font-light leading-25 tracking-normal"
+                />
+              ))}
+            </View>
+          </View>
+        ))}
+      </ScrollView>
     </SafeAreaView>
   );
 };

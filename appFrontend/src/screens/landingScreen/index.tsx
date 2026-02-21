@@ -1,93 +1,57 @@
-import { COLOR } from '@/global/constants';
 import { FontText } from '@/global/ui';
 import { useAuthNavigation } from '@/navigation/AuthNavigation';
-import { Animated, Pressable, SafeAreaView, TouchableOpacity, View } from 'react-native';
-import IconLeftArrow from '@assets/icons/left_arrow_head.svg';
+import { Animated, TouchableOpacity, View } from 'react-native';
 import SocialLogin from './components/SocialLogin';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { IconChevronLeftWhite } from '@/assets/icons';
 
 const LandingScreen = () => {
   const navigation = useAuthNavigation();
 
   return (
-    <View style={{ flex: 1, position: 'relative' }}>
-      <View
-        style={{
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.54)',
-          position: 'absolute',
-          top: 0,
-          zIndex: 1,
-        }}
-      />
+    <View className="relative flex-1">
+      <View className="absolute top-0 z-10 h-full w-full bg-black/50" />
       <Animated.Image
         source={require('@assets/images/landing_background.png')}
-        style={{ width: '100%', height: '100%' }}
+        className="h-full w-full"
         blurRadius={1.25}
       />
-      <SafeAreaView
-        style={{
-          position: 'absolute',
-          top: 0,
-          zIndex: 2,
-          height: '100%',
-          width: '100%',
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            width: 32,
-            height: 32,
-            justifyContent: 'center',
-            alignItems: 'center',
-            margin: 16,
-          }}
-          onPress={() => navigation.goBack()}
-          hitSlop={20}
-        >
-          <IconLeftArrow color={COLOR.WHITE} />
+      <SafeAreaView className="absolute top-0 z-20 h-full w-full">
+        <TouchableOpacity className="p-16" onPress={navigation.goBack} hitSlop={20}>
+          <IconChevronLeftWhite />
         </TouchableOpacity>
 
-        <View style={{ marginLeft: 37, marginTop: 68 }}>
+        <View className="ml-37 mt-68">
           <FontText
             text="가는길 지금,"
-            className="text-27 leading-[36.454px] text-white"
+            className="text-27 leading-36 tracking-[0px] text-white"
             fontWeight="700"
           />
           <FontText
             text={`무슨 일이\n일어나고 있을까요?`}
-            className="text-27 leading-[36.454px] text-white"
+            className="text-27 leading-36 tracking-[0px] text-white"
           />
         </View>
 
-        <View style={{ flex: 1 }} />
+        <View className="flex-1" />
 
         <SocialLogin />
 
-        <View
-          style={{
-            marginBottom: 83,
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'row',
-          }}
-        >
+        <View className="mb-83 flex-row items-center justify-center gap-15">
           <TouchableOpacity
-            hitSlop={20}
             onPress={() => navigation.navigate('SignIn')}
             activeOpacity={0.5}
-          >
-            <FontText text="이메일 로그인" className="text-white text-13" fontWeight="500" />
-          </TouchableOpacity>
-          <View style={{ marginHorizontal: 8 }}>
-            <FontText text="|" className="text-white text-13" />
-          </View>
-          <TouchableOpacity
             hitSlop={20}
+          >
+            <FontText text="이메일 로그인" className="text-13 text-white" fontWeight="500" />
+          </TouchableOpacity>
+          <FontText text="|" className="text-13 text-white" />
+          <TouchableOpacity
             onPress={() => navigation.navigate('SignUp')}
             activeOpacity={0.5}
+            hitSlop={20}
           >
-            <FontText text="이메일 회원가입" className="text-white text-13" fontWeight="500" />
+            <FontText text="이메일 회원가입" className="text-13 text-white" fontWeight="500" />
           </TouchableOpacity>
         </View>
       </SafeAreaView>

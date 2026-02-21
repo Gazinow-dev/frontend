@@ -2,7 +2,7 @@ import { AxiosError } from "axios";
 import GaziAPI from ".";
 import * as Sentry from "@sentry/react";
 import apiUrls from "./url";
-import { Login } from "./entity";
+import { IssueGet, Login } from "./entity";
 
 /**
  * 로그인
@@ -41,6 +41,22 @@ export const deleteMember = async () => {
     await GaziAPI.delete(apiUrls.member_delete_member, { data: {} });
     Sentry.captureMessage("유저가 탈퇴했어요");
   } catch (err) {
+    const error = err as AxiosError;
+    throw error;
+  }
+};
+
+/**
+ * 상세 이슈 조회
+ */
+export const getIssueDetail = async (params: { id: string }) => {
+  try {
+    const res = await GaziAPI.get<{ data: IssueGet }>(apiUrls.issue_get, {
+      params,
+    });
+    return res.data.data;
+  } catch (err) {
+    Sentry.captureException(err);
     const error = err as AxiosError;
     throw error;
   }

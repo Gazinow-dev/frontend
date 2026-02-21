@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { SingleIssueContainer, LaneButtons, PopularIssues } from './components';
 import { FreshSubwayLineName, IssueGet, NowScreenCapsules } from '@/global/apis/entity';
-import { FlatList, RefreshControl, SafeAreaView, View } from 'react-native';
+import { FlatList, RefreshControl, View } from 'react-native';
 import {
   useGetAllIssuesQuery,
   useGetIssuesByLaneQuery,
@@ -10,6 +10,7 @@ import {
 import { FontText } from '@/global/ui';
 import { subwayReturnLineName } from '@/global/utils/subwayLine';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const NowScreen = () => {
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
@@ -25,8 +26,13 @@ const NowScreen = () => {
     isAllIssuesLoading,
   } = useGetAllIssuesQuery();
 
-  const { laneIssues, laneIssuesRefetch, laneIssuesHasNextPage, fetchLaneIssuesNextPage } =
-    useGetIssuesByLaneQuery(subwayReturnLineName(activeButton as FreshSubwayLineName)!);
+  const {
+    laneIssues,
+    laneIssuesRefetch,
+    laneIssuesHasNextPage,
+    fetchLaneIssuesNextPage,
+    isLoadingLaneIssues,
+  } = useGetIssuesByLaneQuery(subwayReturnLineName(activeButton as FreshSubwayLineName)!);
 
   // 선택된 캡슐에 따른 데이터 렌더링
   const flattenedData = useMemo(() => {
@@ -43,13 +49,20 @@ const NowScreen = () => {
   const renderItem = ({ item, index }: { item: IssueGet | string; index: number }) => {
     if (index === 0) {
       return <LaneButtons activeButton={activeButton} setActiveButton={setActiveButton} />;
-    } else if (isDataEmpty) {
-      return (
-        <View className="items-center justify-center h-[70%]">
-          <FontText text="올라온 이슈가 없어요" className="text-18 text-gray-999" />
-        </View>
-      );
     } else {
+      if (isAllIssuesLoading || isLoadingLaneIssues) {
+        return (
+          <View className="h-[70%] items-center justify-center">
+            <LoadingCircle />
+          </View>
+        );
+      } else if (isDataEmpty) {
+        return (
+          <View className="h-[70%] items-center justify-center">
+            <FontText text="올라온 이슈가 없어요" className="text-18 text-gray-999" />
+          </View>
+        );
+      }
       return <SingleIssueContainer key={`${item}_${index}`} issue={item as IssueGet} />;
     }
   };
@@ -92,10 +105,10 @@ const NowScreen = () => {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
       {isAllIssuesLoading ? (
         <View className="items-center justify-center flex-1">
-          <LoadingCircle width={50} height={50} />
+          <LoadingCircle />
         </View>
       ) : (
         <FlatList

@@ -6,11 +6,9 @@ import {
   logoutFetch,
   changeNicknameFetch,
   checkNicknameFetch,
-  addPathNotiSettingsFetch,
-  disablePathNotiFetch,
-  updatePathNotiSettingsFetch,
   getPathNotiFetch,
   getMyCommentsFetch,
+  getNotices,
 } from './func';
 import { AxiosError } from 'axios';
 
@@ -105,57 +103,6 @@ export const useCheckNicknameMutation = ({
 };
 
 /**
- * 알림 비활성화 훅
- */
-export const useDisablePathNotiMutation = ({
-  onSuccess,
-  onError,
-}: {
-  onSuccess: () => void;
-  onError?: (error: AxiosError) => void;
-}) => {
-  const { mutate } = useMutation(disablePathNotiFetch, {
-    onSuccess,
-    onError,
-  });
-  return { disablePathNotiMutate: mutate };
-};
-
-/**
- * 알림 설정 등록 훅
- */
-export const useAddPathNotiSettingsMutation = ({
-  onSuccess,
-  onError,
-}: {
-  onSuccess: () => void;
-  onError?: (error: AxiosError) => void;
-}) => {
-  const { mutate } = useMutation(addPathNotiSettingsFetch, {
-    onSuccess,
-    onError,
-  });
-  return { addPathNotiSettingsMutate: mutate };
-};
-
-/**
- * 알림 설정 수정 훅
- */
-export const usePathUpdateNotiSettingsMutation = ({
-  onSuccess,
-  onError,
-}: {
-  onSuccess: () => void;
-  onError?: (error: AxiosError) => void;
-}) => {
-  const { mutate } = useMutation(updatePathNotiSettingsFetch, {
-    onSuccess,
-    onError,
-  });
-  return { updatePathNotiSettingsMutate: mutate };
-};
-
-/**
  * 경로별 알림 설정 불러오기 훅
  */
 export const useGetPathNotiQuery = (myPathId: number) => {
@@ -167,7 +114,7 @@ export const useGetPathNotiQuery = (myPathId: number) => {
  * 내가 쓴 댓글 조회 훅
  */
 export const useGetMyComments = () => {
-  const { data, refetch, fetchNextPage, hasNextPage } = useInfiniteQuery(
+  const { data, refetch, fetchNextPage, hasNextPage, isLoading, isError } = useInfiniteQuery(
     ['getMyComments'],
     ({ pageParam = 0 }) => getMyCommentsFetch({ page: pageParam }),
     {
@@ -178,9 +125,35 @@ export const useGetMyComments = () => {
     },
   );
   return {
-    myComments: data,
-    myCommentsRefetch: refetch,
-    fetchMyCommentsNextPage: fetchNextPage,
-    myCommentsHasNextPage: hasNextPage,
+    data,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isError,
+  };
+};
+
+/**
+ * 앱 업데이트 공지사항 페이징된 목록 조회 훅
+ */
+export const useGetUpdateNotices = () => {
+  const { data, refetch, fetchNextPage, hasNextPage, isLoading, isError } = useInfiniteQuery(
+    ['getNotices'],
+    ({ pageParam = 0 }) => getNotices({ page: pageParam, size: 15, sort: 'asc' }),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        if (lastPage?.content && lastPage?.content.length < 15) return undefined;
+        return allPages.length;
+      },
+    },
+  );
+  return {
+    data,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isError,
   };
 };

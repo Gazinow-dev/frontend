@@ -1,11 +1,8 @@
 import { useCallback, useState } from 'react';
-import { SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { FontText, Input } from '@/global/ui';
 import { COLOR } from '@/global/constants';
-import IconXCircle from '@assets/icons/x-circle-standard.svg';
-import IconCheck from '@assets/icons/check_green.svg';
-import IconXCircleFill from '@assets/icons/x_circle_fill.svg';
-import IconCrossX from '@assets/icons/cross_x.svg';
+import { IconValid, IconCross, IconInvalid, IconCrossCircle } from '@/assets/icons';
 import { useAppDispatch } from '@/store';
 import { saveUserInfo } from '@/store/modules';
 import { useSelector } from 'react-redux';
@@ -16,6 +13,7 @@ import { useChangeNicknameMutation, useCheckNicknameMutation } from '../apis/hoo
 import { debounce } from 'lodash';
 import cn from 'classname';
 import { AxiosError } from 'axios';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ChangeNickNameScreen = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -32,6 +30,7 @@ const ChangeNickNameScreen = () => {
       showToast('nickNameChanged');
     },
     onError: (error: AxiosError) => {
+      if (error.response?.status === 422) showToast('postFailureByForbiddenWord');
       setIsNicknameValid(false);
       setErrorMessage(getErrorMessage(error.response?.status));
     },
@@ -73,6 +72,8 @@ const ChangeNickNameScreen = () => {
         return '회원이 존재하지 않습니다. 다시 로그인해주세요.';
       case 400:
         return '7글자 이하의 한글, 알파벳, 숫자를 입력해주세요.\n한글 자모음 단독, 공백 입력 불가';
+      case 422:
+        return '사용할 수 없는 단어가 포함되어 있습니다.';
       default:
         return '닉네임 변경에 실패하였습니다. 다시 시도해주세요.';
     }
@@ -82,7 +83,7 @@ const ChangeNickNameScreen = () => {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row items-center justify-between p-16">
         <TouchableOpacity hitSlop={20} onPress={() => myPageNavigation.goBack()}>
-          <IconCrossX width={24} className="mr-12" />
+          <IconCross className="mr-12" />
         </TouchableOpacity>
         <FontText text="닉네임 수정" className="text-18 leading-23" fontWeight="500" />
         <View className="flex-1" />
@@ -101,10 +102,10 @@ const ChangeNickNameScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <View className="flex-1 px-16 bg-gray-9f9">
-        <View className="flex-row items-center px-16 py-8 mt-34 mb-8 rounded-5 border-1 border-[#d4d4d4] bg-white">
+      <View className="flex-1 bg-gray-9f9 px-16">
+        <View className="mb-8 mt-34 flex-row items-center rounded-5 border-1 border-[#d4d4d4] bg-white px-16 py-8">
           <Input
-            className="flex-1 h-36"
+            className="h-36 flex-1"
             value={newNickname}
             placeholder={`새 닉네임을 입력하세요`}
             placeholderTextColor={COLOR.GRAY_999}
@@ -113,16 +114,16 @@ const ChangeNickNameScreen = () => {
             autoFocus
           />
           <TouchableOpacity onPress={handleDelete} hitSlop={20}>
-            <IconXCircleFill width={19.5} />
+            <IconCrossCircle width={19.5} />
           </TouchableOpacity>
         </View>
 
         {isNicknameValid !== null && newNickname !== '' && (
           <View className="flex-row pl-9">
             {isNicknameValid ? (
-              <IconCheck stroke={COLOR.LIGHT_GREEN} className="mr-4" />
+              <IconValid color={COLOR.LIGHT_GREEN} className="mr-4" />
             ) : (
-              <IconXCircle width={14} className="mr-4" />
+              <IconInvalid className="mr-4" />
             )}
             <FontText
               text={isNicknameValid ? '사용 가능한 닉네임입니다' : errorMessage}

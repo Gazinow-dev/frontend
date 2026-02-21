@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NativeScrollEvent, NativeSyntheticEvent, Pressable, ScrollView, View } from 'react-native';
-import { useGetPopularIssuesQuery } from '@/global/apis/hooks';
+import { useGetPopularIssuesAtMain } from '@/global/apis/hooks';
 import { FontText } from '@/global/ui';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { useAppDispatch } from '@/store';
@@ -9,18 +9,18 @@ import dayjs from 'dayjs';
 import { IssueGet } from '@/global/apis/entity';
 import { useQueryClient } from 'react-query';
 import { COLOR } from '@/global/constants';
+import { trackMapBannerClick } from '@/analytics/map.events';
 
-interface IssueCarrouselProps {
+interface Props {
   isRefreshing: boolean;
   setIsRefreshing: (isRefreshing: boolean) => void;
 }
 
-const IssueCarrousel = ({ isRefreshing, setIsRefreshing }: IssueCarrouselProps) => {
+const IssueCarrousel = ({ isRefreshing, setIsRefreshing }: Props) => {
   const navigation = useRootNavigation();
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
-  const { popularIssues, popularIssuesRefetch, isPopularIssuesLoading } =
-    useGetPopularIssuesQuery();
+  const { popularIssues, popularIssuesRefetch } = useGetPopularIssuesAtMain();
   const [itemWidth, setItemWidth] = useState<number>(0);
   const scrollViewRef = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -98,12 +98,12 @@ const IssueCarrousel = ({ isRefreshing, setIsRefreshing }: IssueCarrouselProps) 
               backgroundColor: pressed ? COLOR.GRAY_E5 : COLOR.WHITE,
               padding: 16,
               paddingVertical: 20,
-              margin: 16,
-              marginBottom: 0,
+              marginHorizontal: 16,
               borderRadius: 12,
               gap: 6,
             })}
             onPress={() => {
+              trackMapBannerClick(issue.title);
               dispatch(getIssueId(issue.id));
               navigation.navigate('IssueStack', { screen: 'IssueDetail' });
             }}
@@ -121,15 +121,15 @@ const IssueCarrousel = ({ isRefreshing, setIsRefreshing }: IssueCarrouselProps) 
                   text={dayjs(issue.startDate).fromNow()}
                   className="text-13 leading-18 text-gray-999"
                 />
-                <View className="bg-[#F3F3F3] rounded-full flex-row px-8">
+                <View className="flex-row rounded-full bg-[#F3F3F3] px-8">
                   <FontText
                     text={`${newListIndex()}`}
-                    className="text-13 text-gray-4b4 leading-18"
+                    className="text-13 leading-18 text-gray-4b4"
                   />
-                  <FontText text="/" className="mx-2 text-13 text-gray-4b4 leading-18" />
+                  <FontText text="/" className="mx-2 text-13 leading-18 text-gray-4b4" />
                   <FontText
                     text={`${popularIssues.length}`}
-                    className="text-13 text-gray-4b4 leading-18"
+                    className="text-13 leading-18 text-gray-4b4"
                   />
                 </View>
               </View>

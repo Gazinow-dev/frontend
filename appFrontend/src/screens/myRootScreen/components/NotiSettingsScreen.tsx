@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { AppState, AppStateStatus, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { AppState, AppStateStatus, TouchableOpacity, View } from 'react-native';
 import { FontText } from '@/global/ui';
-import IconLeftArrowHead from '@assets/icons/left_arrow_head.svg';
+import { IconChevronLeft } from '@assets/icons';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
 import RequestNotiOn from './RequestNotiOn';
 import NotiSettings from './NotiSettings';
 import notifee from '@notifee/react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const NotiSettingsScreen = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -36,7 +37,7 @@ const NotiSettingsScreen = () => {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row items-center gap-12 p-16">
         <TouchableOpacity onPress={() => myPageNavigation.goBack()} hitSlop={20}>
-          <IconLeftArrowHead width={24} color="#3F3F46" />
+          <IconChevronLeft />
         </TouchableOpacity>
         <FontText text="알림 설정" className="text-18 leading-23" fontWeight="500" />
       </View>
