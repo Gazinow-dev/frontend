@@ -4,7 +4,7 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - amplitude-react-native (1.5.38):
+  - amplitude-react-native (1.5.40):
     - React-Core
   - AmplitudeCore (1.4.2)
   - AmplitudeSessionReplay (0.9.5):
@@ -1486,7 +1486,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   amplitude-plugin-session-replay-react-native: 71bf73764ead30b80323663f0e3de33ccbfbc786
-  amplitude-react-native: 719d7f2af2734b70302549e01a0d3f2c374d0613
+  amplitude-react-native: 578b20251bf3bf76acc788a24735dd5850ef4510
   AmplitudeCore: b1989e461eb16b679087fff981ab2ac3c0fba2d8
   AmplitudeSessionReplay: 8cc2873b3a0f8312529ee787628d23870569891c
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
