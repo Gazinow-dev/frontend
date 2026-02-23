@@ -83,18 +83,20 @@ const SocialLogin = () => {
   };
 
   return (
-    <View className="mx-30 mb-20 space-y-12">
-      <TouchableOpacity
-        className="flex-row items-center justify-between rounded-30 bg-[#03C75A] px-19 py-6"
-        onPress={() => onSocialLoginPress('naver')}
-      >
-        <IconLogoNaver />
-        <FontText className="text-14 text-white" text="네이버로 계속하기" fontWeight="500" />
-        <View className="w-34" />
-      </TouchableOpacity>
+    <View className="mb-20 space-y-12 mx-30">
+      {Platform.OS === 'ios' && (
+        <TouchableOpacity
+          className="flex-row items-center justify-between rounded-30 bg-[#03C75A] px-19 py-6"
+          onPress={() => onSocialLoginPress('naver')}
+        >
+          <IconLogoNaver />
+          <FontText className="text-white text-14" text="네이버로 계속하기" fontWeight="500" />
+          <View className="w-34" />
+        </TouchableOpacity>
+      )}
 
       <TouchableOpacity
-        className="flex-row items-center justify-between rounded-30 bg-white px-19 py-6"
+        className="flex-row items-center justify-between py-6 bg-white rounded-30 px-19"
         onPress={() => onSocialLoginPress('google')}
       >
         <IconLogoGoogle />
@@ -104,11 +106,11 @@ const SocialLogin = () => {
 
       {Platform.OS === 'ios' && (
         <TouchableOpacity
-          className="flex-row items-center justify-between rounded-30 bg-black px-19 py-6"
+          className="flex-row items-center justify-between py-6 bg-black rounded-30 px-19"
           onPress={() => onSocialLoginPress('apple')}
         >
           <IconLogoApple />
-          <FontText className="text-14 text-white" text="Apple로 계속하기" fontWeight="500" />
+          <FontText className="text-white text-14" text="Apple로 계속하기" fontWeight="500" />
           <View className="w-34" />
         </TouchableOpacity>
       )}
