@@ -128,9 +128,9 @@ const SaveNewRoute = () => {
           })}
           onPress={() => {
             mutate({
-              roadName: roadName,
               ...resultData,
               subPaths: freshSubPathData,
+              roadName,
             });
           }}
           disabled={!roadName || isLoading || isDuplicatedName}
