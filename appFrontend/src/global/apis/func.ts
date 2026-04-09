@@ -6,11 +6,12 @@ import {
   SearchHistoryStationNameTypes,
   SearchPathsTypes,
   SearchStationNameTypes,
-  RawSubwayLineName,
+  OriginLineName,
   SubwayStrEnd,
   IssueGet,
   SaveMyRoutesType,
   NotiHistories,
+  StationsInLineTypes,
 } from './entity';
 import { SignInFetchResponse } from '@/screens/signInScreen/apis/entity';
 import * as Sentry from '@sentry/react-native';
@@ -80,7 +81,7 @@ export const searchHistoryFetch = async () => {
  */
 export const searchAddHistoryFetch = async (data: {
   stationName: string;
-  stationLine: RawSubwayLineName;
+  stationLine: OriginLineName;
 }) => {
   try {
     const res = await authServiceAPI.post<{ data: SearchHistoryStationNameTypes }>(

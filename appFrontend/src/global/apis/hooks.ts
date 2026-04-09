@@ -15,8 +15,8 @@ import {
   getAllIssuesFetch,
   getIssuesByLaneFetch,
 } from '@/global/apis/func';
-import { RawSubwayLineName, SubwayStrEnd } from './entity';
-import { subwayFreshLineName } from '@/global/utils';
+import { OriginLineName, SubwayStrEnd } from './entity';
+import { originToDisplay } from '@/global/utils';
 import { useAppSelect } from '@/store';
 import { useMemo } from 'react';
 
@@ -36,7 +36,7 @@ export const useSearchStationName = (nameValue: string) => {
     },
   );
 
-  const freshData = data ? subwayFreshLineName(data) : [];
+  const freshData = data ? originToDisplay(data) : [];
 
   const deduplicatedStationData = useMemo(() => {
     if (!freshData) return [];
@@ -76,7 +76,7 @@ export const useGetSearchHistory = () => {
     });
   }, [freshData]);
   return {
-    historyData: deduplicatedStationData ? subwayFreshLineName(deduplicatedStationData) : [],
+    historyData: deduplicatedStationData ? originToDisplay(deduplicatedStationData) : [],
   };
 };
 
@@ -125,7 +125,7 @@ export const useSavedSubwayRoute = ({
 export const useAddRecentSearch = ({
   onSuccess,
 }: {
-  onSuccess: (data: { id: number; stationName: string; stationLine: RawSubwayLineName }) => void;
+  onSuccess: (data: { id: number; stationName: string; stationLine: OriginLineName }) => void;
 }) => {
   const { data, mutate } = useMutation(searchAddHistoryFetch, {
     onSuccess,
@@ -133,7 +133,7 @@ export const useAddRecentSearch = ({
   const freshData = data
     ? { line: data.stationLine, name: data.stationName }
     : { line: null, name: '' };
-  return { data: subwayFreshLineName([freshData]), addRecentMutate: mutate };
+  return { data: originToDisplay([freshData]), addRecentMutate: mutate };
 };
 
 /**

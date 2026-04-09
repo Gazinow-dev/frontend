@@ -1,10 +1,10 @@
-import { RawSubwayLineName } from '@/global/apis/entity';
+import { OriginLineName } from '@/global/apis/entity';
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface StationDataTypes {
   stationName: string;
-  stationLine: RawSubwayLineName;
+  stationLine: OriginLineName;
 }
 
 interface InitialStateTypes {
