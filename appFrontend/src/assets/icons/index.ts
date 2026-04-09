@@ -38,6 +38,7 @@ export { default as IconComment } from './icon-comment.svg';
 export { default as IconHeart } from './icon-heart.svg';
 
 // Search Path
+export { default as IconSearch } from './icon-search.svg';
 export { default as IconSwapChange } from './icon-swap-change.svg';
 export { default as IconWalkingHuman } from './icon-walking-human.svg';
 export { default as IconLocationPin } from './icon-location-pin.svg';
