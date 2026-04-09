@@ -1,19 +1,19 @@
-import { View, Platform, TouchableOpacity } from 'react-native';
-import { useRootNavigation } from '@/navigation/RootNavigation';
-import { useAppDispatch } from '@/store';
-import { getAuthorizationState, saveUserInfo } from '@/store/modules';
-import { setEncryptedStorage } from '@/global/utils';
-import messaging from '@react-native-firebase/messaging';
-import { showToast } from '@/global/utils/toast';
-import { sendFirebaseTokenFetch } from '../apis/func';
-import { useMutation } from 'react-query';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FontText } from '@/global/ui';
 import { API_BASE_URL } from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
+import { useMutation } from 'react-query';
+import { Platform, TouchableOpacity, View } from 'react-native';
+import { getAuthorizationState, saveUserInfo } from '@/store/modules';
+import { showToast } from '@/global/utils/toast';
+import { FontText } from '@/global/ui';
+import { setEncryptedStorage } from '@/global/utils';
+import { useRootNavigation } from '@/navigation/RootNavigation';
 import { trackLogin } from '@/analytics/auth.events';
 import { trackRegisterFinish } from '@/analytics/register.events';
 import { IconLogoApple, IconLogoGoogle, IconLogoNaver } from '@/assets/icons';
+import { useAppDispatch } from '@/store';
+import { sendFirebaseTokenFetch } from '../apis/func';
 
 export type SocialLoginTypes = 'naver' | 'google' | 'apple';
 

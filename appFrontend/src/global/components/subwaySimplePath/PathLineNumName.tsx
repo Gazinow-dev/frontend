@@ -1,8 +1,8 @@
-import { Dimensions, View } from 'react-native';
 import cn from 'classname';
-import { FontText } from '@/global/ui';
-import { lineCodeToColor, lineCodeToLineCircle, breakStationName } from '@/global/utils';
+import { Dimensions, View } from 'react-native';
 import { LineCode } from '@/global/apis/entity';
+import { FontText } from '@/global/ui';
+import { breakStationName, lineCodeToColor, lineCodeToLineCircle } from '@/global/utils';
 
 interface Props {
   stationCode: LineCode;

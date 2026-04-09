@@ -8,5 +8,24 @@
   "bracketSpacing": true,
   "arrowParens": "always",
   "endOfLine": "auto",
-  "plugins": ["prettier-plugin-tailwindcss"]
+  "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
+  "importOrder": [
+    "^react$",
+    "^react/(.*)$",
+    "^react-native$",
+    "^react-native/(.*)$",
+    "^@react-navigation/(.*)$",
+    "^@/store/(.*)$",
+    "^@/global/constants/(.*)$",
+    "^@/global/apis/(.*)$",
+    "^@/global/ui/(.*)$",
+    "^@/global/utils/(.*)$",
+    "^@/global/(.*)$",
+    "^@/navigation/(.*)$",
+    "^@/analytics/(.*)$",
+    "^@/assets/(.*)$",
+    "^@/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSortSpecifiers": true
 }

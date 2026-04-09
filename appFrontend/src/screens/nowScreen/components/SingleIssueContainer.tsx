@@ -1,16 +1,16 @@
-import React, { useMemo } from 'react';
-import { FontText } from '@/global/ui';
-import { COLOR } from '@/global/constants';
-import { useAppDispatch } from '@/store';
-import { getIssueId } from '@/store/modules';
-import { useRootNavigation } from '@/navigation/RootNavigation';
-import dayjs from 'dayjs';
-import { Pressable, View } from 'react-native';
 import cn from 'classname';
-import { originToLineCapsule } from '@/global/utils/subwayLine';
-import { IconHeart, IconComment as IconComment } from '@/assets/icons';
+import dayjs from 'dayjs';
+import React, { useMemo } from 'react';
+import { Pressable, View } from 'react-native';
+import { getIssueId } from '@/store/modules';
 import { IssueGet } from '@/global/apis/entity';
+import { COLOR } from '@/global/constants';
+import { FontText } from '@/global/ui';
+import { originToLineCapsule } from '@/global/utils';
+import { useRootNavigation } from '@/navigation/RootNavigation';
 import { trackNowTotalIssueClick } from '@/analytics/now.events';
+import { IconComment, IconHeart } from '@/assets/icons';
+import { useAppDispatch } from '@/store';
 
 interface Props {
   issue: IssueGet;

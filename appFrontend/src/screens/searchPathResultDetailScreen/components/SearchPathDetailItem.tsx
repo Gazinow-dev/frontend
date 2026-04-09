@@ -1,15 +1,15 @@
+import cn from 'classname';
 import { useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import cn from 'classname';
+import { getIssueId } from '@/store/modules';
+import { SubPath } from '@/global/apis/entity';
+import IssueKeywordIcon from '@/global/components/IssueKeywordIcon';
+import { COLOR } from '@/global/constants';
 import { FontText } from '@/global/ui';
 import { lineCodeToColor } from '@/global/utils';
-import { SubPath } from '@/global/apis/entity';
-import { COLOR } from '@/global/constants';
 import { useRootNavigation } from '@/navigation/RootNavigation';
-import { useAppDispatch } from '@/store';
-import { getIssueId } from '@/store/modules';
 import { IconChevronDown, IconChevronRight3, IconWalkingHuman } from '@/assets/icons';
-import IssueKeywordIcon from '@/global/components/IssueKeywordIcon';
+import { useAppDispatch } from '@/store';
 
 interface Props {
   data: SubPath;

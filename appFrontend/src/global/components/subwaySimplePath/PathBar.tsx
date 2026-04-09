@@ -1,6 +1,6 @@
+import { View } from 'react-native';
 import { IssueSummary, LineCode } from '@/global/apis/entity';
 import { lineCodeToColor } from '@/global/utils';
-import { View } from 'react-native';
 import IssueKeywordIcon from '../IssueKeywordIcon';
 
 interface Props {

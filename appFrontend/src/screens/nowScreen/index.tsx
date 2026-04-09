@@ -1,16 +1,16 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useMemo, useState } from 'react';
-import { SingleIssueContainer, LaneButtons, PopularIssues } from './components';
-import { DisplayLineName, IssueGet, LineCapsules } from '@/global/apis/entity';
 import { FlatList, RefreshControl, View } from 'react-native';
+import { DisplayLineName, IssueGet, LineCapsules } from '@/global/apis/entity';
 import {
   useGetAllIssuesQuery,
   useGetIssuesByLaneQuery,
   useGetPopularIssuesQuery,
 } from '@/global/apis/hooks';
-import { FontText } from '@/global/ui';
-import { displayToOrigin } from '@/global/utils/subwayLine';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { FontText } from '@/global/ui';
+import { displayToOrigin } from '@/global/utils';
+import { LaneButtons, PopularIssues, SingleIssueContainer } from './components';
 
 const NowScreen = () => {
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);

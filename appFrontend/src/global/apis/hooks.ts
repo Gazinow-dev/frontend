@@ -1,3 +1,16 @@
+import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
+import { useMemo } from 'react';
+import {
+  getAllIssuesFetch,
+  getIssuesByLaneFetch,
+  searchAddHistoryFetch,
+  searchHistoryFetch,
+  searchPathSaveFetch,
+  searchPathsFetch,
+} from '@/global/apis/func';
+import { originToDisplay } from '@/global/utils';
+import { useAppSelect } from '@/store';
+import { OriginLineName, SubwayStrEnd } from './entity';
 import {
   getNotiHistoryFetch,
   getPopularIssuesAtMainFetch,
@@ -6,19 +19,6 @@ import {
   getSearchRoutesFetch,
   searchStationName,
 } from './func';
-import { useMutation, useQuery, useInfiniteQuery } from 'react-query';
-import {
-  searchAddHistoryFetch,
-  searchHistoryFetch,
-  searchPathSaveFetch,
-  searchPathsFetch,
-  getAllIssuesFetch,
-  getIssuesByLaneFetch,
-} from '@/global/apis/func';
-import { OriginLineName, SubwayStrEnd } from './entity';
-import { originToDisplay } from '@/global/utils';
-import { useAppSelect } from '@/store';
-import { useMemo } from 'react';
 
 /**
  * 지하철역 검색 훅
