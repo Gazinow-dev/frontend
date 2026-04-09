@@ -21,8 +21,7 @@ const RootNavigation = () => {
     <Stack.Navigator screenOptions={screenOption} initialRouteName="MainBottomTab">
       <Stack.Screen name="AuthStack" component={AuthNavigation} />
       <Stack.Screen name="IssueStack" component={IssueNavigation} />
-      <Stack.Screen name={MAIN_BOTTOM_TAB} component={MainBottomTabNavigation} />
-      <Stack.Screen name="NewRouteNavigation" component={NewRouteNavigation} />
+      <Stack.Screen name="MainBottomTab" component={MainBottomTabNavigation} />
       <Stack.Screen name="MyPageNavigation" component={MyPageNavigation} />
       <Stack.Screen name="SubwayPathDetail" component={SearchPathResultDetailScreen} />
     </Stack.Navigator>

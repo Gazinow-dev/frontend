@@ -1,13 +1,13 @@
-import { FontText } from '@/global/ui';
-import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
-import { LineCapsules } from '@/global/apis/entity';
-import { ScrollView, View } from 'react-native';
-import { lineCodeToLineCapsule, lineCapsuleToColor } from '@/global/utils/subwayLine';
-import { useAppSelect } from '@/store';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useMemo } from 'react';
-import { trackNowTotalIssueLine } from '@/analytics/now.events';
+import { ScrollView, View } from 'react-native';
+import { LineCapsules } from '@/global/apis/entity';
+import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
 import { LINE_CAPSULES } from '@/global/constants';
+import { FontText } from '@/global/ui';
+import { lineCapsuleToColor, lineCodeToLineCapsule } from '@/global/utils';
+import { trackNowTotalIssueLine } from '@/analytics/now.events';
+import { useAppSelect } from '@/store';
 
 interface Props {
   activeButton: LineCapsules;
@@ -38,13 +38,13 @@ const LaneButtons = ({ activeButton, setActiveButton }: Props) => {
   const otherStations = LINE_CAPSULES.filter((line) => line !== '전체' && !myLines?.includes(line));
 
   return (
-    <View className="pt-16 bg-white">
+    <View className="bg-white pt-16">
       <ScrollView
         //TODO: iOS 측면 그라데이션
         fadingEdgeLength={130}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        className="pt-4 pb-12 space-x-12"
+        className="space-x-12 pb-12 pt-4"
       >
         <View className="w-4" />
         {['전체' as const, ...myLines, ...otherStations].map((capsule) => (

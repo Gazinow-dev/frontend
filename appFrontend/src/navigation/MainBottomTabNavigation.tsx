@@ -3,7 +3,7 @@ import {
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 import cn from 'classname';
-import { COLOR, HOME, MY_ROOT } from '@/global/constants';
+import { COLOR } from '@/global/constants';
 import HomeNavigation from './HomeNavigation';
 import NowScreen from '@screens/nowScreen';
 import { IconTabMap, IconTabMapBorder, IconTabMy, IconTabNow } from '@/assets/icons';
@@ -67,7 +67,7 @@ const MainBottomTabNavigation = () => {
 
   return (
     <>
-      <Tab.Navigator initialRouteName={HOME} screenOptions={screenOption}>
+      <Tab.Navigator initialRouteName={'Home'} screenOptions={screenOption}>
         <Tab.Screen
           name="homeStack"
           component={HomeNavigation}
@@ -129,7 +129,7 @@ const MainBottomTabNavigation = () => {
           }}
         />
         <Tab.Screen
-          name={MY_ROOT}
+          name={'MyRoot'}
           component={MyPageNavigation}
           options={{
             tabBarButton: (props) => (
