@@ -30,6 +30,8 @@ export type RootStackParamList = {
       noticeId?: number;
     };
   };
+  OnboardingNavigation: undefined;
+  SavePathNavigation: { screen: 'SavedPaths' | 'SwapStation' };
   SubwayPathDetail: { state?: Path | SubPath[]; notificationId?: number | null };
 };
 
