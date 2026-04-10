@@ -22,6 +22,16 @@ buildscript {
 allprojects {
     repositories {
      	google()
+        mavenCentral()
+    }
+    configurations.all {
+        resolutionStrategy {
+            force "org.jetbrains.kotlin:kotlin-stdlib:1.9.24"
+            force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.24"
+            force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.24"
+            force "androidx.annotation:annotation:1.7.1"
+            force "androidx.annotation:annotation-jvm:1.7.1"
+        }
     }
 }
 
