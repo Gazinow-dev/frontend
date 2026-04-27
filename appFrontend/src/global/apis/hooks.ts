@@ -1,3 +1,16 @@
+import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
+import { useMemo } from 'react';
+import {
+  getAllIssuesFetch,
+  getIssuesByLaneFetch,
+  searchAddHistoryFetch,
+  searchHistoryFetch,
+  searchPathSaveFetch,
+  searchPathsFetch,
+} from '@/global/apis/func';
+import { originToDisplay } from '@/global/utils';
+import { useAppSelect } from '@/store';
+import { OriginLineName, SubwayStrEnd } from './entity';
 import {
   getNotiHistoryFetch,
   getPopularIssuesAtMainFetch,
@@ -6,19 +19,6 @@ import {
   getSearchRoutesFetch,
   searchStationName,
 } from './func';
-import { useMutation, useQuery, useInfiniteQuery } from 'react-query';
-import {
-  searchAddHistoryFetch,
-  searchHistoryFetch,
-  searchPathSaveFetch,
-  searchPathsFetch,
-  getAllIssuesFetch,
-  getIssuesByLaneFetch,
-} from '@/global/apis/func';
-import { RawSubwayLineName, SubwayStrEnd } from './entity';
-import { subwayFreshLineName } from '@/global/utils';
-import { useAppSelect } from '@/store';
-import { useMemo } from 'react';
 
 /**
  * 지하철역 검색 훅
@@ -36,7 +36,7 @@ export const useSearchStationName = (nameValue: string) => {
     },
   );
 
-  const freshData = data ? subwayFreshLineName(data) : [];
+  const freshData = data ? originToDisplay(data) : [];
 
   const deduplicatedStationData = useMemo(() => {
     if (!freshData) return [];
@@ -76,7 +76,7 @@ export const useGetSearchHistory = () => {
     });
   }, [freshData]);
   return {
-    historyData: deduplicatedStationData ? subwayFreshLineName(deduplicatedStationData) : [],
+    historyData: deduplicatedStationData ? originToDisplay(deduplicatedStationData) : [],
   };
 };
 
@@ -125,7 +125,7 @@ export const useSavedSubwayRoute = ({
 export const useAddRecentSearch = ({
   onSuccess,
 }: {
-  onSuccess: (data: { id: number; stationName: string; stationLine: RawSubwayLineName }) => void;
+  onSuccess: (data: { id: number; stationName: string; stationLine: OriginLineName }) => void;
 }) => {
   const { data, mutate } = useMutation(searchAddHistoryFetch, {
     onSuccess,
@@ -133,7 +133,7 @@ export const useAddRecentSearch = ({
   const freshData = data
     ? { line: data.stationLine, name: data.stationName }
     : { line: null, name: '' };
-  return { data: subwayFreshLineName([freshData]), addRecentMutate: mutate };
+  return { data: originToDisplay([freshData]), addRecentMutate: mutate };
 };
 
 /**

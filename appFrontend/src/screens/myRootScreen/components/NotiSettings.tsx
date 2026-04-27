@@ -1,21 +1,16 @@
-import { FontText, Toggle } from '@/global/ui';
 import cn from 'classname';
-import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
-import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
-import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
-import { useRootNavigation } from '@/navigation/RootNavigation';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store/configureStore';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import {
-  getDetailPushNotiOnStatusFetch,
-  getPushNotiOnStatusFetch,
-  getTomorrowPushNotiOnStatusFetch,
-  setDetailPushNotiOnFetch,
-  setPushNotiOnFetch,
-  setTomorrowPushNotiOnFetch,
-} from '../apis/func';
+import { useSelector } from 'react-redux';
+import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
+import { RootState } from '@/store/configureStore';
+import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
+import { LoadingScreen } from '@/global/components';
+import LoadingCircle from '@/global/components/animations/LoadingCircle';
 import { COLOR } from '@/global/constants';
+import { FontText, Toggle } from '@/global/ui';
+import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
+import { useRootNavigation } from '@/navigation/RootNavigation';
+import { trackMapBookmark1 } from '@/analytics/map.events';
 import {
   trackMyNotiLineOff,
   trackMyNotiLineOn,
@@ -24,10 +19,15 @@ import {
   trackMyNotiTomorrowOff,
   trackMyNotiTomorrowOn,
 } from '@/analytics/my.events';
-import { trackMapBookmark1 } from '@/analytics/map.events';
-import LoadingCircle from '@/global/components/animations/LoadingCircle';
-import { IconExclamationMark, IconChevronRight2 } from '@/assets/icons';
-import { LoadingScreen } from '@/global/components';
+import { IconChevronRight2, IconExclamationMark } from '@/assets/icons';
+import {
+  getDetailPushNotiOnStatusFetch,
+  getPushNotiOnStatusFetch,
+  getTomorrowPushNotiOnStatusFetch,
+  setDetailPushNotiOnFetch,
+  setPushNotiOnFetch,
+  setTomorrowPushNotiOnFetch,
+} from '../apis/func';
 
 const NotiSettings = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -95,12 +95,12 @@ const NotiSettings = () => {
       {(isLoadingPushNotiToggle ||
         isLoadingTomorrowPushNotiToggle ||
         isLoadingDetailPushNotiToggle) && (
-        <View className="absolute items-center justify-center w-full h-full">
+        <View className="absolute h-full w-full items-center justify-center">
           <LoadingCircle />
         </View>
       )}
 
-      <View className="flex-row items-center justify-between px-16 border-t border-gray-beb py-19">
+      <View className="flex-row items-center justify-between border-t border-gray-beb px-16 py-19">
         <FontText text="푸시 알림 받기" fontWeight="600" />
         <Toggle
           isOn={isPushNotiOn}
@@ -110,7 +110,7 @@ const NotiSettings = () => {
 
       <View className="h-20 bg-gray-9f9" />
 
-      <View className="flex-row items-center justify-between p-16 border-b border-gray-beb">
+      <View className="flex-row items-center justify-between border-b border-gray-beb p-16">
         <View className="space-y-6">
           <FontText
             text="내일 이슈 미리 알림"
@@ -133,7 +133,7 @@ const NotiSettings = () => {
         />
       </View>
 
-      <View className="flex-row items-center justify-between p-16 border-b border-gray-beb">
+      <View className="flex-row items-center justify-between border-b border-gray-beb p-16">
         <View className="space-y-6">
           <FontText
             text="경로별 상세 설정"
@@ -184,7 +184,7 @@ const NotiSettings = () => {
       )}
 
       {isDetailPushNotiOn && myRoutes && myRoutes.length < 1 && (
-        <View className="items-center py-16 mx-16 mt-20 space-y-8 rounded-12 bg-gray-9f9">
+        <View className="mx-16 mt-20 items-center space-y-8 rounded-12 bg-gray-9f9 py-16">
           <View className="flex-row items-center space-x-4">
             <IconExclamationMark />
             <FontText text="저장한 경로가 아직 없어요" className="text-14 text-gray-999" />
@@ -192,12 +192,12 @@ const NotiSettings = () => {
           <TouchableOpacity
             onPress={() => {
               trackMapBookmark1();
-              rootNavigation.navigate('NewRouteNavigation', { screen: 'SavedRoutes' });
+              rootNavigation.navigate('SavePathNavigation', { screen: 'SavedPaths' });
             }}
           >
             <FontText
               text="내 경로 저장하고 알림받기"
-              className="underline text-13 text-gray-999"
+              className="text-13 text-gray-999 underline"
               fontWeight="600"
             />
           </TouchableOpacity>
