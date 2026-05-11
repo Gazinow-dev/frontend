@@ -1,12 +1,10 @@
 import cn from 'classname';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useQueryClient } from 'react-query';
 import React, { useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import type { StationDataTypes } from '@/store/modules';
 import { useSavedSubwayRoute } from '@/global/apis/hooks';
-import { showToast } from '@/global/utils/toast';
 import { SubwaySimplePath } from '@/global/components';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
 import { FontText } from '@/global/ui';
@@ -50,7 +48,6 @@ const OnboardingWalkTimeScreen = () => {
   const { mutate, isLoading } = useSavedSubwayRoute({
     onSuccess: async (newPathId) => {
       trackMapBookmark5Finish({ ...pathData, name: newPathName });
-      showToast('saveRoute');
       onboardingNavigation.push('OnboardingSetAlert', {
         newPath: { ...newPath, roadName: newPathName, id: newPathId },
       });
