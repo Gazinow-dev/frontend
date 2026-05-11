@@ -1,17 +1,20 @@
+import { FontText } from '@/global/ui';
+import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
+import { FreshSubwayLineName, NowScreenCapsules } from '@/global/apis/entity';
+import { ScrollView, View } from 'react-native';
+import {
+  allLines,
+  pathSubwayLineNameInLine,
+  freshSubwayLineNameToNowCapsuleColor,
+} from '@/global/utils/subwayLine';
+import { useAppSelect } from '@/store';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useMemo } from 'react';
-import { ScrollView, View } from 'react-native';
-import { LineCapsules } from '@/global/apis/entity';
-import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
-import { LINE_CAPSULES } from '@/global/constants';
-import { FontText } from '@/global/ui';
-import { lineCapsuleToColor, lineCodeToLineCapsule } from '@/global/utils';
 import { trackNowTotalIssueLine } from '@/analytics/now.events';
-import { useAppSelect } from '@/store';
 
 interface Props {
-  activeButton: LineCapsules;
-  setActiveButton: (activeButton: LineCapsules) => void;
+  activeButton: NowScreenCapsules;
+  setActiveButton: (activeButton: NowScreenCapsules) => void;
 }
 
 const LaneButtons = ({ activeButton, setActiveButton }: Props) => {
@@ -27,42 +30,48 @@ const LaneButtons = ({ activeButton, setActiveButton }: Props) => {
       [
         ...new Set(
           myRoutes?.flatMap((route) =>
-            route.subPaths.map((sub) => lineCodeToLineCapsule(sub.stationCode)),
+            route.subPaths.map((sub) => pathSubwayLineNameInLine(sub.stationCode)),
           ) ?? [],
         ),
       ].sort() ?? []
     );
   }, [isVerifiedUser, myRoutes]);
 
-  // 내가 저장한 경로의 노선이 아닌 나머지 노선
-  const otherStations = LINE_CAPSULES.filter((line) => line !== '전체' && !myLines?.includes(line));
+  // myLines에 없는 나머지 노선
+  const otherStations: FreshSubwayLineName[] = allLines.filter((line) => !myLines?.includes(line));
 
   return (
-    <View className="bg-white pt-16">
+    <View className="pt-16 bg-white">
       <ScrollView
         //TODO: iOS 측면 그라데이션
         fadingEdgeLength={130}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        className="space-x-12 pb-12 pt-4"
+        className="pt-4 pb-12 space-x-12"
       >
         <View className="w-4" />
-        {['전체' as const, ...myLines, ...otherStations].map((capsule) => (
+        {['전체', ...myLines, ...otherStations].map((capsule) => (
           <TouchableOpacity
             key={capsule}
             onPress={() => {
-              trackNowTotalIssueLine(capsule);
-              setActiveButton(capsule);
+              trackNowTotalIssueLine(capsule as NowScreenCapsules);
+              setActiveButton(capsule as NowScreenCapsules);
             }}
             className="rounded-17 px-[8.48px] py-[6.79px]"
             style={{
-              backgroundColor: activeButton === capsule ? lineCapsuleToColor(capsule) : '#F5F5F5',
+              backgroundColor:
+                activeButton === capsule
+                  ? freshSubwayLineNameToNowCapsuleColor(capsule as NowScreenCapsules)
+                  : '#F5F5F5',
             }}
           >
             <FontText
               text={capsule}
               style={{
-                color: activeButton === capsule ? 'white' : lineCapsuleToColor(capsule),
+                color:
+                  activeButton === capsule
+                    ? 'white'
+                    : freshSubwayLineNameToNowCapsuleColor(capsule as NowScreenCapsules),
               }}
               className="text-[12.92px] leading-[15.51px]"
               fontWeight="600"

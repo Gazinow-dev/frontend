@@ -1,16 +1,16 @@
-import cn from 'classname';
-import dayjs from 'dayjs';
 import React, { useMemo } from 'react';
-import { Pressable, View } from 'react-native';
-import { getIssueId } from '@/store/modules';
-import { IssueGet } from '@/global/apis/entity';
-import { COLOR } from '@/global/constants';
 import { FontText } from '@/global/ui';
-import { originToLineCapsule } from '@/global/utils';
-import { useRootNavigation } from '@/navigation/RootNavigation';
-import { trackNowTotalIssueClick } from '@/analytics/now.events';
-import { IconComment, IconHeart } from '@/assets/icons';
+import { COLOR } from '@/global/constants';
 import { useAppDispatch } from '@/store';
+import { getIssueId } from '@/store/modules';
+import { useRootNavigation } from '@/navigation/RootNavigation';
+import dayjs from 'dayjs';
+import { Pressable, View } from 'react-native';
+import cn from 'classname';
+import { rawLineNameToNowCapsuleText } from '@/global/utils/subwayLine';
+import { IconHeart, IconComment as IconComment } from '@/assets/icons';
+import { IssueGet } from '@/global/apis/entity';
+import { trackNowTotalIssueClick } from '@/analytics/now.events';
 
 interface Props {
   issue: IssueGet;
@@ -36,7 +36,7 @@ const SingleIssueContainer = ({ issue }: Props) => {
     const sortedLines = Array.from(new Set(lines)).sort();
     return sortedLines
       .map((line, index) =>
-        index > 0 ? `･${originToLineCapsule(line)}` : originToLineCapsule(line),
+        index > 0 ? `･${rawLineNameToNowCapsuleText(line)}` : rawLineNameToNowCapsuleText(line),
       )
       .join('');
   }, [lines]);

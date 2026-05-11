@@ -1,26 +1,26 @@
-import cn from 'classname';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
-import { StationDataTypes } from '@/store/modules';
-import { Path } from '@/global/apis/entity';
-import { useGetSearchPaths } from '@/global/apis/hooks';
-import { SubwaySimplePath } from '@/global/components';
-import LoadingCircle from '@/global/components/animations/LoadingCircle';
-import { COLOR } from '@/global/constants';
 import { FontText } from '@/global/ui';
-import { useSavePathNavigation } from '@/navigation/SavePathNavigation';
-import { trackMapBookmark3Choice } from '@/analytics/map.events';
+import { COLOR } from '@/global/constants';
+import { SubwaySimplePath } from '@/global/components';
+import { useGetSearchPaths } from '@/global/apis/hooks';
+import { useEffect, useState } from 'react';
+import { Path } from '@/global/apis/entity';
+import { StationDataTypes } from '@/store/modules';
+import { useNewRouteNavigation } from '@/navigation/NewRouteNavigation';
 import { useAppSelect } from '@/store';
-import SwapStation from './components/SwapStation';
+import SwapStation from './SwapStation';
+import LoadingCircle from '@/global/components/animations/LoadingCircle';
+import cn from 'classname';
+import { trackMapBookmark3Choice } from '@/analytics/map.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface SelectedStationTypes {
   departure: StationDataTypes;
   arrival: StationDataTypes;
 }
 
-const PathSelectScreen = () => {
-  const savePathNavigation = useSavePathNavigation();
+const SelectNewRoute = () => {
+  const newRouteNavigation = useNewRouteNavigation();
   const selectedStationRedux = useAppSelect(({ subwaySearch }) => subwaySearch.selectedStation);
   const [selectedRoutePath, setSelectedRoutePath] = useState<Path | null>(null);
 
@@ -56,12 +56,12 @@ const PathSelectScreen = () => {
       <SwapStation setSelectedStation={setSelectedStation} />
       <View className="flex-1 pb-10">
         {isLoading && (
-          <View className="mt-200 items-center">
+          <View className="items-center mt-200">
             <LoadingCircle size={40} />
           </View>
         )}
         {!data && !isLoading && (
-          <View className="flex-1 items-center justify-center bg-white">
+          <View className="items-center justify-center flex-1 bg-white">
             <FontText text="검색 결과가 없어요" className="text-gray-999" />
           </View>
         )}
@@ -79,12 +79,12 @@ const PathSelectScreen = () => {
                   })}
                   onPress={() => {
                     setSelectedRoutePath(item);
-                    savePathNavigation.push('PathDetail', {
+                    newRouteNavigation.push('Detail', {
                       state: item,
                     });
                   }}
                 >
-                  <View className="mb-8 flex-row items-center justify-between">
+                  <View className="flex-row items-center justify-between mb-8">
                     <View className="gap-4">
                       <FontText
                         text="평균 소요시간"
@@ -113,7 +113,7 @@ const PathSelectScreen = () => {
                       hitSlop={20}
                     >
                       {selectedRoutePath === item && (
-                        <View className="h-11 w-11 rounded-full bg-light-blue" />
+                        <View className="rounded-full h-11 w-11 bg-light-blue" />
                       )}
                     </TouchableOpacity>
                   </View>
@@ -136,16 +136,16 @@ const PathSelectScreen = () => {
           'bg-black-717': selectedRoutePath !== null,
         })}
         onPress={() =>
-          savePathNavigation.push('PathName', {
+          newRouteNavigation.push('Name', {
             state: selectedRoutePath!,
           })
         }
         disabled={selectedRoutePath === null}
       >
-        <FontText text="다음" className="text-17 text-white" fontWeight="600" />
+        <FontText text="다음" className="text-white text-17" fontWeight="600" />
       </TouchableOpacity>
     </SafeAreaView>
   );
 };
 
-export default PathSelectScreen;
+export default SelectNewRoute;

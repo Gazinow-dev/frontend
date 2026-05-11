@@ -1,3 +1,5 @@
+import { IssueKeywords, RawSubwayLineName } from '@global/apis/entity';
+
 /**
  * 이슈 댓글 등록
  */

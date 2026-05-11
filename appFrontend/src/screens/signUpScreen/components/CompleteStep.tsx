@@ -1,7 +1,7 @@
-import { Image, View } from 'react-native';
 import { FontText } from '@/global/ui';
-import { useRootNavigation } from '@/navigation/RootNavigation';
+import { Image, View } from 'react-native';
 import StepButton from '../ui/StepButton';
+import { useRootNavigation } from '@/navigation/RootNavigation';
 
 interface Props {
   nickname: string;
@@ -25,7 +25,7 @@ const CompleteStep = ({ nickname }: Props) => {
       <StepButton
         value="확인"
         backgroundCondition={true} // 검정을 의미함
-        onPress={() => navigation.push('OnboardingNavigation')}
+        onPress={() => navigation.reset({ routes: [{ name: 'MainBottomTab' }] })}
       />
     </View>
   );

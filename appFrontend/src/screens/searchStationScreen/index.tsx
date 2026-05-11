@@ -1,4 +1,9 @@
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAddRecentSearch, useGetSearchHistory, useSearchStationName } from '@/global/apis/hooks';
+import { COLOR } from '@/global/constants';
+import { FontText } from '@/global/ui';
+import { subwayReturnLineName } from '@/global/utils/subwayLine';
+import { useAppDispatch, useAppSelect } from '@/store';
+import { getSeletedStation } from '@/store/modules/stationSearchModule';
 import { useState } from 'react';
 import {
   KeyboardAvoidingView,
@@ -8,23 +13,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { getSeletedStation } from '@/store/modules/stationSearchModule';
-import { OriginLineName } from '@/global/apis/entity';
-import { useAddRecentSearch, useGetSearchHistory, useSearchStationName } from '@/global/apis/hooks';
-import { COLOR } from '@/global/constants';
-import { FontText } from '@/global/ui';
 import { Input } from '@/global/ui';
-import { displayToOrigin } from '@/global/utils';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
-import { trackMapSearchArrivalChoice, trackMapSearchDepartureChoice } from '@/analytics/map.events';
 import {
   IconArrowLeftSharp,
   IconClock,
-  IconCrossCircle,
   IconLocationPin,
   IconNoResult,
+  IconCrossCircle,
 } from '@/assets/icons';
-import { useAppDispatch, useAppSelect } from '@/store';
+import { RawSubwayLineName } from '@/global/apis/entity';
+import { trackMapSearchArrivalChoice, trackMapSearchDepartureChoice } from '@/analytics/map.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SearchStationScreen = () => {
   const navigation = useHomeNavigation();
@@ -44,7 +44,7 @@ const SearchStationScreen = () => {
     setSearchTextValue('');
   };
 
-  const saveSelectedStation = (stationLine: OriginLineName, stationName: string) => {
+  const saveSelectedStation = (stationLine: RawSubwayLineName, stationName: string) => {
     const key = stationType === '출발역' ? 'departure' : 'arrival';
     dispatch(
       getSeletedStation({
@@ -85,8 +85,8 @@ const SearchStationScreen = () => {
     }
 
     if (isVerifiedUser === 'success auth')
-      addRecentMutate({ stationName, stationLine: displayToOrigin(stationLine) });
-    else saveSelectedStation(displayToOrigin(stationLine), stationName);
+      addRecentMutate({ stationName, stationLine: subwayReturnLineName(stationLine) });
+    else saveSelectedStation(subwayReturnLineName(stationLine), stationName);
   };
 
   return (

@@ -1,23 +1,23 @@
-import cn from 'classname';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Shadow } from 'react-native-shadow-2';
-import { useQuery, useQueryClient } from 'react-query';
-import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
-import { RootState } from '@/store/configureStore';
-import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
-import IssueKeywordIcon from '@/global/components/IssueKeywordIcon';
-import RetryLoad from '@/global/components/RetryLoad';
-import LoadingCircle from '@/global/components/animations/LoadingCircle';
-import { COLOR } from '@/global/constants';
+import cn from 'classname';
 import { FontText } from '@/global/ui';
-import { useHomeNavigation } from '@/navigation/HomeNavigation';
+import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
 import { useRootNavigation } from '@/navigation/RootNavigation';
-import { trackMapBookmark1 } from '@/analytics/map.events';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { NonLoggedIn, RouteItem, NoRoutes } from '.';
+import { useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
+import { useHomeNavigation } from '@/navigation/HomeNavigation';
+import RetryLoad from '@/global/components/RetryLoad';
 import { IconCross, IconInfo } from '@/assets/icons';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/configureStore';
 import { getTomorrowPushNotiOnStatusFetch } from '@/screens/myRootScreen/apis/func';
-import { NoRoutes, NonLoggedIn, RouteItem } from '.';
+import IssueKeywordIcon from '@/global/components/IssueKeywordIcon';
+import { COLOR } from '@/global/constants';
+import { Shadow } from 'react-native-shadow-2';
+import { trackMapBookmark1 } from '@/analytics/map.events';
+import LoadingCircle from '@/global/components/animations/LoadingCircle';
 
 interface Props {
   isVerifiedUser: 'success auth' | 'fail auth' | 'yet';
@@ -48,7 +48,7 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: Props) => {
   const editMyRoutesHandler = () => {
     trackMapBookmark1();
     isVerifiedUser === 'success auth'
-      ? homeNavigation.navigate('SavedPaths')
+      ? homeNavigation.navigate('SavedRoutes')
       : navigation.navigate('AuthStack', { screen: 'Landing' });
   };
 

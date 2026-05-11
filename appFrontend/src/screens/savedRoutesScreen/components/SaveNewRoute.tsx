@@ -1,22 +1,22 @@
-import cn from 'classname';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useQueryClient } from 'react-query';
-import React, { useEffect, useMemo, useState } from 'react';
-import { Keyboard, TouchableOpacity, View } from 'react-native';
-import { KeyboardAvoidingView, Platform } from 'react-native';
-import { useRoute } from '@react-navigation/native';
-import { Path, SubPath } from '@/global/apis/entity';
-import { useSavedSubwayRoute } from '@/global/apis/hooks';
-import { showToast } from '@/global/utils/toast';
-import { SubwaySimplePath } from '@/global/components';
-import { COLOR } from '@/global/constants';
 import { FontText, Input } from '@/global/ui';
+import { COLOR } from '@/global/constants';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useSavedSubwayRoute } from '@/global/apis/hooks';
+import { useQueryClient } from 'react-query';
+import { SubwaySimplePath } from '@/global/components';
+import { Path, SubPath } from '@/global/apis/entity';
+import { View, Keyboard, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, Platform } from 'react-native';
+import { IconInvalid } from '@/assets/icons';
+import AddNewRouteHeader from './AddNewRouteHeader';
+import { useRoute } from '@react-navigation/native';
+import { showToast } from '@/global/utils/toast';
+import cn from 'classname';
 import { useRootNavigation } from '@/navigation/RootNavigation';
 import { trackMapBookmark4Name, trackMapBookmark5Finish } from '@/analytics/map.events';
-import { IconInvalid } from '@/assets/icons';
-import SavePathHeader from './components/SavePathHeader';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const PathNameScreen = () => {
+const SaveNewRoute = () => {
   const { state: resultData } = useRoute().params as { state: Path };
   const navigation = useRootNavigation();
   const queryClient = useQueryClient();
@@ -78,9 +78,9 @@ const PathNameScreen = () => {
       className="flex-1"
     >
       <SafeAreaView className="flex-1 bg-white" edges={['top']}>
-        <SavePathHeader />
-        <View className="flex-1 bg-white px-16">
-          <View className="mx-33 mb-40 mt-32">
+        <AddNewRouteHeader />
+        <View className="flex-1 px-16 bg-white">
+          <View className="mt-32 mb-40 mx-33">
             <SubwaySimplePath
               pathData={freshSubPathData}
               arriveStationName={resultData.lastEndStation}
@@ -90,7 +90,7 @@ const PathNameScreen = () => {
           </View>
           <FontText text="새 경로 이름" className="text-14 leading-21" fontWeight="500" />
           <Input
-            className="my-7 rounded-5 bg-gray-9f9 px-16 py-12"
+            className="px-16 py-12 my-7 rounded-5 bg-gray-9f9"
             placeholder="경로 이름을 입력하세요"
             value={roadName}
             maxLength={10}
@@ -103,7 +103,7 @@ const PathNameScreen = () => {
           />
           <View className="flex-row justify-between">
             {isDuplicatedName ? (
-              <View className="ml-9 h-14 flex-row items-center">
+              <View className="flex-row items-center ml-9 h-14">
                 <IconInvalid />
                 <FontText
                   text={errorMessage}
@@ -128,18 +128,18 @@ const PathNameScreen = () => {
           })}
           onPress={() => {
             mutate({
+              roadName: roadName,
               ...resultData,
               subPaths: freshSubPathData,
-              roadName,
             });
           }}
           disabled={!roadName || isLoading || isDuplicatedName}
         >
-          <FontText text="완료" className="text-17 text-white" fontWeight="600" />
+          <FontText text="완료" className="text-white text-17" fontWeight="600" />
         </TouchableOpacity>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
 };
 
-export default PathNameScreen;
+export default SaveNewRoute;

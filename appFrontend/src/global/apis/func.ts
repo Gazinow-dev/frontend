@@ -1,20 +1,19 @@
-import * as Sentry from '@sentry/react-native';
 import { AxiosError } from 'axios';
-import { SignInFetchResponse } from '@/screens/signInScreen/apis/entity';
 import { authServiceAPI, publicServiceAPI } from '.';
 import {
   AllIssues,
-  IssueGet,
   MyRoutesType,
-  NotiHistories,
-  OriginLineName,
-  SaveMyRoutesType,
   SearchHistoryStationNameTypes,
   SearchPathsTypes,
   SearchStationNameTypes,
-  StationsInLineTypes,
+  RawSubwayLineName,
   SubwayStrEnd,
+  IssueGet,
+  SaveMyRoutesType,
+  NotiHistories,
 } from './entity';
+import { SignInFetchResponse } from '@/screens/signInScreen/apis/entity';
+import * as Sentry from '@sentry/react-native';
 
 /**
  * 인증 토큰 재인증 axios
@@ -57,26 +56,6 @@ export const searchStationName = async (params: { stationName: string }) => {
 };
 
 /**
- * N호선의 모든 지하철역 조회 axios
- */
-export const searchStationsInLine = async (params: { line: string }) => {
-  try {
-    const res = await publicServiceAPI.get<StationsInLineTypes>('/api/v1/stations', {
-      params,
-    });
-    return res.data;
-  } catch (err) {
-    const error = err as AxiosError;
-    Sentry.captureException({
-      target: 'N호선의 모든 지하철역 조회',
-      input: { params, request: error.request },
-      output: { status: error.response?.status, error: error.message, response: error.response },
-    });
-    throw error;
-  }
-};
-
-/**
  * 지하철역 검색 히스토리 조회 axios
  */
 export const searchHistoryFetch = async () => {
@@ -101,7 +80,7 @@ export const searchHistoryFetch = async () => {
  */
 export const searchAddHistoryFetch = async (data: {
   stationName: string;
-  stationLine: OriginLineName;
+  stationLine: RawSubwayLineName;
 }) => {
   try {
     const res = await authServiceAPI.post<{ data: SearchHistoryStationNameTypes }>(

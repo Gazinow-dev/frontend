@@ -1,19 +1,20 @@
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useMutation, useQueryClient } from 'react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { FlatList, Modal, TouchableOpacity, View } from 'react-native';
-import { useRoute } from '@react-navigation/native';
-import { Path, SubPath } from '@/global/apis/entity';
-import { myPathDeleteFetch, updateNotiReadStatus } from '@/global/apis/func';
-import { showToast } from '@/global/utils/toast';
-import { COLOR } from '@/global/constants';
 import { FontText } from '@/global/ui';
+import { useRoute } from '@react-navigation/native';
+import NewRouteSaveModal from './components/NewRouteSaveModal';
+import SearchPathDetailItem from './components/SearchPathDetailItem';
+import { Path, SubPath } from '@/global/apis/entity';
 import { useHomeNavigation } from '@/navigation/HomeNavigation';
-import { useRootNavigation } from '@/navigation/RootNavigation';
-import { trackMapBookmarkDelete } from '@/analytics/map.events';
+import { COLOR } from '@/global/constants';
+import { useMutation, useQueryClient } from 'react-query';
 import { IconBookmark, IconChevronLeft } from '@/assets/icons';
 import { useAppSelect } from '@/store';
-import { SaveNewPathModal, SearchPathDetailItem } from './components';
+import { useRootNavigation } from '@/navigation/RootNavigation';
+import { showToast } from '@/global/utils/toast';
+import { myPathDeleteFetch, updateNotiReadStatus } from '@/global/apis/func';
+import { trackMapBookmarkDelete } from '@/analytics/map.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface DetailData extends Path {
   id: number;
@@ -94,7 +95,7 @@ const SearchPathResultDetailScreen = () => {
           </TouchableOpacity>
           {isSaveRouteModalOpen &&
             (isVerifiedUser === 'success auth' ? (
-              <SaveNewPathModal
+              <NewRouteSaveModal
                 freshData={{ ...resultData, subPaths: freshSubPathData }}
                 closeModal={() => setIsSaveRouteModalOpen(false)}
                 onBookmark={() => setIsBookmarking(true)}
