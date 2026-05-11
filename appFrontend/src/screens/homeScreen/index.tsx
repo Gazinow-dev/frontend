@@ -1,16 +1,16 @@
-import { RefreshControl, ScrollView, View } from 'react-native';
-import { IssueCarrousel, SwapStation, MyRoutes } from './components';
-import { useCallback, useEffect, useState } from 'react';
-import SplashScreen from 'react-native-splash-screen';
-import { useTryAuthorization } from './hooks';
-import { IconBell } from '@/assets/icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useRootNavigation } from '@/navigation/RootNavigation';
-import { useHomeNavigation } from '@/navigation/HomeNavigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import SplashScreen from 'react-native-splash-screen';
 import { useQuery } from 'react-query';
-import { getUnreadNotiCount } from '@/global/apis/func';
+import { useCallback, useEffect, useState } from 'react';
+import { RefreshControl, ScrollView, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import { getUnreadNotiCount } from '@/global/apis/func';
+import { useHomeNavigation } from '@/navigation/HomeNavigation';
+import { useRootNavigation } from '@/navigation/RootNavigation';
+import { IconBell } from '@/assets/icons';
+import { IssueCarrousel, MyRoutes, SwapStation } from './components';
+import { useTryAuthorization } from './hooks';
 
 const HomeScreen = () => {
   const { isVerifiedUser, tryAuthorization } = useTryAuthorization();
@@ -68,7 +68,7 @@ const HomeScreen = () => {
           <TouchableOpacity onPress={authStateHandler} hitSlop={20} className="relative">
             {(unreadData?.unreadNotificationCount ?? 0) > 0 &&
               isVerifiedUser === 'success auth' && (
-                <View className="absolute right-2 top-2 z-10 h-10 w-10 rounded-full border-1 border-gray-9f9 bg-light-red" />
+                <View className="absolute z-10 w-10 h-10 rounded-full right-2 top-2 border-1 border-gray-9f9 bg-light-red" />
               )}
             <IconBell />
           </TouchableOpacity>
