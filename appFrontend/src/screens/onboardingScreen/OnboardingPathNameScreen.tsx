@@ -32,8 +32,6 @@ const OnboardingPathNameScreen = () => {
   const [pathName, setPathName] = useState('출근길');
   const recommendedNames = ['출근길', '퇴근길', '학교가는 길', '집 가는 길'];
 
-  const queryClient = useQueryClient();
-
   const pathData = {
     station_departure: newPath.transitStationList[0].stationsName,
     station_arrival: newPath.transitStationList.at(-1)?.stationsName!,
@@ -56,7 +54,6 @@ const OnboardingPathNameScreen = () => {
       trackMapBookmark5Finish({ ...pathData, name: pathName });
       onboardingNavigation.push('OnboardingCompleted', { pathName });
       showToast('saveRoute');
-      queryClient.invalidateQueries('getRoads');
     },
     onError: () => {},
   });

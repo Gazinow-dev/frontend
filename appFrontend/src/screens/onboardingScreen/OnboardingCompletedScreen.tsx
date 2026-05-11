@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useQueryClient } from 'react-query';
 import { useEffect } from 'react';
 import { Image, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
@@ -12,8 +13,10 @@ const OnboardingCompletedScreen = () => {
   const { pathName } = useRoute().params as {
     pathName: OnboardingStackParamList['OnboardingCompleted']['pathName'];
   };
+  const queryClient = useQueryClient();
 
   useEffect(() => {
+    queryClient.invalidateQueries(['getRoads']);
     setTimeout(async () => {
       await AsyncStorage.setItem('showCoachMark', 'true');
       navigation.reset({ routes: [{ name: 'MainBottomTab' }] });
