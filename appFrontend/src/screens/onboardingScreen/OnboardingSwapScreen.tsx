@@ -104,58 +104,60 @@ const OnboardingSwapScreen = () => {
         </View>
 
         <View className="h-28" />
-
-        <View className="space-y-10">
-          <FontText
-            text="어떤 경로를 자주 이용하시나요?"
-            fontWeight="700"
-            className="text-24 leading-32"
-          />
-          <FontText
-            text="이 경로에 문제가 생기면 바로 알려드려요"
-            className="text-13 leading-19 text-gray-999"
-          />
-        </View>
-
-        <View className="h-28" />
-
-        <Shadow
-          offset={[0, -4]}
-          distance={34}
-          startColor="#0000000D"
-          style={{
-            alignItems: 'center',
-          }}
-        >
-          <View className="flex-row items-center bg-white space-x-15 rounded-14 pb-19 pl-17 pr-14 pt-21">
-            <View className="flex-1 gap-8">
-              {renderStationButton(selectedStation.departure, DEPARTURE_STATION)}
-              {renderStationButton(selectedStation.arrival, ARRIVAL_STATION)}
-            </View>
-            <TouchableOpacity onPress={swapStation} hitSlop={20}>
-              <IconSwapChange width={24} />
-            </TouchableOpacity>
-          </View>
-        </Shadow>
       </View>
 
-      <View className="flex-1 px-16 pt-16">
-        {isLoading && (
-          <View className="items-center justify-center flex-1">
-            <LoadingCircle />
-          </View>
-        )}
-        {!!selectedStation.departure.stationName &&
-          !!selectedStation.arrival.stationName &&
-          !data &&
-          !isLoading && (
-            <View className="items-center justify-center flex-1 bg-white rounded-14">
-              <FontText text="검색 결과가 없어요" className="text-gray-999" />
+      <View className="flex-1">
+        <ScrollView className="rounded-14" showsVerticalScrollIndicator={false}>
+          <View className="px-16">
+            <View className="space-y-10">
+              <FontText
+                text="어떤 경로를 자주 이용하시나요?"
+                fontWeight="700"
+                className="text-24 leading-32"
+              />
+              <FontText
+                text="이 경로에 문제가 생기면 바로 알려드려요"
+                className="text-13 leading-19 text-gray-999"
+              />
             </View>
-          )}
-        {data && (
-          <ScrollView className="rounded-14" showsVerticalScrollIndicator={false}>
-            {data.paths.map((item, idx) => (
+
+            <View className="h-28" />
+
+            <Shadow
+              offset={[0, -4]}
+              distance={34}
+              startColor="#0000000D"
+              style={{
+                alignItems: 'center',
+              }}
+            >
+              <View className="flex-row items-center bg-white space-x-15 rounded-14 pb-19 pl-17 pr-14 pt-21">
+                <View className="flex-1 gap-8">
+                  {renderStationButton(selectedStation.departure, DEPARTURE_STATION)}
+                  {renderStationButton(selectedStation.arrival, ARRIVAL_STATION)}
+                </View>
+                <TouchableOpacity onPress={swapStation} hitSlop={20}>
+                  <IconSwapChange width={24} />
+                </TouchableOpacity>
+              </View>
+            </Shadow>
+          </View>
+
+          <View className="px-16 pt-16">
+            {isLoading && (
+              <View className="items-center justify-center flex-1 pt-100">
+                <LoadingCircle />
+              </View>
+            )}
+            {!!selectedStation.departure.stationName &&
+              !!selectedStation.arrival.stationName &&
+              !data &&
+              !isLoading && (
+                <View className="items-center justify-center flex-1 bg-white rounded-14">
+                  <FontText text="검색 결과가 없어요" className="text-gray-999" />
+                </View>
+              )}
+            {data?.paths.map((item, idx) => (
               <Pressable
                 key={item.firstStartStation + item.totalTime}
                 style={({ pressed }) => ({
@@ -221,8 +223,8 @@ const OnboardingSwapScreen = () => {
                 />
               </Pressable>
             ))}
-          </ScrollView>
-        )}
+          </View>
+        </ScrollView>
       </View>
 
       <View className="bottom-0 w-full px-16 pt-10 bg-gray-9f9 pb-30">
