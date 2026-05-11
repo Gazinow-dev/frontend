@@ -1,10 +1,10 @@
 import { COLOR } from '@/global/constants';
 import {
-  SearchStationNameTypes,
-  LineCode,
-  OriginLineName,
   DisplayLineName,
   LineCapsules,
+  LineCode,
+  OriginLineName,
+  SearchStationNameTypes,
 } from '../apis/entity';
 
 /**
@@ -72,6 +72,120 @@ export const displayToOrigin = (displayLine: DisplayLineName): OriginLineName =>
 
 /**
  * @param origin 오디세이 기준 지하철 호선명
+ * @returns lineCircle N호선 아이콘에 쓰이는 줄바꿈 적용된 이름
+ */
+export const originToLineCircle = (origin: OriginLineName): string => {
+  switch (origin) {
+    case '수도권 1호선':
+      return '1';
+    case '수도권 2호선':
+      return '2';
+    case '수도권 3호선':
+      return '3';
+    case '수도권 4호선':
+      return '4';
+    case '수도권 5호선':
+      return '5';
+    case '수도권 6호선':
+      return '6';
+    case '수도권 7호선':
+      return '7';
+    case '수도권 8호선':
+      return '8';
+    case '수도권 9호선':
+      return '9';
+    case '인천 1호선':
+      return '인천1';
+    case '인천 2호선':
+      return '인천2';
+    case '수도권 공항철도':
+      return `공항\n철도`;
+    case '경의중앙선':
+      return '경의';
+    case '수도권 에버라인':
+      return `에버\n라인`;
+    case '수도권 경춘선':
+      return '경춘';
+    case '수도권 신분당선':
+      return '신분당';
+    case '수도권 의정부경전철':
+      return '의정부';
+    case '수도권 경강선':
+      return '경강';
+    case '수도권 우이신설경전철':
+      return '우이\n신설';
+    case '수도권 서해선(대곡-원시)':
+      return '서해';
+    case '수도권 김포골드라인':
+      return '김포\n골드';
+    case '수도권 수인.분당선':
+      return '수인\n분당';
+    case '수도권 신림선':
+      return '신림';
+    default:
+      return '1';
+  }
+};
+
+/**
+ * @param origin 오디세이 기준 지하철 호선명
+ * @returns lineCircle N호선 아이콘에 쓰이는 줄바꿈 적용된 이름
+ */
+export const displayToLineCircle = (origin: DisplayLineName): string => {
+  switch (origin) {
+    case '1호선':
+      return '1';
+    case '2호선':
+      return '2';
+    case '3호선':
+      return '3';
+    case '4호선':
+      return '4';
+    case '5호선':
+      return '5';
+    case '6호선':
+      return '6';
+    case '7호선':
+      return '7';
+    case '8호선':
+      return '8';
+    case '9호선':
+      return '9';
+    case '인천1호선':
+      return '인천1';
+    case '인천2호선':
+      return '인천2';
+    case '공항철도':
+      return `공항\n철도`;
+    case '경의중앙':
+      return '경의';
+    case '에버라인':
+      return `에버\n라인`;
+    case '경춘선':
+      return '경춘';
+    case '신분당':
+      return '신분당';
+    case '의정부':
+      return '의정부';
+    case '경강선':
+      return '경강';
+    case '우이신설':
+      return '우이\n신설';
+    case '서해선':
+      return '서해';
+    case '김포골드':
+      return '김포\n골드';
+    case '수인분당':
+      return '수인\n분당';
+    case '신림선':
+      return '신림';
+    default:
+      return '1';
+  }
+};
+
+/**
+ * @param origin 오디세이 기준 지하철 호선명
  * @returns lineCapsule 가로스크롤되는 N호선 캡슐명
  */
 export const originToLineCapsule = (origin: OriginLineName): LineCapsules => {
@@ -131,7 +245,7 @@ export const originToLineCapsule = (origin: OriginLineName): LineCapsules => {
  * @param lineCapsule 가로스크롤되는 N호선 캡슐명
  * @returns OriginLineName
  */
-export const lineCapsuleToOrigin = (lineCapsule: LineCapsules): OriginLineName => {
+export const lineCapsuleToOrigin = (lineCapsule: LineCapsules): OriginLineName | '전체' => {
   switch (lineCapsule) {
     case '1호선':
       return '수도권 1호선';
@@ -179,6 +293,8 @@ export const lineCapsuleToOrigin = (lineCapsule: LineCapsules): OriginLineName =
       return '수도권 김포골드라인';
     case '신림':
       return '수도권 신림선';
+    case '전체':
+      return '전체';
     default:
       return '수도권 1호선';
   }
@@ -247,7 +363,7 @@ export const lineCapsuleToColor = (lineCapsule: LineCapsules | '전체'): string
  * @param lineCode 지하철 코드
  * @returns 호선별 COLOR
  */
-export const lineCodeToColor = (lineCode: LineCode) => {
+export const lineCodeToColor = (lineCode: LineCode): string => {
   switch (lineCode) {
     case 1:
       return COLOR.LINE1;
@@ -304,7 +420,7 @@ export const lineCodeToColor = (lineCode: LineCode) => {
  * @param lineCode 지하철 코드
  * @returns lineCircle N호선 아이콘에 쓰이는 줄바꿈 적용된 이름
  */
-export const lineCodeToLineCircle = (lineCode: LineCode) => {
+export const lineCodeToLineCircle = (lineCode: LineCode): string => {
   switch (lineCode) {
     case 1:
       return '1';
@@ -361,7 +477,7 @@ export const lineCodeToLineCircle = (lineCode: LineCode) => {
  * @param lineCode 지하철 코드
  * @returns lineCapsule 가로스크롤되는 N호선 캡슐 이름
  */
-export const lineCodeToLineCapsule = (lineCode: LineCode) => {
+export const lineCodeToLineCapsule = (lineCode: LineCode): LineCapsules => {
   switch (lineCode) {
     case 1:
       return '1호선';
@@ -416,7 +532,7 @@ export const lineCodeToLineCapsule = (lineCode: LineCode) => {
  * @param station 길이가 긴 지하철역 이름
  * @returns 줄바꿈된 지하철역 이름
  */
-export const breakStationName = (station: string) => {
+export const breakStationName = (station: string): string => {
   switch (station) {
     case '4.19민주묘지':
       return '4.19\n민주묘지';

@@ -28,7 +28,7 @@ export const useSearchStationName = (nameValue: string) => {
     nameValue.slice(-1) === 'ㅇ' || nameValue.slice(-1) === '여' || nameValue.slice(-1) === '역';
   const stationName = lastChar && nameValue !== '서울역' ? nameValue.slice(0, -1) : nameValue;
 
-  const { data } = useQuery(
+  const { data, isLoading } = useQuery(
     ['search-subway-name', nameValue],
     () => searchStationName({ stationName }),
     {
@@ -52,6 +52,7 @@ export const useSearchStationName = (nameValue: string) => {
     searchResultData: deduplicatedStationData.sort((a, b) =>
       a.stationName.localeCompare(b.stationName),
     ),
+    isLoading,
   };
 };
 
@@ -127,13 +128,17 @@ export const useAddRecentSearch = ({
 }: {
   onSuccess: (data: { id: number; stationName: string; stationLine: OriginLineName }) => void;
 }) => {
-  const { data, mutate } = useMutation(searchAddHistoryFetch, {
+  const { data, mutate, isLoading } = useMutation(searchAddHistoryFetch, {
     onSuccess,
   });
   const freshData = data
     ? { line: data.stationLine, name: data.stationName }
     : { line: null, name: '' };
-  return { data: originToDisplay([freshData]), addRecentMutate: mutate };
+  return {
+    data: originToDisplay([freshData]),
+    addRecentMutate: mutate,
+    isLoadingAddRecent: isLoading,
+  };
 };
 
 /**

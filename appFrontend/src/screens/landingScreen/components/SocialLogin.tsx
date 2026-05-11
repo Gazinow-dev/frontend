@@ -68,6 +68,9 @@ const SocialLogin = () => {
 
         if (urlParams.socialLoginIsNewMember === 'true') {
           trackRegisterFinish(socialLoginType);
+          setTimeout(() => {
+            navigation.push('OnboardingNavigation');
+          }, 1000);
         }
 
         const firebaseToken = await messaging().getToken();

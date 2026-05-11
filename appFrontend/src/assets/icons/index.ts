@@ -63,6 +63,7 @@ export { default as IconIssueProtest } from './issue-protest.svg';
 
 // logo
 export { default as IconLogoGAZI } from './logo-GAZI.svg';
+export { default as IconLogoGAZISquare } from './logo-GAZI-square.svg';
 export { default as IconLogoApple } from './logo-apple.svg';
 export { default as IconLogoGoogle } from './logo-google.svg';
 export { default as IconLogoNaver } from './logo-naver.svg';

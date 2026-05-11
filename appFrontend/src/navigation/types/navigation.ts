@@ -70,6 +70,15 @@ export type MyPageStackParamList = {
   PersonalTermsScreen: undefined;
 };
 
+export type OnboardingStackParamList = {
+  Onboarding: undefined;
+  OnboardingSwap: undefined;
+  OnboardingWalkTime: { newPath: Path };
+  OnboardingSetAlert: { newPath: Path };
+  OnboardingPathName: { newPath: Path };
+  OnboardingCompleted: { pathName: unknown };
+};
+
 export type SavePathStackParamList = {
   PathName: { state?: Path | SubPath[]; pathId?: number | null };
   PathSelect: undefined;

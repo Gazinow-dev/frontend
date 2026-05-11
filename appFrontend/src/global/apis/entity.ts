@@ -126,9 +126,23 @@ export interface SearchStationNameTypes {
 }
 
 /**
+ * N호선의 모든 역 조회 응답
+ */
+export type StationsInLineTypes = {
+  id: number;
+  line: OriginLineName[];
+  name: string;
+  stationCode: number;
+  lat: number;
+  lng: number;
+  issueStationCode: number;
+}[];
+
+/**
  * 지하철 경로 데이터
  */
 export interface Path {
+  roadName: any;
   id?: number;
   totalTime: number;
   stationTransitCount: number;
@@ -137,6 +151,7 @@ export interface Path {
   subPaths: SubPath[];
   myPath: boolean;
   myPathId: [number] | null;
+  transitStationList: { stationsName: string; line: OriginLineName }[];
 }
 
 /**
@@ -169,6 +184,8 @@ export interface SearchPathsTypes {
 
 export interface SaveMyRoutesType extends Path {
   roadName: string;
+  walkingTimeFromStartStation?: number;
+  walkingTimeToEndStation?: number;
 }
 
 export interface MyRoutesType extends Path {
