@@ -2,6 +2,8 @@ export { getEncryptedStorage, setEncryptedStorage, removeEncryptedStorage } from
 export {
   originToDisplay,
   displayToOrigin,
+  originToLineCircle,
+  displayToLineCircle,
   originToLineCapsule,
   lineCapsuleToOrigin,
   lineCapsuleToColor,
