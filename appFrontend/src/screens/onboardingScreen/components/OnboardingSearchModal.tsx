@@ -108,6 +108,11 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
   return (
     <Modal visible onRequestClose={closeModal}>
       <View className="flex-1 bg-black/60">
+        {isLoadingAddRecent && (
+          <View className="absolute left-[44%] top-1/2 z-10">
+            <LoadingCircle />
+          </View>
+        )}
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           className="justify-end flex-1"
@@ -121,11 +126,6 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
               transform: [{ translateY: animRef }],
             }}
           >
-            {isLoadingAddRecent && (
-              <View className="absolute -translate-x-1/2 left-1/2 top-1/2">
-                <LoadingCircle />
-              </View>
-            )}
             <TouchableOpacity hitSlop={20} className="flex items-center mt-12" onPress={closeModal}>
               <View className="h-4 w-34 rounded-2 bg-gray-ddd" />
             </TouchableOpacity>
