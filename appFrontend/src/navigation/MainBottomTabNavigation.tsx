@@ -1,22 +1,22 @@
+import notifee, { AndroidImportance, AndroidVisibility } from '@notifee/react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import NowScreen from '@screens/nowScreen';
+import cn from 'classname';
+import { useCallback, useEffect, useState } from 'react';
+import { Pressable, StatusBar } from 'react-native';
 import {
   BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import cn from 'classname';
 import { COLOR } from '@/global/constants';
-import HomeNavigation from './HomeNavigation';
-import NowScreen from '@screens/nowScreen';
-import { IconTabMap, IconTabMapBorder, IconTabMy, IconTabNow } from '@/assets/icons';
 import { FontText } from '@/global/ui';
-import { Pressable, StatusBar } from 'react-native';
-import { MyPageNavigation } from '.';
-import notifee, { AndroidImportance, AndroidVisibility } from '@notifee/react-native';
-import { Walkthrough } from '@/screens/homeScreen/components';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useCallback, useEffect, useState } from 'react';
 import { trackHomeTabClick } from '@/analytics/map.events';
-import { trackNowTabClick } from '@/analytics/now.events';
 import { trackMyTabClick } from '@/analytics/my.events';
+import { trackNowTabClick } from '@/analytics/now.events';
+import { IconTabMap, IconTabMapBorder, IconTabMy, IconTabNow } from '@/assets/icons';
+import { Walkthrough } from '@/screens/homeScreen/components';
+import { MyPageNavigation } from '.';
+import HomeNavigation from './HomeNavigation';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,9 +35,9 @@ const MainBottomTabNavigation = () => {
   const [isFirstRun, setIsFirstRun] = useState<isFirstRunType>('notFirstRun');
 
   const checkFirstRun = useCallback(async () => {
-    const hasRunBefore = await AsyncStorage.getItem('hasRunBefore');
-    if (!hasRunBefore) {
-      await AsyncStorage.setItem('hasRunBefore', 'true');
+    const showCoachMark = await AsyncStorage.getItem('showCoachMark');
+    if (showCoachMark === 'true') {
+      await AsyncStorage.setItem('showCoachMark', 'false');
       setIsFirstRun('isFirstRun');
     }
   }, []);
