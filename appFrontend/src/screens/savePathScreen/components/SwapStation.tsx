@@ -1,20 +1,18 @@
-import { FontText } from '@/global/ui';
-import { ARRIVAL_STATION, DEPARTURE_STATION } from '@/global/constants';
-import { useAppDispatch, useAppSelect } from '@/store';
-import { getSeletedStation, getStationType, initialize } from '@/store/modules';
-import type { StationDataTypes } from '@/store/modules';
-import { IconSwapChange } from '@/assets/icons';
-import { TouchableOpacity, View } from 'react-native';
-import AddNewRouteHeader from './AddNewRouteHeader';
-import { useNewRouteNavigation } from '@/navigation/NewRouteNavigation';
-import { useFocusEffect, useRoute } from '@react-navigation/native';
-import React from 'react';
 import cn from 'classname';
+import React from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import { getSeletedStation, getStationType } from '@/store/modules';
+import type { StationDataTypes } from '@/store/modules';
+import { ARRIVAL_STATION, DEPARTURE_STATION } from '@/global/constants';
+import { FontText } from '@/global/ui';
+import { useSavePathNavigation } from '@/navigation/SavePathNavigation';
 import {
   trackMapBookmark3ArrivalClick,
   trackMapBookmark3DepartureClick,
 } from '@/analytics/map.events';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { IconSwapChange } from '@/assets/icons';
+import { useAppDispatch, useAppSelect } from '@/store';
+import { SavePathHeader } from '.';
 
 export interface SelectedStationTypes {
   departure: StationDataTypes;
@@ -28,8 +26,7 @@ interface Props {
 }
 
 const SwapStation = ({ setSelectedStation }: Props) => {
-  const route = useRoute();
-  const newRouteNavigation = useNewRouteNavigation();
+  const savePathNavigation = useSavePathNavigation();
   const dispatch = useAppDispatch();
   const selectedStation = useAppSelect((state) => state.subwaySearch.selectedStation);
 
@@ -40,18 +37,8 @@ const SwapStation = ({ setSelectedStation }: Props) => {
       trackMapBookmark3ArrivalClick();
     }
     dispatch(getStationType(type));
-    newRouteNavigation.navigate('Search');
+    savePathNavigation.navigate('StationSearch');
   };
-
-  useFocusEffect(() => {
-    if (
-      selectedStation.arrival.stationName &&
-      selectedStation.departure.stationName &&
-      route.name === 'Swap'
-    ) {
-      dispatch(initialize());
-    }
-  });
 
   const renderStationButton = (station: StationDataTypes, type: StationTypes) => (
     <TouchableOpacity
@@ -74,17 +61,15 @@ const SwapStation = ({ setSelectedStation }: Props) => {
         departure: selectedStation.arrival,
       }),
     );
-    setSelectedStation(({ departure, arrival }) => ({
-      departure: { ...arrival },
-      arrival: { ...departure },
-    }));
+    // setSelectedStation(({ departure, arrival }) => ({
+    //   departure: { ...arrival },
+    //   arrival: { ...departure },
+    // }));
   };
 
-  const Wrapper = route.name === 'Swap' ? SafeAreaView : View;
-
   return (
-    <Wrapper className={route.name === 'Swap' ? 'flex-1 bg-white' : ''}>
-      <AddNewRouteHeader />
+    <View>
+      <SavePathHeader />
       <View className="flex-row items-center bg-white px-16 pb-45 pt-28">
         <View className="mr-15 flex-1 gap-8">
           {renderStationButton(selectedStation.departure, DEPARTURE_STATION)}
@@ -94,7 +79,7 @@ const SwapStation = ({ setSelectedStation }: Props) => {
           <IconSwapChange width={24} />
         </TouchableOpacity>
       </View>
-    </Wrapper>
+    </View>
   );
 };
 

@@ -1,20 +1,20 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useMemo, useState } from 'react';
-import { SingleIssueContainer, LaneButtons, PopularIssues } from './components';
-import { FreshSubwayLineName, IssueGet, NowScreenCapsules } from '@/global/apis/entity';
 import { FlatList, RefreshControl, View } from 'react-native';
+import { DisplayLineName, IssueGet, LineCapsules } from '@/global/apis/entity';
 import {
   useGetAllIssuesQuery,
   useGetIssuesByLaneQuery,
   useGetPopularIssuesQuery,
 } from '@/global/apis/hooks';
-import { FontText } from '@/global/ui';
-import { subwayReturnLineName } from '@/global/utils/subwayLine';
 import LoadingCircle from '@/global/components/animations/LoadingCircle';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { FontText } from '@/global/ui';
+import { displayToOrigin } from '@/global/utils';
+import { LaneButtons, PopularIssues, SingleIssueContainer } from './components';
 
 const NowScreen = () => {
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
-  const [activeButton, setActiveButton] = useState<NowScreenCapsules>('전체');
+  const [activeButton, setActiveButton] = useState<LineCapsules>('전체');
 
   const { popularIssues, popularIssuesRefetch } = useGetPopularIssuesQuery();
 
@@ -32,7 +32,7 @@ const NowScreen = () => {
     laneIssuesHasNextPage,
     fetchLaneIssuesNextPage,
     isLoadingLaneIssues,
-  } = useGetIssuesByLaneQuery(subwayReturnLineName(activeButton as FreshSubwayLineName)!);
+  } = useGetIssuesByLaneQuery(displayToOrigin(activeButton as DisplayLineName)!);
 
   // 선택된 캡슐에 따른 데이터 렌더링
   const flattenedData = useMemo(() => {
@@ -107,7 +107,7 @@ const NowScreen = () => {
   return (
     <SafeAreaView className="flex-1 bg-white" edges={['top']}>
       {isAllIssuesLoading ? (
-        <View className="items-center justify-center flex-1">
+        <View className="flex-1 items-center justify-center">
           <LoadingCircle />
         </View>
       ) : (

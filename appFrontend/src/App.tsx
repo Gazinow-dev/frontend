@@ -18,9 +18,10 @@ import { SessionReplayPlugin } from '@amplitude/plugin-session-replay-react-nati
 Amplitude.init(AMPLITUDE_API_KEY, undefined, {
   disableCookies: true,
 }).promise;
+
 Amplitude.add(
   new SessionReplayPlugin({
-    sampleRate: 0.3,
+    sampleRate: 1,
   }),
 ).promise;
 

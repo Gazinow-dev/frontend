@@ -1,8 +1,4 @@
-import { FontText, Input } from '@/global/ui';
-import { COLOR } from '@/global/constants';
-import { useAppDispatch, useAppSelect } from '@/store';
-import { getSeletedStation } from '@/store/modules/stationSearchModule';
-import { useAddRecentSearch, useGetSearchHistory, useSearchStationName } from '@/global/apis/hooks';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import {
   KeyboardAvoidingView,
@@ -12,18 +8,22 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { subwayReturnLineName } from '@/global/utils/subwayLine';
-import AddNewRouteHeader from './AddNewRouteHeader';
-import { useNewRouteNavigation } from '@/navigation/NewRouteNavigation';
-import { IconClock, IconLocationPin, IconNoResult, IconCrossCircle } from '@/assets/icons';
+import { getSeletedStation } from '@/store/modules/stationSearchModule';
+import { useAddRecentSearch, useGetSearchHistory, useSearchStationName } from '@/global/apis/hooks';
+import { COLOR } from '@/global/constants';
+import { FontText, Input } from '@/global/ui';
+import { displayToOrigin } from '@/global/utils';
+import { useSavePathNavigation } from '@/navigation/SavePathNavigation';
 import {
   trackMapBookmark3ArrivalChoice,
   trackMapBookmark3DepartureChoice,
 } from '@/analytics/map.events';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { IconClock, IconCrossCircle, IconLocationPin, IconNoResult } from '@/assets/icons';
+import { useAppDispatch, useAppSelect } from '@/store';
+import { SavePathHeader } from './components';
 
-const SearchStation = () => {
-  const newRouteNavigation = useNewRouteNavigation();
+const StationSearchScreen = () => {
+  const savePathNavigation = useSavePathNavigation();
   const dispatch = useAppDispatch();
   const { selectedStation, stationType } = useAppSelect((state) => state.subwaySearch);
 
@@ -52,13 +52,13 @@ const SearchStation = () => {
         selectedStation.arrival.stationName === stationName ||
         selectedStation.departure.stationName === stationName;
       if (isDuplicate) {
-        newRouteNavigation.goBack();
+        savePathNavigation.goBack();
       } else if (
         (key === 'departure' && selectedStation.arrival.stationName) ||
         (key === 'arrival' && selectedStation.departure.stationName)
       ) {
-        newRouteNavigation.push('Result');
-      } else newRouteNavigation.goBack();
+        savePathNavigation.push('PathSelect');
+      } else savePathNavigation.goBack();
     },
   });
 
@@ -71,7 +71,7 @@ const SearchStation = () => {
       trackMapBookmark3ArrivalChoice({ station: stationName, line: stationLine });
     }
 
-    addRecentMutate({ stationName, stationLine: subwayReturnLineName(stationLine) });
+    addRecentMutate({ stationName, stationLine: displayToOrigin(stationLine) });
   };
 
   return (
@@ -80,7 +80,7 @@ const SearchStation = () => {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         className="flex-1"
       >
-        <AddNewRouteHeader />
+        <SavePathHeader />
 
         <View className="mx-16 mt-20 flex-row items-center rounded-28 border-1 border-[#d4d4d4] px-18 py-4">
           <Input
@@ -182,4 +182,4 @@ const SearchStation = () => {
   );
 };
 
-export default SearchStation;
+export default StationSearchScreen;
