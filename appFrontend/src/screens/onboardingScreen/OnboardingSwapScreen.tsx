@@ -73,7 +73,7 @@ const OnboardingSwapScreen = () => {
       onPress={() => navigateSearchStation(type)}
     >
       <FontText
-        text={station.stationName || type}
+        text={station.stationName.split('(')[0] || type}
         className={cn('leading-21', {
           'text-gray-999': !station.stationName,
         })}
