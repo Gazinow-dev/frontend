@@ -2,7 +2,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Shadow } from 'react-native-shadow-2';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { useState } from 'react';
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { COLOR } from '@/global/constants';
 import { FontText } from '@/global/ui';
 import { useOnboardingNavigation } from '@/navigation/OnboardingNavigation';
@@ -92,32 +92,38 @@ const OnboardingScreen = () => {
               </View>
             </>
           ) : (
-            <>
-              <View className="relative mt-13">
-                <Image
-                  source={require('@/assets/images/img-onboarding-2-Noti.png')}
-                  style={{
-                    width: '100%',
-                    height: undefined,
-                    aspectRatio: 302 / 78,
-                  }}
-                  resizeMode="contain"
-                />
-                <View className="absolute left-[4%] top-[15%] h-1/2 w-[13%]">
-                  <IconLogoGAZISquare
-                    width="100%"
-                    height="100%"
-                    preserveAspectRatio="xMidYMid meet"
-                  />
+            <View className="mt-13">
+              <View className="relative flex items-center justify-center">
+                <View className="absolute -bottom-14 h-30 w-3/5 rounded-24 border-b border-white/10 bg-[#4A4758]/80" />
+                <View className="absolute -bottom-6 h-30 w-4/5 rounded-24 border-b border-white/20 bg-[#636171]" />
+                <View className="flex-row items-center space-x-10 rounded-24 border-y border-white/30 bg-[#978D9F] p-12">
+                  <IconLogoGAZISquare />
+                  <View className="flex-1">
+                    <View className="flex-row items-start justify-between">
+                      <FontText
+                        text="2호선 사당역 무정차"
+                        className="text-white text-15 leading-17"
+                        fontWeight="600"
+                      />
+                      <FontText
+                        text="9:41 AM"
+                        className="tracking-normal text-13 leading-19 text-white/70"
+                      />
+                    </View>
+                    <FontText
+                      text="폭우로 4호선 운행이 멈췄어요"
+                      className="mt-2 text-white text-15 leading-18"
+                    />
+                  </View>
                 </View>
               </View>
 
-              <View className="h-10" />
+              <View className="h-25" />
 
               <View style={{ aspectRatio: 234 / 55 }}>
                 <ImgOnboardingStep2Path width="100%" height="100%" />
               </View>
-            </>
+            </View>
           )}
 
           <View className="flex-1" />
