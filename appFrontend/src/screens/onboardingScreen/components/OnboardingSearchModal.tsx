@@ -145,7 +145,6 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
                 placeholderTextColor={COLOR.GRAY_BE}
                 inputMode="search"
                 onChangeText={changeSearchText}
-                autoFocus
                 hitSlop={{ top: 20, bottom: 20, right: 500, left: 50 }}
               />
             </View>
