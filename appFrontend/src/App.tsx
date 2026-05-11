@@ -1,19 +1,19 @@
-import React, { useEffect, useRef } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { Provider } from 'react-redux';
-import { RootNavigation } from '@/navigation';
-import { store } from '@/store';
-import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
-import * as Sentry from '@sentry/react-native';
-import { MODE, SENTRY_DSN, AMPLITUDE_API_KEY } from '@env';
-import { version as currentVersion } from '../package.json';
-import { fetch } from '@react-native-community/netinfo';
-import { Alert } from 'react-native';
-import RNExitApp from 'react-native-exit-app';
-import { RootStackParamList } from './navigation/types/navigation';
-import analytics from '@react-native-firebase/analytics';
 import * as Amplitude from '@amplitude/analytics-react-native';
 import { SessionReplayPlugin } from '@amplitude/plugin-session-replay-react-native';
+import { AMPLITUDE_API_KEY, MODE, SENTRY_DSN } from '@env';
+import { fetch } from '@react-native-community/netinfo';
+import analytics from '@react-native-firebase/analytics';
+import * as Sentry from '@sentry/react-native';
+import RNExitApp from 'react-native-exit-app';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { Provider } from 'react-redux';
+import React, { useEffect, useRef } from 'react';
+import { Alert } from 'react-native';
+import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
+import { RootNavigation } from '@/navigation';
+import { store } from '@/store';
+import { version as currentVersion } from '../package.json';
+import { RootStackParamList } from './navigation/types/navigation';
 
 Amplitude.init(AMPLITUDE_API_KEY, undefined, {
   disableCookies: true,
