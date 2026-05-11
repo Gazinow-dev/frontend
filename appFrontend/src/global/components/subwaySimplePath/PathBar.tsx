@@ -1,10 +1,10 @@
-import { IssueSummary, StationCode } from '@/global/apis/entity';
-import { subwayLineColor } from '@/global/utils';
 import { View } from 'react-native';
+import { IssueSummary, LineCode } from '@/global/apis/entity';
+import { lineCodeToColor } from '@/global/utils';
 import IssueKeywordIcon from '../IssueKeywordIcon';
 
 interface Props {
-  stationCode: StationCode;
+  stationCode: LineCode;
   isFirst?: boolean;
   isLast: boolean;
   issues: IssueSummary[];
@@ -15,7 +15,7 @@ const PathBar = ({ stationCode, isFirst, isLast, issues, isHideIsuue }: Props) =
   return (
     <View
       style={{
-        backgroundColor: subwayLineColor(stationCode),
+        backgroundColor: lineCodeToColor(stationCode),
         height: 2,
         flex: 1,
         marginTop: 10,
@@ -46,7 +46,7 @@ const PathBar = ({ stationCode, isFirst, isLast, issues, isHideIsuue }: Props) =
                 width={25}
                 height={25}
                 keyword={issue.keyword}
-                color={subwayLineColor(stationCode)}
+                color={lineCodeToColor(stationCode)}
                 isPath
               />
             );

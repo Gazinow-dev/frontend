@@ -38,6 +38,7 @@ export { default as IconComment } from './icon-comment.svg';
 export { default as IconHeart } from './icon-heart.svg';
 
 // Search Path
+export { default as IconSearch } from './icon-search.svg';
 export { default as IconSwapChange } from './icon-swap-change.svg';
 export { default as IconWalkingHuman } from './icon-walking-human.svg';
 export { default as IconLocationPin } from './icon-location-pin.svg';
@@ -62,6 +63,7 @@ export { default as IconIssueProtest } from './issue-protest.svg';
 
 // logo
 export { default as IconLogoGAZI } from './logo-GAZI.svg';
+export { default as IconLogoGAZISquare } from './logo-GAZI-square.svg';
 export { default as IconLogoApple } from './logo-apple.svg';
 export { default as IconLogoGoogle } from './logo-google.svg';
 export { default as IconLogoNaver } from './logo-naver.svg';

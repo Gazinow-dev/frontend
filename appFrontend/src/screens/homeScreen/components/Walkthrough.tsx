@@ -1,7 +1,7 @@
-import { Dimensions, Pressable, View } from 'react-native';
-import { useState } from 'react';
-import { isFirstRunType } from '@/navigation/MainBottomTabNavigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState } from 'react';
+import { Dimensions, Pressable, View } from 'react-native';
+import { isFirstRunType } from '@/navigation/MainBottomTabNavigation';
 import {
   IconTextWalkthroughMypath,
   IconTextWalkthroughNoti,
@@ -21,7 +21,7 @@ const Walkthrough = ({ setIsFirstRun }: Props) => {
     <SafeAreaView className="absolute h-full w-full flex-1 bg-[#000000BF]">
       {walkthroughStep === 'Path' && (
         <Pressable onPress={() => setWalkthroughStep('Noti')}>
-          <View style={{ height: height * 0.33 }} />
+          <View style={{ height: height * 0.3 }} />
           <IconTextWalkthroughMypath className="mb-16 ml-21" />
           <ImgWalkthroughMypath className="mx-16" width={width - 32} />
         </Pressable>
@@ -29,10 +29,10 @@ const Walkthrough = ({ setIsFirstRun }: Props) => {
       {walkthroughStep === 'Noti' && (
         <Pressable
           onPress={() => setIsFirstRun('finishedWalkThrough')}
-          className="h-full w-full items-end"
+          className="items-end w-full h-full"
         >
           <ImgWalkthroughNoti className="-mt-4 mr-11" />
-          <IconTextWalkthroughNoti className="mr-15 mt-16" />
+          <IconTextWalkthroughNoti className="mt-16 mr-15" />
         </Pressable>
       )}
     </SafeAreaView>

@@ -7,7 +7,6 @@ export type RootStackParamList = {
     params?: { searchType: '출발역' | '도착역' };
   };
   MainBottomTab: { screen: 'homeStack' };
-  NewRouteNavigation: { screen: 'SavedRoutes' | 'Swap' };
   MyPageNavigation: {
     screen:
       | 'NotiSettingsDetailScreen'
@@ -30,6 +29,8 @@ export type RootStackParamList = {
       noticeId?: number;
     };
   };
+  OnboardingNavigation: undefined;
+  SavePathNavigation: { screen: 'SavedPaths' | 'SwapStation' };
   SubwayPathDetail: { state?: Path | SubPath[]; notificationId?: number | null };
 };
 
@@ -44,16 +45,12 @@ export type HomeStackParamList = {
   NotiHistory: undefined;
   SubwayPathResult: undefined;
   SubwayPathDetail: { state?: Path | SubPath[]; notificationId?: number | null };
-  SavedRoutes: undefined;
+  SavedPaths: undefined;
 };
 
-export type NewRouteStackParamList = {
-  SavedRoutes: undefined;
-  Swap: undefined;
-  Search: undefined;
-  Result: undefined;
-  Detail: { state?: Path | SubPath[]; pathId?: number | null };
-  Name: { state?: Path | SubPath[]; pathId?: number | null };
+export type IssueStackParamList = {
+  SearchStation: undefined;
+  IssueDetail: undefined;
 };
 
 export type MyPageStackParamList = {
@@ -73,7 +70,20 @@ export type MyPageStackParamList = {
   PersonalTermsScreen: undefined;
 };
 
-export type IssueStackParamList = {
-  SearchStation: undefined;
-  IssueDetail: undefined;
+export type OnboardingStackParamList = {
+  Onboarding: undefined;
+  OnboardingSwap: undefined;
+  OnboardingWalkTime: { newPath: Path };
+  OnboardingSetAlert: { newPath: Path };
+  OnboardingPathName: { newPath: Path };
+  OnboardingCompleted: { pathName: unknown };
+};
+
+export type SavePathStackParamList = {
+  PathName: { state?: Path | SubPath[]; pathId?: number | null };
+  PathSelect: undefined;
+  SavedPaths: undefined;
+  StationSearch: undefined;
+  SwapStation: undefined;
+  PathDetail: { state?: Path | SubPath[]; pathId?: number | null };
 };
