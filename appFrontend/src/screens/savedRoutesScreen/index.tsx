@@ -1,20 +1,20 @@
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useMutation, useQueryClient } from 'react-query';
 import React, { useState } from 'react';
-import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
-import { MyRoutesType } from '@/global/apis/entity';
-import { myPathDeleteFetch } from '@/global/apis/func';
-import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
-import { showToast } from '@/global/utils/toast';
-import { LoadingScreen, NetworkErrorScreen, SubwaySimplePath } from '@/global/components';
-import MyTabModal from '@/global/components/MyTabModal';
-import { COLOR } from '@/global/constants';
 import { FontText } from '@/global/ui';
+import { COLOR } from '@/global/constants';
 import { useRootNavigation } from '@/navigation/RootNavigation';
-import { trackMapBookmark2, trackMapBookmarkDelete } from '@/analytics/map.events';
+import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
 import { IconChevronLeft, IconPlusCircle } from '@/assets/icons';
+import { useGetSavedRoutesQuery } from '@/global/apis/hooks';
+import MyTabModal from '@/global/components/MyTabModal';
+import { useMutation, useQueryClient } from 'react-query';
+import { LoadingScreen, NetworkErrorScreen, SubwaySimplePath } from '@/global/components';
+import { showToast } from '@/global/utils/toast';
+import { trackMapBookmark2, trackMapBookmarkDelete } from '@/analytics/map.events';
+import { myPathDeleteFetch } from '@/global/apis/func';
+import { MyRoutesType } from '@/global/apis/entity';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const SavedPathsScreen = () => {
+const SavedRoutesScreen = () => {
   const navigation = useRootNavigation();
 
   const [popupVisible, setPopupVisible] = useState<boolean>(false);
@@ -81,9 +81,9 @@ const SavedPathsScreen = () => {
         <FontText text="저장경로 편집" className="text-18 leading-23" fontWeight="500" />
       </View>
       <ScrollView>
-        <View className="mx-16 rounded-15 bg-white">
+        <View className="mx-16 bg-white rounded-15">
           {myRoutes?.map((item) => (
-            <View className="border-b-1 border-gray-beb px-16 pb-24 pt-20" key={item.id}>
+            <View className="px-16 pt-20 pb-24 border-b-1 border-gray-beb" key={item.id}>
               <View className="flex-row items-center justify-between">
                 <FontText text={item.roadName} className="text-18 leading-23" fontWeight="600" />
                 <View className="flex-row gap-20">
@@ -119,7 +119,7 @@ const SavedPathsScreen = () => {
             })}
             onPress={() => {
               trackMapBookmark2();
-              navigation.navigate('SavePathNavigation', { screen: 'SwapStation' });
+              navigation.navigate('NewRouteNavigation', { screen: 'Swap' });
             }}
           >
             <IconPlusCircle />
@@ -135,4 +135,4 @@ const SavedPathsScreen = () => {
   );
 };
 
-export default SavedPathsScreen;
+export default SavedRoutesScreen;

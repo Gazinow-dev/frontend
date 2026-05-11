@@ -1,4 +1,4 @@
-import { LineCapsules } from '@/global/apis/entity';
+import { NowScreenCapsules } from '@/global/apis/entity';
 import { NOW } from '@/global/constants';
 import * as Amplitude from '@amplitude/analytics-react-native';
 
@@ -45,7 +45,7 @@ export const trackNowHotIssueOpen = () => {
  * 전체 이슈의 노선 캡슐 클릭
  * @param line 나우탭 노선 캡슐
  */
-export const trackNowTotalIssueLine = (line: LineCapsules) => {
+export const trackNowTotalIssueLine = (line: NowScreenCapsules) => {
   Amplitude.track(NOW.NOW_TOTALISSUE_LINE, { line });
 };
 

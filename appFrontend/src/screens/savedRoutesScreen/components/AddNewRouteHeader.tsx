@@ -1,17 +1,17 @@
 import React from 'react';
-import { TouchableOpacity, View } from 'react-native';
 import { FontText } from '@/global/ui';
-import { useHomeNavigation } from '@/navigation/HomeNavigation';
-import { useSavePathNavigation } from '@/navigation/SavePathNavigation';
+import { TouchableOpacity, View } from 'react-native';
 import { IconChevronLeft, IconCross } from '@/assets/icons';
+import { useNewRouteNavigation } from '@/navigation/NewRouteNavigation';
+import { useHomeNavigation } from '@/navigation/HomeNavigation';
 
-const SavePathHeader = () => {
-  const savePathNavigation = useSavePathNavigation();
+const AddNewRouteHeader = () => {
+  const newRouteNavigation = useNewRouteNavigation();
   const homeNavigation = useHomeNavigation();
 
   return (
     <View className="h-56 flex-row items-center justify-between px-16">
-      <TouchableOpacity hitSlop={20} onPress={() => savePathNavigation.goBack()}>
+      <TouchableOpacity hitSlop={20} onPress={() => newRouteNavigation.goBack()}>
         <IconChevronLeft />
       </TouchableOpacity>
 
@@ -30,4 +30,4 @@ const SavePathHeader = () => {
   );
 };
 
-export default SavePathHeader;
+export default AddNewRouteHeader;

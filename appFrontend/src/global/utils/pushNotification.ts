@@ -1,8 +1,8 @@
-import notifee, { AndroidImportance, AndroidVisibility, EventType } from '@notifee/react-native';
-import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 import { useCallback, useEffect } from 'react';
-import { AppState, AppStateStatus, Platform } from 'react-native';
+import messaging, { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
+import notifee, { AndroidImportance, AndroidVisibility, EventType } from '@notifee/react-native';
 import { useRootNavigation } from '@/navigation/RootNavigation';
+import { AppState, AppStateStatus, Platform } from 'react-native';
 
 const rootNavigation = useRootNavigation();
 
@@ -51,7 +51,9 @@ export const displayReceivedNotification = async (
 };
 
 // 알림 클릭 시 remoteMessage의 data(Path값, 알림 id)를 경로 상세 페이지 화면의 param으로 넣고 화면 이동
-export const handleNotificationPress = (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {
+export const handleNotificationPress = async (
+  remoteMessage: FirebaseMessagingTypes.RemoteMessage,
+) => {
   const pathJsonString = remoteMessage.data?.path as string;
   const notificationId = Number(remoteMessage.data?.notificationId);
 
@@ -66,7 +68,7 @@ export const handleNotificationPress = (remoteMessage: FirebaseMessagingTypes.Re
     };
     const parsedPathObject = parseJsonString(pathJsonString);
 
-    rootNavigation.navigate('SubwayPathDetail', {
+    await rootNavigation.navigate('SubwayPathDetail', {
       state: parsedPathObject,
       notificationId,
     });

@@ -1,21 +1,21 @@
-import { IconChevronLeft } from '@assets/icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Sentry from '@sentry/react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { Alert, TouchableOpacity, View } from 'react-native';
-import { RootState } from '@/store/configureStore';
-import { getAuthorizationState } from '@/store/modules';
-import { showToast } from '@/global/utils/toast';
-import MyTabModal from '@/global/components/MyTabModal';
 import { FontText } from '@/global/ui';
-import { removeEncryptedStorage } from '@/global/utils';
+import MyTabModal from '@/global/components/MyTabModal';
+import { Alert, TouchableOpacity, View } from 'react-native';
+import { IconChevronLeft } from '@assets/icons';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store/configureStore';
 import { useMyPageNavigation } from '@/navigation/MyPageNavigation';
-import { useRootNavigation } from '@/navigation/RootNavigation';
-import { trackMyWithdraw } from '@/analytics/my.events';
-import { useAppDispatch } from '@/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDeleteAccountMutation } from '../apis/hooks';
+import * as Sentry from '@sentry/react-native';
+import { removeEncryptedStorage } from '@/global/utils';
+import { useRootNavigation } from '@/navigation/RootNavigation';
+import { showToast } from '@/global/utils/toast';
+import { useAppDispatch } from '@/store';
+import { getAuthorizationState } from '@/store/modules';
+import { trackMyWithdraw } from '@/analytics/my.events';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ConfirmQuitScreen = () => {
   const myPageNavigation = useMyPageNavigation();
@@ -66,14 +66,14 @@ const ConfirmQuitScreen = () => {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 px-16">
         <TouchableOpacity
-          className="flex-row items-center h-56 w-30"
+          className="h-56 w-30 flex-row items-center"
           onPress={() => myPageNavigation.goBack()}
           hitSlop={20}
         >
           <IconChevronLeft />
         </TouchableOpacity>
 
-        <View className="flex-1 space-20 pt-29">
+        <View className="space-20 flex-1 pt-29">
           <FontText
             text={`${nickname}님,\n정말 탈퇴하시겠어요?`}
             className="text-24 leading-32"
@@ -87,13 +87,13 @@ const ConfirmQuitScreen = () => {
         </View>
 
         <TouchableOpacity
-          className="items-center mb-24 rounded-5 bg-black-717 py-11"
+          className="mb-24 items-center rounded-5 bg-black-717 py-11"
           onPress={() => myPageNavigation.goBack()}
         >
-          <FontText text="이전으로 돌아가기" className="text-white text-17 leading-26" />
+          <FontText text="이전으로 돌아가기" className="text-17 leading-26 text-white" />
         </TouchableOpacity>
 
-        <TouchableOpacity className="items-center mb-36" onPress={() => setPopupVisible(true)}>
+        <TouchableOpacity className="mb-36 items-center" onPress={() => setPopupVisible(true)}>
           <View className="border-b-1 border-gray-999">
             <FontText text="탈퇴하기" className="text-13 text-gray-999" />
           </View>

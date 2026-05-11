@@ -1,22 +1,22 @@
-import notifee, { AndroidImportance, AndroidVisibility } from '@notifee/react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import NowScreen from '@screens/nowScreen';
-import cn from 'classname';
-import { useCallback, useEffect, useState } from 'react';
-import { Pressable, StatusBar } from 'react-native';
 import {
   BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import { COLOR } from '@/global/constants';
-import { FontText } from '@/global/ui';
-import { trackHomeTabClick } from '@/analytics/map.events';
-import { trackMyTabClick } from '@/analytics/my.events';
-import { trackNowTabClick } from '@/analytics/now.events';
-import { IconTabMap, IconTabMapBorder, IconTabMy, IconTabNow } from '@/assets/icons';
-import { Walkthrough } from '@/screens/homeScreen/components';
-import { MyPageNavigation } from '.';
+import cn from 'classname';
+import { COLOR, HOME, MY_ROOT } from '@/global/constants';
 import HomeNavigation from './HomeNavigation';
+import NowScreen from '@screens/nowScreen';
+import { IconTabMap, IconTabMapBorder, IconTabMy, IconTabNow } from '@/assets/icons';
+import { FontText } from '@/global/ui';
+import { Pressable, StatusBar } from 'react-native';
+import { MyPageNavigation } from '.';
+import notifee, { AndroidImportance, AndroidVisibility } from '@notifee/react-native';
+import { Walkthrough } from '@/screens/homeScreen/components';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useCallback, useEffect, useState } from 'react';
+import { trackHomeTabClick } from '@/analytics/map.events';
+import { trackNowTabClick } from '@/analytics/now.events';
+import { trackMyTabClick } from '@/analytics/my.events';
 
 const Tab = createBottomTabNavigator();
 
@@ -35,9 +35,9 @@ const MainBottomTabNavigation = () => {
   const [isFirstRun, setIsFirstRun] = useState<isFirstRunType>('notFirstRun');
 
   const checkFirstRun = useCallback(async () => {
-    const showCoachMark = await AsyncStorage.getItem('showCoachMark');
-    if (showCoachMark === 'true') {
-      await AsyncStorage.setItem('showCoachMark', 'false');
+    const hasRunBefore = await AsyncStorage.getItem('hasRunBefore');
+    if (!hasRunBefore) {
+      await AsyncStorage.setItem('hasRunBefore', 'true');
       setIsFirstRun('isFirstRun');
     }
   }, []);
@@ -67,7 +67,7 @@ const MainBottomTabNavigation = () => {
 
   return (
     <>
-      <Tab.Navigator initialRouteName={'Home'} screenOptions={screenOption}>
+      <Tab.Navigator initialRouteName={HOME} screenOptions={screenOption}>
         <Tab.Screen
           name="homeStack"
           component={HomeNavigation}
@@ -129,7 +129,7 @@ const MainBottomTabNavigation = () => {
           }}
         />
         <Tab.Screen
-          name={'MyRoot'}
+          name={MY_ROOT}
           component={MyPageNavigation}
           options={{
             tabBarButton: (props) => (

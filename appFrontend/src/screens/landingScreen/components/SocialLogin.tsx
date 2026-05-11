@@ -1,19 +1,19 @@
-import { API_BASE_URL } from '@env';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import messaging from '@react-native-firebase/messaging';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
-import { useMutation } from 'react-query';
-import { Platform, TouchableOpacity, View } from 'react-native';
-import { getAuthorizationState, saveUserInfo } from '@/store/modules';
-import { showToast } from '@/global/utils/toast';
-import { FontText } from '@/global/ui';
-import { setEncryptedStorage } from '@/global/utils';
+import { View, Platform, TouchableOpacity } from 'react-native';
 import { useRootNavigation } from '@/navigation/RootNavigation';
+import { useAppDispatch } from '@/store';
+import { getAuthorizationState, saveUserInfo } from '@/store/modules';
+import { setEncryptedStorage } from '@/global/utils';
+import messaging from '@react-native-firebase/messaging';
+import { showToast } from '@/global/utils/toast';
+import { sendFirebaseTokenFetch } from '../apis/func';
+import { useMutation } from 'react-query';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FontText } from '@/global/ui';
+import { API_BASE_URL } from '@env';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 import { trackLogin } from '@/analytics/auth.events';
 import { trackRegisterFinish } from '@/analytics/register.events';
 import { IconLogoApple, IconLogoGoogle, IconLogoNaver } from '@/assets/icons';
-import { useAppDispatch } from '@/store';
-import { sendFirebaseTokenFetch } from '../apis/func';
 
 export type SocialLoginTypes = 'naver' | 'google' | 'apple';
 
@@ -68,9 +68,6 @@ const SocialLogin = () => {
 
         if (urlParams.socialLoginIsNewMember === 'true') {
           trackRegisterFinish(socialLoginType);
-          setTimeout(() => {
-            navigation.push('OnboardingNavigation');
-          }, 1000);
         }
 
         const firebaseToken = await messaging().getToken();
@@ -86,20 +83,20 @@ const SocialLogin = () => {
   };
 
   return (
-    <View className="mx-30 mb-20 space-y-12">
+    <View className="mb-20 space-y-12 mx-30">
       {Platform.OS === 'ios' && (
         <TouchableOpacity
           className="flex-row items-center justify-between rounded-30 bg-[#03C75A] px-19 py-6"
           onPress={() => onSocialLoginPress('naver')}
         >
           <IconLogoNaver />
-          <FontText className="text-14 text-white" text="네이버로 계속하기" fontWeight="500" />
+          <FontText className="text-white text-14" text="네이버로 계속하기" fontWeight="500" />
           <View className="w-34" />
         </TouchableOpacity>
       )}
 
       <TouchableOpacity
-        className="flex-row items-center justify-between rounded-30 bg-white px-19 py-6"
+        className="flex-row items-center justify-between py-6 bg-white rounded-30 px-19"
         onPress={() => onSocialLoginPress('google')}
       >
         <IconLogoGoogle />
@@ -109,11 +106,11 @@ const SocialLogin = () => {
 
       {Platform.OS === 'ios' && (
         <TouchableOpacity
-          className="flex-row items-center justify-between rounded-30 bg-black px-19 py-6"
+          className="flex-row items-center justify-between py-6 bg-black rounded-30 px-19"
           onPress={() => onSocialLoginPress('apple')}
         >
           <IconLogoApple />
-          <FontText className="text-14 text-white" text="Apple로 계속하기" fontWeight="500" />
+          <FontText className="text-white text-14" text="Apple로 계속하기" fontWeight="500" />
           <View className="w-34" />
         </TouchableOpacity>
       )}

@@ -1,4 +1,4 @@
-import { OriginLineName } from '@/global/apis/entity';
+import { RawSubwayLineName } from '@/global/apis/entity';
 import { MAP } from '@/global/constants';
 import * as Amplitude from '@amplitude/analytics-react-native';
 
@@ -10,8 +10,8 @@ type Station = {
 type DepArr = {
   station_departure: string;
   station_arrival: string;
-  line_departure: OriginLineName;
-  line_arrival: OriginLineName;
+  line_departure: RawSubwayLineName;
+  line_arrival: RawSubwayLineName;
 };
 
 type DepArrName = { name: string } & DepArr;

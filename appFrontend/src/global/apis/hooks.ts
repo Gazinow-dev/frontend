@@ -1,16 +1,3 @@
-import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
-import { useMemo } from 'react';
-import {
-  getAllIssuesFetch,
-  getIssuesByLaneFetch,
-  searchAddHistoryFetch,
-  searchHistoryFetch,
-  searchPathSaveFetch,
-  searchPathsFetch,
-} from '@/global/apis/func';
-import { originToDisplay } from '@/global/utils';
-import { useAppSelect } from '@/store';
-import { OriginLineName, SubwayStrEnd } from './entity';
 import {
   getNotiHistoryFetch,
   getPopularIssuesAtMainFetch,
@@ -19,6 +6,19 @@ import {
   getSearchRoutesFetch,
   searchStationName,
 } from './func';
+import { useMutation, useQuery, useInfiniteQuery } from 'react-query';
+import {
+  searchAddHistoryFetch,
+  searchHistoryFetch,
+  searchPathSaveFetch,
+  searchPathsFetch,
+  getAllIssuesFetch,
+  getIssuesByLaneFetch,
+} from '@/global/apis/func';
+import { RawSubwayLineName, SubwayStrEnd } from './entity';
+import { subwayFreshLineName } from '@/global/utils';
+import { useAppSelect } from '@/store';
+import { useMemo } from 'react';
 
 /**
  * 지하철역 검색 훅
@@ -28,7 +28,7 @@ export const useSearchStationName = (nameValue: string) => {
     nameValue.slice(-1) === 'ㅇ' || nameValue.slice(-1) === '여' || nameValue.slice(-1) === '역';
   const stationName = lastChar && nameValue !== '서울역' ? nameValue.slice(0, -1) : nameValue;
 
-  const { data, isLoading } = useQuery(
+  const { data } = useQuery(
     ['search-subway-name', nameValue],
     () => searchStationName({ stationName }),
     {
@@ -36,7 +36,7 @@ export const useSearchStationName = (nameValue: string) => {
     },
   );
 
-  const freshData = data ? originToDisplay(data) : [];
+  const freshData = data ? subwayFreshLineName(data) : [];
 
   const deduplicatedStationData = useMemo(() => {
     if (!freshData) return [];
@@ -52,7 +52,6 @@ export const useSearchStationName = (nameValue: string) => {
     searchResultData: deduplicatedStationData.sort((a, b) =>
       a.stationName.localeCompare(b.stationName),
     ),
-    isLoading,
   };
 };
 
@@ -77,7 +76,7 @@ export const useGetSearchHistory = () => {
     });
   }, [freshData]);
   return {
-    historyData: deduplicatedStationData ? originToDisplay(deduplicatedStationData) : [],
+    historyData: deduplicatedStationData ? subwayFreshLineName(deduplicatedStationData) : [],
   };
 };
 
@@ -126,19 +125,15 @@ export const useSavedSubwayRoute = ({
 export const useAddRecentSearch = ({
   onSuccess,
 }: {
-  onSuccess: (data: { id: number; stationName: string; stationLine: OriginLineName }) => void;
+  onSuccess: (data: { id: number; stationName: string; stationLine: RawSubwayLineName }) => void;
 }) => {
-  const { data, mutate, isLoading } = useMutation(searchAddHistoryFetch, {
+  const { data, mutate } = useMutation(searchAddHistoryFetch, {
     onSuccess,
   });
   const freshData = data
     ? { line: data.stationLine, name: data.stationName }
     : { line: null, name: '' };
-  return {
-    data: originToDisplay([freshData]),
-    addRecentMutate: mutate,
-    isLoadingAddRecent: isLoading,
-  };
+  return { data: subwayFreshLineName([freshData]), addRecentMutate: mutate };
 };
 
 /**

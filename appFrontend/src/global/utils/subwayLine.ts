@@ -1,40 +1,40 @@
 import { COLOR } from '@/global/constants';
 import {
-  DisplayLineName,
-  LineCapsules,
-  LineCode,
-  OriginLineName,
   SearchStationNameTypes,
+  StationCode,
+  RawSubwayLineName,
+  FreshSubwayLineName,
+  NowScreenCapsules,
 } from '../apis/entity';
 
 /**
- * @param originLineName[]
- * @returns displayLineName[]
+ * 지하철 호선명 가는길지금 표기로 변경
+ * @param list 응답받은 지하철 검색 결과
  */
-export const originToDisplay = (
-  stations: SearchStationNameTypes['data'],
-): { stationName: string; stationLine: DisplayLineName | null }[] => {
-  return stations.map(({ name, line }) => {
-    switch (line) {
+export const subwayFreshLineName = (
+  list: SearchStationNameTypes['data'],
+): { stationName: string; stationLine: FreshSubwayLineName | null }[] => {
+  return list.map((item) => {
+    switch (item?.line) {
       case '수도권 김포골드라인':
-        return { stationName: name, stationLine: '김포골드' };
+        return { stationName: item.name, stationLine: '김포골드' };
       case '수도권 서해선(대곡-원시)':
-        return { stationName: name, stationLine: '서해선' };
+        return { stationName: item.name, stationLine: '서해선' };
       case '수도권 수인.분당선':
-        return { stationName: name, stationLine: '수인분당' };
+        return { stationName: item.name, stationLine: '수인분당' };
       case '수도권 신분당선':
-        return { stationName: name, stationLine: '신분당' };
+        return { stationName: item.name, stationLine: '신분당' };
       case '수도권 우이신설경전철':
-        return { stationName: name, stationLine: '우이신설' };
+        return { stationName: item.name, stationLine: '우이신설' };
       case '수도권 의정부경전철':
-        return { stationName: name, stationLine: '의정부' };
+        return { stationName: item.name, stationLine: '의정부' };
       case '경의중앙선':
-        return { stationName: name, stationLine: '경의중앙' };
+        return { stationName: item.name, stationLine: '경의중앙' };
       default:
         return {
-          stationName: name,
-          stationLine: !!line
-            ? (line.replace('수도권 ', '').replace('인천 ', '인천') as DisplayLineName)
+          stationName: item.name,
+          stationLine: !!item.line
+            ? (item.line.replace('수도권 ', '').replace('인천 ', '인천') as FreshSubwayLineName)
             : null,
         };
     }
@@ -42,11 +42,11 @@ export const originToDisplay = (
 };
 
 /**
- * @param displayLineName
- * @returns originLineName
+ * 지하철 호선명 오디세이 표기로 원상복귀
+ * @param lineName 응답받은 지하철 검색 결과
  */
-export const displayToOrigin = (displayLine: DisplayLineName): OriginLineName => {
-  switch (displayLine) {
+export const subwayReturnLineName = (lineName: FreshSubwayLineName): RawSubwayLineName => {
+  switch (lineName) {
     case '김포골드':
       return '수도권 김포골드라인';
     case '서해선':
@@ -66,130 +66,130 @@ export const displayToOrigin = (displayLine: DisplayLineName): OriginLineName =>
     case '경의중앙':
       return '경의중앙선';
     default:
-      return `수도권 ${displayLine}`;
+      return `수도권 ${lineName}`;
   }
 };
 
 /**
- * @param origin 오디세이 기준 지하철 호선명
- * @returns lineCircle N호선 아이콘에 쓰이는 줄바꿈 적용된 이름
+ * 오디세이 지하철 호선 표기를 컬러로
+ * @param lineName 응답받은 지하철 검색 결과
  */
-export const originToLineCircle = (origin: OriginLineName): string => {
-  switch (origin) {
+export const rawLineNameToColor = (lineName: RawSubwayLineName) => {
+  switch (lineName) {
     case '수도권 1호선':
-      return '1';
+      return COLOR.LINE1;
     case '수도권 2호선':
-      return '2';
+      return COLOR.LINE2;
     case '수도권 3호선':
-      return '3';
+      return COLOR.LINE3;
     case '수도권 4호선':
-      return '4';
+      return COLOR.LINE4;
     case '수도권 5호선':
-      return '5';
+      return COLOR.LINE5;
     case '수도권 6호선':
-      return '6';
+      return COLOR.LINE6;
     case '수도권 7호선':
-      return '7';
+      return COLOR.LINE7;
     case '수도권 8호선':
-      return '8';
+      return COLOR.LINE8;
     case '수도권 9호선':
-      return '9';
+      return COLOR.LINE9;
     case '인천 1호선':
-      return '인천1';
+      return COLOR.LINEIO;
     case '인천 2호선':
-      return '인천2';
+      return COLOR.LINEIT;
     case '수도권 공항철도':
-      return `공항\n철도`;
+      return COLOR.LINEGH;
     case '경의중앙선':
-      return '경의';
+      return COLOR.LINEKJ;
     case '수도권 에버라인':
-      return `에버\n라인`;
+      return COLOR.LINEEL;
     case '수도권 경춘선':
-      return '경춘';
+      return COLOR.LINEKC;
     case '수도권 신분당선':
-      return '신분당';
-    case '수도권 의정부경전철':
-      return '의정부';
-    case '수도권 경강선':
-      return '경강';
-    case '수도권 우이신설경전철':
-      return '우이\n신설';
-    case '수도권 서해선(대곡-원시)':
-      return '서해';
-    case '수도권 김포골드라인':
-      return '김포\n골드';
+      return COLOR.LINENBD;
     case '수도권 수인.분당선':
-      return '수인\n분당';
+      return COLOR.LINESBD;
+    case '수도권 의정부경전철':
+      return COLOR.LINEEGB;
+    case '수도권 경강선':
+      return COLOR.LINEKK;
+    case '수도권 우이신설경전철':
+      return COLOR.LINEUS;
+    case '수도권 서해선(대곡-원시)':
+      return COLOR.LINESH;
+    case '수도권 김포골드라인':
+      return COLOR.LINEGG;
     case '수도권 신림선':
-      return '신림';
+      return COLOR.LINESL;
     default:
-      return '1';
+      return '#222';
   }
 };
 
 /**
- * @param origin 오디세이 기준 지하철 호선명
- * @returns lineCircle N호선 아이콘에 쓰이는 줄바꿈 적용된 이름
+ * 오디세이 지하철 호선 표기를 나우탭 캡슐 텍스트 컬러로
+ * @param lineName 응답받은 지하철 검색 결과
  */
-export const displayToLineCircle = (origin: DisplayLineName): string => {
-  switch (origin) {
+export const freshSubwayLineNameToNowCapsuleColor = (lineName: NowScreenCapsules) => {
+  switch (lineName) {
     case '1호선':
-      return '1';
+      return COLOR.LINE1;
     case '2호선':
-      return '2';
+      return COLOR.LINE2;
     case '3호선':
-      return '3';
+      return COLOR.LINE3;
     case '4호선':
-      return '4';
+      return COLOR.LINE4;
     case '5호선':
-      return '5';
+      return COLOR.LINE5;
     case '6호선':
-      return '6';
+      return COLOR.LINE6;
     case '7호선':
-      return '7';
+      return COLOR.LINE7;
     case '8호선':
-      return '8';
+      return COLOR.LINE8;
     case '9호선':
-      return '9';
+      return COLOR.LINE9;
     case '인천1호선':
-      return '인천1';
+      return COLOR.LINEIO;
     case '인천2호선':
-      return '인천2';
+      return COLOR.LINEIT;
     case '공항철도':
-      return `공항\n철도`;
+      return COLOR.LINEGH;
     case '경의중앙':
-      return '경의';
+      return COLOR.LINEKJ;
     case '에버라인':
-      return `에버\n라인`;
+      return COLOR.LINEEL;
     case '경춘선':
-      return '경춘';
+      return COLOR.LINEKC;
     case '신분당':
-      return '신분당';
-    case '의정부':
-      return '의정부';
-    case '경강선':
-      return '경강';
-    case '우이신설':
-      return '우이\n신설';
-    case '서해선':
-      return '서해';
-    case '김포골드':
-      return '김포\n골드';
+      return COLOR.LINENBD;
     case '수인분당':
-      return '수인\n분당';
+      return COLOR.LINESBD;
+    case '의정부':
+      return COLOR.LINEEGB;
+    case '경강선':
+      return COLOR.LINEKK;
+    case '우이신설':
+      return COLOR.LINEUS;
+    case '서해선':
+      return COLOR.LINESH;
+    case '김포골드':
+      return COLOR.LINEGG;
     case '신림선':
-      return '신림';
+      return COLOR.LINESL;
     default:
-      return '1';
+      return '#222';
   }
 };
 
 /**
- * @param origin 오디세이 기준 지하철 호선명
- * @returns lineCapsule 가로스크롤되는 N호선 캡슐명
+ * 나우탭 호선 캡슐에 띄울 이름
+ * @param lineName 응답받은 호선
  */
-export const originToLineCapsule = (origin: OriginLineName): LineCapsules => {
-  switch (origin) {
+export const rawLineNameToNowCapsuleText = (lineName: RawSubwayLineName) => {
+  switch (lineName) {
     case '수도권 1호선':
       return '1호선';
     case '수도권 2호선':
@@ -237,134 +237,12 @@ export const originToLineCapsule = (origin: OriginLineName): LineCapsules => {
     case '수도권 신림선':
       return '신림';
     default:
-      return '1호선';
+      return '#222';
   }
 };
 
-/**
- * @param lineCapsule 가로스크롤되는 N호선 캡슐명
- * @returns OriginLineName
- */
-export const lineCapsuleToOrigin = (lineCapsule: LineCapsules): OriginLineName | '전체' => {
-  switch (lineCapsule) {
-    case '1호선':
-      return '수도권 1호선';
-    case '2호선':
-      return '수도권 2호선';
-    case '3호선':
-      return '수도권 3호선';
-    case '4호선':
-      return '수도권 4호선';
-    case '5호선':
-      return '수도권 5호선';
-    case '6호선':
-      return '수도권 6호선';
-    case '7호선':
-      return '수도권 7호선';
-    case '8호선':
-      return '수도권 8호선';
-    case '9호선':
-      return '수도권 9호선';
-    case '인천1':
-      return '인천 1호선';
-    case '인천2':
-      return '인천 2호선';
-    case '공항철도':
-      return '수도권 공항철도';
-    case '경의중앙':
-      return '경의중앙선';
-    case '에버라인':
-      return '수도권 에버라인';
-    case '경춘':
-      return '수도권 경춘선';
-    case '신분당':
-      return '수도권 신분당선';
-    case '수인분당':
-      return '수도권 수인.분당선';
-    case '의정부':
-      return '수도권 의정부경전철';
-    case '경강':
-      return '수도권 경강선';
-    case '우이신설':
-      return '수도권 우이신설경전철';
-    case '서해':
-      return '수도권 서해선(대곡-원시)';
-    case '김포골드':
-      return '수도권 김포골드라인';
-    case '신림':
-      return '수도권 신림선';
-    case '전체':
-      return '전체';
-    default:
-      return '수도권 1호선';
-  }
-};
-
-/**
- * @param lineCapsule 가로스크롤되는 N호선 캡슐명
- * @returns 호선별 COLOR
- */
-export const lineCapsuleToColor = (lineCapsule: LineCapsules | '전체'): string => {
-  switch (lineCapsule) {
-    case '전체':
-      return COLOR.BASIC_BLACK;
-    case '1호선':
-      return COLOR.LINE1;
-    case '2호선':
-      return COLOR.LINE2;
-    case '3호선':
-      return COLOR.LINE3;
-    case '4호선':
-      return COLOR.LINE4;
-    case '5호선':
-      return COLOR.LINE5;
-    case '6호선':
-      return COLOR.LINE6;
-    case '7호선':
-      return COLOR.LINE7;
-    case '8호선':
-      return COLOR.LINE8;
-    case '9호선':
-      return COLOR.LINE9;
-    case '인천1':
-      return COLOR.LINEIO;
-    case '인천2':
-      return COLOR.LINEIT;
-    case '공항철도':
-      return COLOR.LINEGH;
-    case '경의중앙':
-      return COLOR.LINEKJ;
-    case '에버라인':
-      return COLOR.LINEEL;
-    case '경춘':
-      return COLOR.LINEKC;
-    case '신분당':
-      return COLOR.LINENBD;
-    case '수인분당':
-      return COLOR.LINESBD;
-    case '의정부':
-      return COLOR.LINEEGB;
-    case '경강':
-      return COLOR.LINEKK;
-    case '우이신설':
-      return COLOR.LINEUS;
-    case '서해':
-      return COLOR.LINESH;
-    case '김포골드':
-      return COLOR.LINEGG;
-    case '신림':
-      return COLOR.LINESL;
-    default:
-      return COLOR.BASIC_BLACK;
-  }
-};
-
-/**
- * @param lineCode 지하철 코드
- * @returns 호선별 COLOR
- */
-export const lineCodeToColor = (lineCode: LineCode): string => {
-  switch (lineCode) {
+export const subwayLineColor = (StationCode: StationCode) => {
+  switch (StationCode) {
     case 1:
       return COLOR.LINE1;
     case 2:
@@ -412,16 +290,12 @@ export const lineCodeToColor = (lineCode: LineCode): string => {
     case 117:
       return COLOR.LINESL;
     default:
-      return COLOR.BASIC_BLACK;
+      return '#222';
   }
 };
 
-/**
- * @param lineCode 지하철 코드
- * @returns lineCircle N호선 아이콘에 쓰이는 줄바꿈 적용된 이름
- */
-export const lineCodeToLineCircle = (lineCode: LineCode): string => {
-  switch (lineCode) {
+export const pathSubwayLineName = (StationCode: StationCode) => {
+  switch (StationCode) {
     case 1:
       return '1';
     case 2:
@@ -474,11 +348,11 @@ export const lineCodeToLineCircle = (lineCode: LineCode): string => {
 };
 
 /**
- * @param lineCode 지하철 코드
- * @returns lineCapsule 가로스크롤되는 N호선 캡슐 이름
+ * 나우탭 지하철 호선명 캡슐
+ * @param StationCode 유저가 저장한 경로의 노선 코드
  */
-export const lineCodeToLineCapsule = (lineCode: LineCode): LineCapsules => {
-  switch (lineCode) {
+export const pathSubwayLineNameInLine = (StationCode: StationCode) => {
+  switch (StationCode) {
     case 1:
       return '1호선';
     case 2:
@@ -498,9 +372,9 @@ export const lineCodeToLineCapsule = (lineCode: LineCode): LineCapsules => {
     case 9:
       return '9호선';
     case 21:
-      return '인천1';
+      return '인천1호선';
     case 22:
-      return '인천2';
+      return '인천2호선';
     case 101:
       return '공항철도';
     case 104:
@@ -508,32 +382,30 @@ export const lineCodeToLineCapsule = (lineCode: LineCode): LineCapsules => {
     case 107:
       return '에버라인';
     case 108:
-      return '경춘';
+      return '경춘선';
     case 109:
       return '신분당';
     case 110:
       return '의정부';
     case 112:
-      return '경강';
+      return '경강선';
     case 113:
       return '우이신설';
     case 114:
-      return '서해';
+      return '서해선';
     case 115:
       return '김포골드';
     case 116:
       return '수인분당';
     case 117:
-      return '신림';
+      return '신림선';
+    default:
+      return '';
   }
 };
 
-/**
- * @param station 길이가 긴 지하철역 이름
- * @returns 줄바꿈된 지하철역 이름
- */
-export const breakStationName = (station: string): string => {
-  switch (station) {
+export const subwayNameCutting = (name: string) => {
+  switch (name) {
     case '4.19민주묘지':
       return '4.19\n민주묘지';
     case '가산디지털단지':
@@ -609,6 +481,35 @@ export const breakStationName = (station: string): string => {
     case '아시아드경기장':
       return '아시아드\n경기장';
     default:
-      return station;
+      return name;
   }
 };
+
+/**
+ * 나우탭 캡슐 - 모든 노선 데이터
+ */
+export const allLines: FreshSubwayLineName[] = [
+  '1호선',
+  '2호선',
+  '3호선',
+  '4호선',
+  '5호선',
+  '6호선',
+  '7호선',
+  '8호선',
+  '9호선',
+  '경의중앙',
+  '신분당',
+  '수인분당',
+  '공항철도',
+  '인천1호선',
+  '인천2호선',
+  '신림선',
+  '경강선',
+  '서해선',
+  '경춘선',
+  '의정부',
+  '에버라인',
+  '김포골드',
+  '우이신설',
+];
