@@ -19,7 +19,7 @@ const SubwaySimplePath = ({
   isHideIsuue = false,
 }: Props) => {
   const freshLanesPathData = useMemo(() => {
-    return pathData.filter((item) => !!item.stations.length);
+    return pathData.filter((item) => !!item.stations?.length);
   }, [pathData]);
   const maxLength = freshLanesPathData.length;
 

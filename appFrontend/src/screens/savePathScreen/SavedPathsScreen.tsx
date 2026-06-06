@@ -65,7 +65,7 @@ const SavedPathsScreen = () => {
     return <NetworkErrorScreen retryFn={getSavedRoutesRefetch} />;
   }
   return (
-    <SafeAreaView className="flex-1 bg-gray-9f9">
+    <SafeAreaView className="flex-1 bg-gray-9f9" edges={['top']}>
       <MyTabModal
         isVisible={popupVisible}
         onCancel={hideModal}
@@ -80,7 +80,7 @@ const SavedPathsScreen = () => {
         </TouchableOpacity>
         <FontText text="저장경로 편집" className="text-18 leading-23" fontWeight="500" />
       </View>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
         <View className="mx-16 rounded-15 bg-white">
           {myRoutes?.map((item) => (
             <View className="border-b-1 border-gray-beb px-16 pb-24 pt-20" key={item.id}>

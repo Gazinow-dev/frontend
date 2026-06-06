@@ -8,7 +8,6 @@ import type { StationDataTypes } from '@/store/modules';
 import { Path } from '@/global/apis/entity';
 import { useGetSearchPaths } from '@/global/apis/hooks';
 import { SubwaySimplePath } from '@/global/components';
-import LoadingCircle from '@/global/components/animations/LoadingCircle';
 import { ARRIVAL_STATION, COLOR, DEPARTURE_STATION } from '@/global/constants';
 import { FontText } from '@/global/ui';
 import { useOnboardingNavigation } from '@/navigation/OnboardingNavigation';
@@ -144,11 +143,6 @@ const OnboardingSwapScreen = () => {
           </View>
 
           <View className="px-16 pt-16">
-            {isLoading && (
-              <View className="items-center justify-center flex-1 pt-100">
-                <LoadingCircle />
-              </View>
-            )}
             {!!selectedStation.departure.stationName &&
               !!selectedStation.arrival.stationName &&
               !data &&
