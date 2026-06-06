@@ -171,6 +171,7 @@ export interface SubPath {
   stations: {
     index: number;
     stationName: string;
+    stationCode?: number;
     issueSummary: IssueSummary[];
   }[];
 }
@@ -188,9 +189,22 @@ export interface SaveMyRoutesType extends Path {
   walkingTimeToEndStation?: number;
 }
 
-export interface MyRoutesType extends Path {
+/**
+ * get_roads(저장된 경로 조회) 응답 데이터
+ *
+ * 검색 경로(Path)와 달리 firstStartStation/stationTransitCount/myPath/myPathId가
+ * 응답에 없고, transitStationList는 null로 내려온다.
+ */
+export interface MyRoutesType {
   id: number;
+  totalTime: number;
   roadName: string;
+  lastEndStation: string;
+  notification?: boolean;
+  transitStationList: { stationsName: string; line: OriginLineName }[] | null;
+  subPaths: SubPath[];
+  walkingTimeFromStartStation?: number;
+  walkingTimeToEndStation?: number;
 }
 
 export interface SubwayStrEnd {

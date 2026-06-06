@@ -31,7 +31,7 @@ export type RootStackParamList = {
   };
   OnboardingNavigation: undefined;
   SavePathNavigation: { screen: 'SavedPaths' | 'SwapStation' };
-  SubwayPathDetail: { state?: Path | SubPath[]; notificationId?: number | null };
+  SubwayPathDetail: { state?: Path | MyRoutesType | SubPath[]; notificationId?: number | null };
 };
 
 export type AuthStackStackParamList = {
@@ -44,7 +44,7 @@ export type HomeStackParamList = {
   Home: undefined;
   NotiHistory: undefined;
   SubwayPathResult: undefined;
-  SubwayPathDetail: { state?: Path | SubPath[]; notificationId?: number | null };
+  SubwayPathDetail: { state?: Path | MyRoutesType | SubPath[]; notificationId?: number | null };
   SavedPaths: undefined;
 };
 
