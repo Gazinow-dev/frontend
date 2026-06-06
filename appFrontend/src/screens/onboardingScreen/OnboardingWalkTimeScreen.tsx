@@ -4,12 +4,10 @@ import React, { useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import type { StationDataTypes } from '@/store/modules';
-import { useSavedSubwayRoute } from '@/global/apis/hooks';
 import { SubwaySimplePath } from '@/global/components';
 import { FontText } from '@/global/ui';
 import { useOnboardingNavigation } from '@/navigation/OnboardingNavigation';
 import { OnboardingStackParamList } from '@/navigation/types/navigation';
-import { trackMapBookmark5Finish } from '@/analytics/map.events';
 import { useAppSelect } from '@/store';
 import { OnboardingHeader } from './components';
 
@@ -35,31 +33,12 @@ const OnboardingWalkTimeScreen = () => {
     }));
   };
 
-  const pathData = {
-    station_departure: newPath.firstStartStation,
-    station_arrival: newPath.lastEndStation,
-    line_departure: newPath.subPaths[1].name,
-    line_arrival: newPath.subPaths.at(-2)?.name!,
-  };
-
-  const newPathName = '출근길' + Math.floor(Math.random() * 1000) + 1;
-
-  const { mutate } = useSavedSubwayRoute({
-    onSuccess: async (newPathId) => {
-      trackMapBookmark5Finish({ ...pathData, name: newPathName });
-      onboardingNavigation.push('OnboardingSetAlert', {
-        newPath: { ...newPath, roadName: newPathName, id: newPathId },
-      });
-    },
-    onError: () => {},
-  });
-
+  // 경로 저장은 마지막 단계(OnboardingPathName)에서 1회만 수행한다.
+  // 여기서는 입력한 도보 시간만 다음 화면으로 넘긴다.
   const handleNext = () =>
-    mutate({
-      ...newPath,
-      roadName: newPathName,
-      walkingTimeFromStartStation: walkTime.before,
-      walkingTimeToEndStation: walkTime.after,
+    onboardingNavigation.push('OnboardingSetAlert', {
+      newPath,
+      walkTime,
     });
 
   const totalTime = newPath.totalTime + walkTime.before + walkTime.after;

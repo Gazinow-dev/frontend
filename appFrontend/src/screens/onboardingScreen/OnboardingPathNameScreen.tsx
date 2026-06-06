@@ -1,6 +1,7 @@
+import { AxiosError } from 'axios';
 import cn from 'classname';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 import React, { useEffect, useMemo, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { useRoute } from '@react-navigation/native';
@@ -13,7 +14,18 @@ import { COLOR } from '@/global/constants';
 import { FontText, Input } from '@/global/ui';
 import { useOnboardingNavigation } from '@/navigation/OnboardingNavigation';
 import { OnboardingStackParamList } from '@/navigation/types/navigation';
-import { trackMapBookmark4Name, trackMapBookmark5Finish } from '@/analytics/map.events';
+import {
+  DepArrNameAlert,
+  trackMapBookmark4Name,
+  trackMapBookmark5Finish,
+  trackMapSearchBookmarkSetting,
+} from '@/analytics/map.events';
+import {
+  disablePathNotiFetch,
+  enablePathNotiSettingsFetch,
+  updatePathNotiSettingsFetch,
+} from '@/screens/myRootScreen/apis/func';
+import { rawTimeToReqTimeFormat } from '@/screens/myRootScreen/util/timeFormatChange';
 import { OnboardingHeader } from './components';
 
 export interface SelectedStationTypes {
@@ -23,10 +35,12 @@ export interface SelectedStationTypes {
 
 const OnboardingPathNameScreen = () => {
   const onboardingNavigation = useOnboardingNavigation();
-  const { newPath } = useRoute().params as {
+  const { newPath, walkTime, alertSettings } = useRoute().params as {
     newPath: OnboardingStackParamList['OnboardingPathName']['newPath'];
+    walkTime: OnboardingStackParamList['OnboardingPathName']['walkTime'];
+    alertSettings: OnboardingStackParamList['OnboardingPathName']['alertSettings'];
   };
-  if (!newPath || !newPath.id) return null;
+  if (!newPath) return null;
 
   const [pathName, setPathName] = useState('출근길');
   const recommendedNames = ['출근길', '퇴근길', '학교가는 길', '집 가는 길'];
@@ -48,11 +62,59 @@ const OnboardingPathNameScreen = () => {
     return Object.values(subPaths).filter((item) => !!item.stations.length);
   }, [newPath]);
 
+  // 경로 저장 + 알림 설정 저장 완료 후 마무리
+  const finishOnboarding = () => {
+    trackMapBookmark5Finish({ ...pathData, name: pathName });
+    showToast('saveRoute');
+    onboardingNavigation.push('OnboardingCompleted', { pathName });
+  };
+
+  const createNotiSettingsBody = (newPathId: number) => ({
+    myPathId: newPathId,
+    dayTimeRanges: alertSettings.selectedDays.map((day) => ({
+      day,
+      fromTime: rawTimeToReqTimeFormat(alertSettings.startTime),
+      toTime: rawTimeToReqTimeFormat(alertSettings.endTime),
+    })),
+  });
+
+  // 알림 설정 저장 (경로 저장 성공 후 1회 호출)
+  const { mutate: enablePathNotiSettingsMutate } = useMutation(updatePathNotiSettingsFetch, {
+    onSuccess: (
+      _: unknown,
+      provider: { dayTimeRanges: { fromTime: string; toTime: string }[] },
+    ) => {
+      const trackData: DepArrNameAlert = {
+        ...pathData,
+        name: pathName,
+        alarm: 'on',
+        starttime: provider.dayTimeRanges[0].fromTime.replace(':', ''),
+        finishtime: provider.dayTimeRanges[0].toTime.replace(':', ''),
+        day: alertSettings.selectedDays.join(', '),
+      };
+      trackMapSearchBookmarkSetting(trackData);
+      finishOnboarding();
+    },
+    onError: (error: AxiosError) => {
+      showToast(
+        error.response?.status === 400 ? 'notiSettingsTimeError' : 'saveNotiSettingsFailed',
+      );
+    },
+  });
+
+  const { mutate: disablePathNotiMutate } = useMutation(disablePathNotiFetch, {
+    onSuccess: () => finishOnboarding(),
+    onError: () => showToast('saveNotiSettingsFailed'),
+  });
+
+  // 경로 저장 (온보딩 전체에서 1회만 호출) -> 성공 시 알림 설정 저장으로 이어진다.
   const { mutate } = useSavedSubwayRoute({
-    onSuccess: async () => {
-      trackMapBookmark5Finish({ ...pathData, name: pathName });
-      onboardingNavigation.push('OnboardingCompleted', { pathName });
-      showToast('saveRoute');
+    onSuccess: (newPathId) => {
+      if (alertSettings.isPushNotificationOn) {
+        enablePathNotiSettingsMutate(createNotiSettingsBody(newPathId));
+      } else {
+        disablePathNotiMutate(newPathId);
+      }
     },
     onError: () => {},
   });
@@ -62,18 +124,20 @@ const OnboardingPathNameScreen = () => {
       ...newPath,
       subPaths: freshSubPathData,
       roadName: pathName,
+      walkingTimeFromStartStation: walkTime.before,
+      walkingTimeToEndStation: walkTime.after,
     });
   };
 
   return (
-    <SafeAreaView className="flex-1 px-16 bg-gray-9f9">
+    <SafeAreaView className="flex-1 bg-gray-9f9 px-16">
       <OnboardingHeader />
 
       <View className="flex-1 space-y-28">
-        <View className="pt-16 pb-14">
+        <View className="pb-14 pt-16">
           <View className="relative">
             <View className="h-6 w-full rounded-3 bg-[#78787833]" />
-            <View className="absolute z-10 w-full h-6 rounded-3 bg-black-717" />
+            <View className="absolute z-10 h-6 w-full rounded-3 bg-black-717" />
           </View>
         </View>
 
@@ -91,7 +155,7 @@ const OnboardingPathNameScreen = () => {
 
         <View className="space-y-16">
           {/* 경로 컴포넌트 */}
-          <View className="p-16 bg-white rounded-14">
+          <View className="rounded-14 bg-white p-16">
             <SubwaySimplePath
               pathData={newPath.subPaths}
               arriveStationName={newPath.lastEndStation}
@@ -100,10 +164,10 @@ const OnboardingPathNameScreen = () => {
           </View>
 
           {/* 새 경로 이름 입력 컴포넌트 */}
-          <View className="p-16 bg-white space-y-7 rounded-14">
+          <View className="space-y-7 rounded-14 bg-white p-16">
             <FontText text="새 경로 이름" className="text-14 leading-21" fontWeight="500" />
             <Input
-              className="px-16 py-12 rounded-5 bg-gray-9f9"
+              className="rounded-5 bg-gray-9f9 px-16 py-12"
               value={pathName}
               onChangeText={(text) => setPathName(text)}
               inputMode="text"
@@ -143,7 +207,7 @@ const OnboardingPathNameScreen = () => {
       <TouchableOpacity className="mb-56 rounded-5 bg-black-717 p-11" onPress={handleSave}>
         <FontText
           text="경로 저장하기"
-          className="text-center text-white text-17 leading-26"
+          className="text-center text-17 leading-26 text-white"
           fontWeight="600"
         />
       </TouchableOpacity>

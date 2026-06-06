@@ -70,12 +70,30 @@ export type MyPageStackParamList = {
   PersonalTermsScreen: undefined;
 };
 
+/** 온보딩 도보 시간 입력값 */
+export interface OnboardingWalkTime {
+  before: number;
+  after: number;
+}
+
+/** 온보딩 알림 설정 입력값 (경로 저장 후 실제 알림 API 요청에 사용) */
+export interface OnboardingAlertSettings {
+  isPushNotificationOn: boolean;
+  selectedDays: string[];
+  startTime: string;
+  endTime: string;
+}
+
 export type OnboardingStackParamList = {
   Onboarding: undefined;
   OnboardingSwap: undefined;
   OnboardingWalkTime: { newPath: Path };
-  OnboardingSetAlert: { newPath: Path };
-  OnboardingPathName: { newPath: Path };
+  OnboardingSetAlert: { newPath: Path; walkTime: OnboardingWalkTime };
+  OnboardingPathName: {
+    newPath: Path;
+    walkTime: OnboardingWalkTime;
+    alertSettings: OnboardingAlertSettings;
+  };
   OnboardingCompleted: { pathName: unknown };
 };
 
