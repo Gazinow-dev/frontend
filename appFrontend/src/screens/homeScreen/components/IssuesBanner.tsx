@@ -15,7 +15,7 @@ interface Props {
 }
 
 const IssuesBanner = ({ subPaths, isHomeScreen }: Props) => {
-  const issues = subPaths.filter((subPath) => !!subPath.issueSummary.length);
+  const issues = subPaths.filter((subPath) => !!subPath.issueSummary?.length);
   if (issues.length < 1) return null;
 
   const dispatch = useAppDispatch();
@@ -35,9 +35,9 @@ const IssuesBanner = ({ subPaths, isHomeScreen }: Props) => {
           key={`${index}-${issue}`}
           onPress={() => {
             const trackData = {
-              station_departure: subPaths[1].stations[0].stationName,
-              station_arrival: subPaths.at(-2)?.stations.at(-1)?.stationName!,
-              line_departure: subPaths[1].name,
+              station_departure: subPaths[1]?.stations?.[0]?.stationName!,
+              station_arrival: subPaths.at(-2)?.stations?.at(-1)?.stationName!,
+              line_departure: subPaths[1]?.name,
               line_arrival: subPaths.at(-2)?.name!,
             };
             if (isHomeScreen) {

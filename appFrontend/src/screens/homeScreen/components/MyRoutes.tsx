@@ -1,4 +1,5 @@
 import cn from 'classname';
+import * as Sentry from '@sentry/react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Shadow } from 'react-native-shadow-2';
 import { useQuery, useQueryClient } from 'react-query';
@@ -81,14 +82,36 @@ const MyRoutes = ({ isVerifiedUser, isRefreshing, setIsRefreshing }: Props) => {
         </View>
       );
     }
-    return myRoutes?.map((myRoute, index) => {
-      const hasIssues = myRoute.subPaths.some((subPath) => !!subPath.issueSummary.length);
+    // 스키마가 맞지 않는 경로(subPaths 누락 등)는 렌더링에서 제외해 앱이 꺼지지 않도록 방어
+    const allRoutes = myRoutes ?? [];
+    const validRoutes = allRoutes.filter(
+      (myRoute) => myRoute && Array.isArray(myRoute.subPaths),
+    );
+
+    // 스키마가 깨진 경로가 섞여 있으면 Sentry로 로깅
+    if (validRoutes.length !== allRoutes.length) {
+      const invalidRoutes = allRoutes.filter(
+        (myRoute) => !myRoute || !Array.isArray(myRoute.subPaths),
+      );
+      Sentry.captureException({
+        target: '내가 저장한 경로 스키마 불일치',
+        input: { invalidCount: invalidRoutes.length, totalCount: allRoutes.length },
+        output: { invalidRoutes },
+      });
+    }
+
+    if (validRoutes.length < 1) {
+      return <NoRoutes />;
+    }
+
+    return validRoutes.map((myRoute, index) => {
+      const hasIssues = myRoute.subPaths.some((subPath) => !!subPath?.issueSummary?.length);
       return (
         <RouteItem
           key={myRoute.id}
           route={myRoute}
           hasIssues={hasIssues}
-          isLastItem={index === myRoutes.length - 1}
+          isLastItem={index === validRoutes.length - 1}
         />
       );
     });
