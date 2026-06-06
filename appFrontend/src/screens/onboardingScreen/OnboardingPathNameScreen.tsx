@@ -9,7 +9,6 @@ import { SubPath } from '@/global/apis/entity';
 import { useSavedSubwayRoute } from '@/global/apis/hooks';
 import { showToast } from '@/global/utils/toast';
 import { SubwaySimplePath } from '@/global/components';
-import LoadingCircle from '@/global/components/animations/LoadingCircle';
 import { COLOR } from '@/global/constants';
 import { FontText, Input } from '@/global/ui';
 import { useOnboardingNavigation } from '@/navigation/OnboardingNavigation';
@@ -49,7 +48,7 @@ const OnboardingPathNameScreen = () => {
     return Object.values(subPaths).filter((item) => !!item.stations.length);
   }, [newPath]);
 
-  const { mutate, isLoading } = useSavedSubwayRoute({
+  const { mutate } = useSavedSubwayRoute({
     onSuccess: async () => {
       trackMapBookmark5Finish({ ...pathData, name: pathName });
       onboardingNavigation.push('OnboardingCompleted', { pathName });
@@ -68,12 +67,6 @@ const OnboardingPathNameScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 px-16 bg-gray-9f9">
-      {isLoading && (
-        <View className="absolute items-center justify-center w-full h-full">
-          <LoadingCircle />
-        </View>
-      )}
-
       <OnboardingHeader />
 
       <View className="flex-1 space-y-28">

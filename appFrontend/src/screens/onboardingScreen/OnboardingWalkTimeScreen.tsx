@@ -6,7 +6,6 @@ import { useRoute } from '@react-navigation/native';
 import type { StationDataTypes } from '@/store/modules';
 import { useSavedSubwayRoute } from '@/global/apis/hooks';
 import { SubwaySimplePath } from '@/global/components';
-import LoadingCircle from '@/global/components/animations/LoadingCircle';
 import { FontText } from '@/global/ui';
 import { useOnboardingNavigation } from '@/navigation/OnboardingNavigation';
 import { OnboardingStackParamList } from '@/navigation/types/navigation';
@@ -45,7 +44,7 @@ const OnboardingWalkTimeScreen = () => {
 
   const newPathName = '출근길' + Math.floor(Math.random() * 1000) + 1;
 
-  const { mutate, isLoading } = useSavedSubwayRoute({
+  const { mutate } = useSavedSubwayRoute({
     onSuccess: async (newPathId) => {
       trackMapBookmark5Finish({ ...pathData, name: newPathName });
       onboardingNavigation.push('OnboardingSetAlert', {
@@ -72,11 +71,6 @@ const OnboardingWalkTimeScreen = () => {
 
   return (
     <SafeAreaView className="relative flex-1 px-16 bg-gray-9f9">
-      {isLoading && (
-        <View className="absolute items-center justify-center w-full h-full">
-          <LoadingCircle />
-        </View>
-      )}
       <OnboardingHeader />
       <View className="pt-16 pb-14">
         <View className="relative">

@@ -16,7 +16,6 @@ import { getSeletedStation } from '@/store/modules/stationSearchModule';
 import { DisplayLineName, LineCapsules, OriginLineName } from '@/global/apis/entity';
 import { searchStationsInLine } from '@/global/apis/func';
 import { useAddRecentSearch, useSearchStationName } from '@/global/apis/hooks';
-import LoadingCircle from '@/global/components/animations/LoadingCircle';
 import { COLOR } from '@/global/constants';
 import { FontText, Input } from '@/global/ui';
 import { displayToOrigin, lineCapsuleToOrigin } from '@/global/utils';
@@ -37,7 +36,7 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
 
   // N호선 캡슐로 N호선의 모든 역 불러오기
   const [activeButton, setActiveButton] = useState<LineCapsules>('전체');
-  const { data: searchStationsInLineData, isLoading: isLoadingLine } = useQuery(
+  const { data: searchStationsInLineData } = useQuery(
     ['searchStationsInLine', activeButton],
     () => searchStationsInLine({ line: lineCapsuleToOrigin(activeButton) ?? '전체' }),
     { enabled: !!activeButton },
@@ -51,7 +50,7 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
   const { searchResultData, isLoading: isLoadingSearch } = useSearchStationName(searchTextValue);
 
   // 클릭된 역을 최근검색 역에 저장(서버) -> 성공 시 전역변수에도 저장하고 모달 닫기
-  const { addRecentMutate, isLoadingAddRecent } = useAddRecentSearch({
+  const { addRecentMutate } = useAddRecentSearch({
     onSuccess: ({ stationLine, stationName }) => {
       const key = stationType === '출발역' ? 'departure' : 'arrival';
       dispatch(
@@ -108,11 +107,6 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
   return (
     <Modal visible onRequestClose={closeModal}>
       <View className="flex-1 bg-black/60">
-        {isLoadingAddRecent && (
-          <View className="absolute left-[44%] top-1/2 z-10">
-            <LoadingCircle />
-          </View>
-        )}
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           className="justify-end flex-1"
@@ -152,11 +146,6 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
             {!searchTextValue ? (
               <View className="flex-1">
                 <LaneButtons activeButton={activeButton} setActiveButton={setActiveButton} />
-                {!searchStationsInLineData && isLoadingLine && (
-                  <View className="items-center justify-center flex-1">
-                    <LoadingCircle />
-                  </View>
-                )}
                 <ScrollView keyboardShouldPersistTaps="handled">
                   {searchStationsInLineData?.map(({ name, line }, idx) => (
                     <Pressable
@@ -192,11 +181,6 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
               </View>
             ) : (
               <View className="flex-1">
-                {searchResultData.length < 1 && isLoadingSearch && (
-                  <View className="items-center justify-center flex-1">
-                    <LoadingCircle />
-                  </View>
-                )}
                 {/* 입력어가 있고 && 검색 결과가 없으면 없음 표시 */}
                 {searchResultData.length < 1 && !isLoadingSearch && (
                   <View className="items-center justify-center flex-1 gap-17">
