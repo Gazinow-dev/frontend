@@ -16,6 +16,7 @@ import { getSeletedStation } from '@/store/modules/stationSearchModule';
 import { DisplayLineName, LineCapsules, OriginLineName } from '@/global/apis/entity';
 import { searchStationsInLine } from '@/global/apis/func';
 import { useAddRecentSearch, useSearchStationName } from '@/global/apis/hooks';
+import LoadingCircle from '@/global/components/animations/LoadingCircle';
 import { COLOR } from '@/global/constants';
 import { FontText, Input } from '@/global/ui';
 import { displayToOrigin, lineCapsuleToOrigin } from '@/global/utils';
@@ -36,7 +37,7 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
 
   // N호선 캡슐로 N호선의 모든 역 불러오기
   const [activeButton, setActiveButton] = useState<LineCapsules>('전체');
-  const { data: searchStationsInLineData } = useQuery(
+  const { data: searchStationsInLineData, isLoading: isLoadingLine } = useQuery(
     ['searchStationsInLine', activeButton],
     () => searchStationsInLine({ line: lineCapsuleToOrigin(activeButton) ?? '전체' }),
     { enabled: !!activeButton },
@@ -50,7 +51,7 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
   const { searchResultData, isLoading: isLoadingSearch } = useSearchStationName(searchTextValue);
 
   // 클릭된 역을 최근검색 역에 저장(서버) -> 성공 시 전역변수에도 저장하고 모달 닫기
-  const { addRecentMutate } = useAddRecentSearch({
+  const { addRecentMutate, isLoadingAddRecent } = useAddRecentSearch({
     onSuccess: ({ stationLine, stationName }) => {
       const key = stationType === '출발역' ? 'departure' : 'arrival';
       dispatch(
@@ -109,10 +110,10 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
       <View className="flex-1 bg-black/60">
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          className="justify-end flex-1"
+          className="flex-1 justify-end"
         >
           <Animated.View
-            className="relative flex-1 bg-white top-60"
+            className="relative top-60 flex-1 bg-white"
             style={{
               borderTopStartRadius: 14,
               borderTopEndRadius: 14,
@@ -120,7 +121,7 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
               transform: [{ translateY: animRef }],
             }}
           >
-            <TouchableOpacity hitSlop={20} className="flex items-center mt-12" onPress={closeModal}>
+            <TouchableOpacity hitSlop={20} className="mt-12 flex items-center" onPress={closeModal}>
               <View className="h-4 w-34 rounded-2 bg-gray-ddd" />
             </TouchableOpacity>
 
@@ -130,7 +131,7 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
               fontWeight="600"
             />
 
-            <View className="flex-row items-center px-10 mx-16 space-x-12 my-14 rounded-8 bg-gray-9f9 py-9">
+            <View className="mx-16 my-14 flex-row items-center space-x-12 rounded-8 bg-gray-9f9 px-10 py-9">
               <IconSearch />
               <Input
                 className="leading-21"
@@ -146,6 +147,11 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
             {!searchTextValue ? (
               <View className="flex-1">
                 <LaneButtons activeButton={activeButton} setActiveButton={setActiveButton} />
+                {!searchStationsInLineData && isLoadingLine && (
+                  <View className="flex-1 items-center justify-center">
+                    <LoadingCircle />
+                  </View>
+                )}
                 <ScrollView keyboardShouldPersistTaps="handled">
                   {searchStationsInLineData?.map(({ name, line }, idx) => (
                     <Pressable
@@ -172,7 +178,7 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
                       ))}
                       <FontText
                         text={name.split('(')[0]}
-                        className="text-black text-14 leading-21"
+                        className="text-14 leading-21 text-black"
                         fontWeight="500"
                       />
                     </Pressable>
@@ -183,7 +189,7 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
               <View className="flex-1">
                 {/* 입력어가 있고 && 검색 결과가 없으면 없음 표시 */}
                 {searchResultData.length < 1 && !isLoadingSearch && (
-                  <View className="items-center justify-center flex-1 gap-17">
+                  <View className="flex-1 items-center justify-center gap-17">
                     <IconNoResult />
                     <FontText
                       text="검색 결과가 없습니다!"
@@ -212,7 +218,7 @@ const OnboardingSearchModal = ({ closeModal }: Props) => {
                         <LineNum displayName={stationLine ?? '1호선'} />
                         <FontText
                           text={stationName.split('(')[0]}
-                          className="text-black text-14 leading-21"
+                          className="text-14 leading-21 text-black"
                           fontWeight="500"
                         />
                       </Pressable>
