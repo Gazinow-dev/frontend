@@ -1,24 +1,13 @@
-import { AxiosError } from 'axios';
 import cn from 'classname';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useMutation } from 'react-query';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Pressable, TouchableOpacity, View } from 'react-native';
 import { useRoute } from '@react-navigation/core';
 import type { StationDataTypes } from '@/store/modules';
-import { showToast } from '@/global/utils/toast';
 import { FontText, Toggle } from '@/global/ui';
 import { useOnboardingNavigation } from '@/navigation/OnboardingNavigation';
 import { OnboardingStackParamList } from '@/navigation/types/navigation';
-import { DepArrNameAlert, trackMapSearchBookmarkSetting } from '@/analytics/map.events';
-import {
-  disablePathNotiFetch,
-  enablePathNotiSettingsFetch,
-  updatePathNotiSettingsFetch,
-} from '@/screens/myRootScreen/apis/func';
-import { useGetPathNotiQuery } from '@/screens/myRootScreen/apis/hooks';
 import SetNotiTimesBtn from '@/screens/myRootScreen/components/SetNotiTimesBtn';
-import { rawTimeToReqTimeFormat } from '@/screens/myRootScreen/util/timeFormatChange';
 import { OnboardingHeader } from './components';
 
 export interface SelectedStationTypes {
@@ -28,30 +17,16 @@ export interface SelectedStationTypes {
 
 const OnboardingSetAlertScreen = () => {
   const onboardingNavigation = useOnboardingNavigation();
-  const { newPath } = useRoute().params as {
-    newPath: OnboardingStackParamList['OnboardingWalkTime']['newPath'];
+  const { newPath, walkTime } = useRoute().params as {
+    newPath: OnboardingStackParamList['OnboardingSetAlert']['newPath'];
+    walkTime: OnboardingStackParamList['OnboardingSetAlert']['walkTime'];
   };
-  if (!newPath || !newPath.id) return null;
+  if (!newPath) return null;
 
-  const { pathNotiData } = useGetPathNotiQuery(newPath.id);
+  // 온보딩은 항상 새 경로이므로 기존 알림 설정은 없다. 기본값으로 시작한다.
   const [isPushNotificationOn, setIsPushNotificationOn] = useState<boolean>(false);
   const [savedStartTime, setSavedStartTime] = useState<string>('07:00');
   const [savedEndTime, setSavedEndTime] = useState<string>('09:00');
-
-  // 저장된 설정 불러오기
-  useEffect(() => {
-    if (pathNotiData?.enabled) {
-      setIsPushNotificationOn(true);
-      setSelectedDays(pathNotiData.notificationTimes.map((notiTimes) => notiTimes.dayOfWeek));
-      setSavedStartTime(pathNotiData?.notificationTimes[0].fromTime);
-      setSavedEndTime(pathNotiData?.notificationTimes[0].toTime);
-    } else {
-      setIsPushNotificationOn(false);
-      setSavedStartTime('07:00');
-      setSavedEndTime('09:00');
-      setSelectedDays([]);
-    }
-  }, [pathNotiData]);
 
   // 푸시 알림 on 토글
   const handlePushNotificationOnToggle = () => {
@@ -72,80 +47,19 @@ const OnboardingSetAlertScreen = () => {
     });
   };
 
-  const routeInfo = {
-    station_departure: newPath.transitStationList[0].stationsName,
-    station_arrival: newPath.transitStationList.at(-1)?.stationsName!,
-    line_departure: newPath.transitStationList[0].line,
-    line_arrival: newPath.transitStationList.at(-1)?.line!,
-    name: '출근길',
-  };
-
-  const buildOnTrackData = (provider: {
-    dayTimeRanges: { day: string; fromTime: string; toTime: string }[];
-  }): DepArrNameAlert => ({
-    ...routeInfo,
-    alarm: 'on' as const,
-    starttime: provider.dayTimeRanges[0].fromTime.replace(':', ''),
-    finishtime: provider.dayTimeRanges[0].toTime.replace(':', ''),
-    day: provider.dayTimeRanges.map(({ day }) => day).join(', '),
-  });
-
-  const handleAfterSuccess = (trackData: DepArrNameAlert) => {
-    showToast('saveNotiSettingsSuccess');
-
-    trackMapSearchBookmarkSetting(trackData);
-
-    onboardingNavigation.push('OnboardingPathName', { newPath });
-  };
-
-  const mutationOptions = {
-    onSuccess: (_: unknown, provider: any) => {
-      handleAfterSuccess(buildOnTrackData(provider));
-    },
-    onError: (error: AxiosError) => {
-      showToast(
-        error.response?.status === 400 ? 'notiSettingsTimeError' : 'saveNotiSettingsFailed',
-      );
-    },
-  };
-
-  // 완료 버튼 클릭 시 요청 전송
-  const { mutate: enablePathNotiSettingsMutate } = useMutation(
-    enablePathNotiSettingsFetch,
-    mutationOptions,
-  );
-  const { mutate: updatePathNotiSettingsMutate } = useMutation(
-    updatePathNotiSettingsFetch,
-    mutationOptions,
-  );
-
-  const { mutate: disablePathNotiMutate } = useMutation(disablePathNotiFetch, {
-    onSuccess: () => handleAfterSuccess({ ...routeInfo, alarm: 'off' as const }),
-    onError: () => showToast('saveNotiSettingsFailed'),
-  });
-
-  const createNotiSettingsBody = (selectedDays: string[], newPathId: number) => {
-    return {
-      myPathId: newPathId,
-      dayTimeRanges: selectedDays.map((day) => ({
-        day,
-        fromTime: rawTimeToReqTimeFormat(savedStartTime),
-        toTime: rawTimeToReqTimeFormat(savedEndTime),
-      })),
-    };
-  };
-
+  // 경로/알림 저장은 마지막 단계(OnboardingPathName)에서 1회씩만 수행한다.
+  // 여기서는 알림 설정 입력값만 다음 화면으로 넘긴다.
   const saveSettingsHandler = () => {
-    if (!newPath.id) return;
-
-    const notiSettings = createNotiSettingsBody(selectedDays, newPath.id);
-    if (!isPushNotificationOn) {
-      disablePathNotiMutate(newPath.id);
-    } else if (pathNotiData?.enabled) {
-      updatePathNotiSettingsMutate(notiSettings);
-    } else {
-      enablePathNotiSettingsMutate(notiSettings);
-    }
+    onboardingNavigation.push('OnboardingPathName', {
+      newPath,
+      walkTime,
+      alertSettings: {
+        isPushNotificationOn,
+        selectedDays,
+        startTime: savedStartTime,
+        endTime: savedEndTime,
+      },
+    });
   };
 
   return (
