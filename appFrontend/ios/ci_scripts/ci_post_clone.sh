@@ -40,19 +40,12 @@ echo "export NODE_BINARY=$(command -v node)" > "$APP_DIR/ios/.xcode.env.local"
 echo "[ci_post_clone] wrote ios/.xcode.env.local -> NODE_BINARY=$(command -v node)"
 
 # --- 5) CocoaPods 설치 ---
-# Gemfile은 appFrontend/ 에 있고, Podfile은 appFrontend/ios/ 에 있다.
-# 시스템 Ruby(/Library/Ruby) 디렉터리는 쓰기 권한이 없으므로 gem을 사용자 경로에 설치한다.
-export GEM_HOME="$HOME/.gem"
-export PATH="$GEM_HOME/bin:$PATH"
-export BUNDLE_GEMFILE="$APP_DIR/Gemfile"
-
-cd "$APP_DIR"
-# Xcode Cloud의 시스템 Ruby는 2.6.10이라 최신 bundler(Ruby 3.2+ 요구)는 설치 불가.
-# Gemfile.lock의 "BUNDLED WITH"(1.17.2)와 동일하게 고정한다 (Ruby 2.6 호환).
-gem install bundler -v 1.17.2 --no-document
-bundle _1.17.2_ install
+# Xcode Cloud 시스템 Ruby(2.6.10)는 RubyGems가 오래되어 gem/bundler 설치가 불안정하다
+# (rubygems.org 인덱스 다운로드 실패 등). 시스템 Ruby 의존을 피해 Homebrew로 CocoaPods를 설치한다.
+brew install cocoapods
+echo "[ci_post_clone] pod=$(command -v pod) ($(pod --version))"
 
 cd "$APP_DIR/ios"
-bundle _1.17.2_ exec pod install --repo-update
+pod install --repo-update
 
 echo "===== [ci_post_clone] done ====="
