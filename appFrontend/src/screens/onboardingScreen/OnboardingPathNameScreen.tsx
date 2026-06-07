@@ -47,9 +47,9 @@ const OnboardingPathNameScreen = () => {
 
   const pathData = {
     station_departure: newPath.transitStationList[0].stationsName,
-    station_arrival: newPath.transitStationList.at(-1)?.stationsName!,
+    station_arrival: newPath.transitStationList[newPath.transitStationList.length - 1].stationsName,
     line_departure: newPath.transitStationList[0].line,
-    line_arrival: newPath.transitStationList.at(-1)?.line!,
+    line_arrival: newPath.transitStationList[newPath.transitStationList.length - 1].line,
   };
 
   useEffect(() => {

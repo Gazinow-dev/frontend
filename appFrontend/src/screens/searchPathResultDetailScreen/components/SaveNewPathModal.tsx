@@ -31,7 +31,7 @@ const SaveNewPathModal = ({ freshData, closeModal, onBookmark, setMyPathId }: Pr
     station_departure: freshData.firstStartStation,
     station_arrival: freshData.lastEndStation,
     line_departure: freshData.subPaths[0].name,
-    line_arrival: freshData.subPaths.at(-1)?.name!,
+    line_arrival: freshData.subPaths[freshData.subPaths.length - 1].name,
   };
 
   const { isLoading, mutate } = useSavedSubwayRoute({

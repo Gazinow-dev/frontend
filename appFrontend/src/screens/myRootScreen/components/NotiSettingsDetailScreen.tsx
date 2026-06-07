@@ -71,11 +71,12 @@ const NotiSettingsDetailScreen = () => {
     });
   };
 
+  const lastSubPath = myRoutes.subPaths[myRoutes.subPaths.length - 1];
   const routeInfo = {
     station_departure: myRoutes.subPaths[0].stations[0].stationName,
-    station_arrival: myRoutes.subPaths.at(-1)?.stations.at(-1)?.stationName!,
+    station_arrival: lastSubPath.stations[lastSubPath.stations.length - 1].stationName,
     line_departure: myRoutes.subPaths[0].name,
-    line_arrival: myRoutes.subPaths.at(-1)?.name!,
+    line_arrival: lastSubPath.name,
     name: myRoutes.roadName,
   };
 

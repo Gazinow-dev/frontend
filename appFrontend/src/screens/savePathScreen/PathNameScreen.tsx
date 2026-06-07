@@ -30,7 +30,7 @@ const PathNameScreen = () => {
     station_departure: resultData.firstStartStation,
     station_arrival: resultData.lastEndStation,
     line_departure: resultData.subPaths[1].name,
-    line_arrival: resultData.subPaths.at(-2)?.name!,
+    line_arrival: resultData.subPaths[resultData.subPaths.length - 2].name,
   };
 
   useEffect(() => {
