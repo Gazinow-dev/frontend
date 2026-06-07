@@ -6,6 +6,10 @@ require Pod::Executable.execute_command('node', ['-p',
   )', __dir__]).strip
 
 platform :ios, min_ios_version_supported
+
+# Android(newArchEnabled=false)과 일관되게 iOS도 New Architecture 비활성화 (구 아키텍처 유지)
+ENV['RCT_NEW_ARCH_ENABLED'] = '0'
+
 prepare_react_native_project!
 
 $RNFirebaseAnalyticsWithoutAdIdSupport = true
