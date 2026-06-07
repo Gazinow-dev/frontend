@@ -43,5 +43,15 @@ target 'gazinow' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
+
+    # fmt 라이브러리(RCT-Folly가 사용)가 최신 Xcode/Clang의 consteval 평가와 충돌해
+    # "Call to consteval function ... is not a constant expression" 에러가 난다.
+    # FMT_USE_CONSTEVAL=0 으로 consteval 사용을 끄면 회피된다.
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)']
+        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'FMT_USE_CONSTEVAL=0'
+      end
+    end
   end
 end
