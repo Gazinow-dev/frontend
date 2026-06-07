@@ -28,22 +28,23 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const NotiSettingsDetailScreen = () => {
   const navigation = useRootNavigation();
   const params = useRoute().params as RootStackParamList['MyPageNavigation']['params'];
-  if (!params) return;
-  const { myRoutes, prevScreen } = params;
-  if (!myRoutes) return;
+  const myRoutes = params?.myRoutes;
+  const prevScreen = params?.prevScreen;
 
-  const { pathNotiData } = useGetPathNotiQuery(myRoutes.id);
+  // 훅은 조기 반환보다 먼저, 항상 같은 순서로 호출되어야 한다 (rules-of-hooks)
+  const { pathNotiData } = useGetPathNotiQuery(myRoutes?.id);
   const [isPushNotificationOn, setIsPushNotificationOn] = useState<boolean>(false);
   const [savedStartTime, setSavedStartTime] = useState<string>('07:00');
   const [savedEndTime, setSavedEndTime] = useState<string>('09:00');
+  const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
   // 저장된 설정 불러오기
   useEffect(() => {
     if (pathNotiData?.enabled) {
       setIsPushNotificationOn(true);
       setSelectedDays(pathNotiData.notificationTimes.map((notiTimes) => notiTimes.dayOfWeek));
-      setSavedStartTime(pathNotiData?.notificationTimes[0].fromTime);
-      setSavedEndTime(pathNotiData?.notificationTimes[0].toTime);
+      setSavedStartTime(pathNotiData.notificationTimes[0].fromTime);
+      setSavedEndTime(pathNotiData.notificationTimes[0].toTime);
     } else {
       setIsPushNotificationOn(false);
       setSavedStartTime('07:00');
@@ -52,37 +53,23 @@ const NotiSettingsDetailScreen = () => {
     }
   }, [pathNotiData]);
 
-  // 푸시 알림 on 토글
-  const handlePushNotificationOnToggle = () => {
-    setIsPushNotificationOn(!isPushNotificationOn);
-    setSelectedDays([]);
+  // myRoutes는 가드 통과 후(렌더 시점)에만 호출되므로 지연 계산
+  const buildRouteInfo = () => {
+    const subPaths = myRoutes!.subPaths;
+    const lastSubPath = subPaths[subPaths.length - 1];
+    return {
+      station_departure: subPaths[0].stations[0].stationName,
+      station_arrival: lastSubPath.stations[lastSubPath.stations.length - 1].stationName,
+      line_departure: subPaths[0].name,
+      line_arrival: lastSubPath.name,
+      name: myRoutes!.roadName,
+    };
   };
 
-  // 알림 받을 요일 선택
-  const days = ['월', '화', '수', '목', '금', '토', '일'];
-  const [selectedDays, setSelectedDays] = useState<string[]>([]);
-  const toggleDay = (day: string) => {
-    setSelectedDays((prevSelectedDays) => {
-      if (prevSelectedDays.includes(day)) {
-        return prevSelectedDays.filter((selectedDay) => selectedDay !== day);
-      } else {
-        return [...prevSelectedDays, day];
-      }
-    });
-  };
+  type NotiProvider = { dayTimeRanges: { day: string; fromTime: string; toTime: string }[] };
 
-  const routeInfo = {
-    station_departure: myRoutes.subPaths[0].stations[0].stationName,
-    station_arrival: myRoutes.subPaths.at(-1)?.stations.at(-1)?.stationName!,
-    line_departure: myRoutes.subPaths[0].name,
-    line_arrival: myRoutes.subPaths.at(-1)?.name!,
-    name: myRoutes.roadName,
-  };
-
-  const buildOnTrackData = (provider: {
-    dayTimeRanges: { day: string; fromTime: string; toTime: string }[];
-  }): DepArrNameAlert => ({
-    ...routeInfo,
+  const buildOnTrackData = (provider: NotiProvider): DepArrNameAlert => ({
+    ...buildRouteInfo(),
     alarm: 'on' as const,
     starttime: provider.dayTimeRanges[0].fromTime.replace(':', ''),
     finishtime: provider.dayTimeRanges[0].toTime.replace(':', ''),
@@ -105,7 +92,7 @@ const NotiSettingsDetailScreen = () => {
   };
 
   const mutationOptions = {
-    onSuccess: (_: unknown, provider: any) => {
+    onSuccess: (_: unknown, provider: NotiProvider) => {
       handleAfterSuccess(buildOnTrackData(provider));
     },
     onError: (error: AxiosError) => {
@@ -126,9 +113,27 @@ const NotiSettingsDetailScreen = () => {
   );
 
   const { mutate: disablePathNotiMutate } = useMutation(disablePathNotiFetch, {
-    onSuccess: () => handleAfterSuccess({ ...routeInfo, alarm: 'off' as const }),
+    onSuccess: () => handleAfterSuccess({ ...buildRouteInfo(), alarm: 'off' as const }),
     onError: () => showToast('saveNotiSettingsFailed'),
   });
+
+  if (!myRoutes) return null;
+
+  // 푸시 알림 on 토글
+  const handlePushNotificationOnToggle = () => {
+    setIsPushNotificationOn(!isPushNotificationOn);
+    setSelectedDays([]);
+  };
+
+  // 알림 받을 요일 선택
+  const days = ['월', '화', '수', '목', '금', '토', '일'];
+  const toggleDay = (day: string) => {
+    setSelectedDays((prevSelectedDays) =>
+      prevSelectedDays.includes(day)
+        ? prevSelectedDays.filter((selectedDay) => selectedDay !== day)
+        : [...prevSelectedDays, day],
+    );
+  };
 
   const createNotiSettingsBody = (selectedDays: string[], myRoutesId: number) => {
     return {

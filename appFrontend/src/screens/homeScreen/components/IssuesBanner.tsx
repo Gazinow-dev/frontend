@@ -34,11 +34,12 @@ const IssuesBanner = ({ subPaths, isHomeScreen }: Props) => {
         <TouchableOpacity
           key={`${index}-${issue}`}
           onPress={() => {
+            const lastSubPath = subPaths[subPaths.length - 2];
             const trackData = {
-              station_departure: subPaths[1]?.stations?.[0]?.stationName!,
-              station_arrival: subPaths.at(-2)?.stations?.at(-1)?.stationName!,
-              line_departure: subPaths[1]?.name,
-              line_arrival: subPaths.at(-2)?.name!,
+              station_departure: subPaths[1].stations[0].stationName,
+              station_arrival: lastSubPath.stations[lastSubPath.stations.length - 1].stationName,
+              line_departure: subPaths[1].name,
+              line_arrival: lastSubPath.name,
             };
             if (isHomeScreen) {
               trackMapBookmarkIssueCheck(trackData);

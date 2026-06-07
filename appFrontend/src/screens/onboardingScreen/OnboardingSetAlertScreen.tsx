@@ -21,12 +21,14 @@ const OnboardingSetAlertScreen = () => {
     newPath: OnboardingStackParamList['OnboardingSetAlert']['newPath'];
     walkTime: OnboardingStackParamList['OnboardingSetAlert']['walkTime'];
   };
-  if (!newPath) return null;
-
   // 온보딩은 항상 새 경로이므로 기존 알림 설정은 없다. 기본값으로 시작한다.
   const [isPushNotificationOn, setIsPushNotificationOn] = useState<boolean>(false);
   const [savedStartTime, setSavedStartTime] = useState<string>('07:00');
   const [savedEndTime, setSavedEndTime] = useState<string>('09:00');
+  const [selectedDays, setSelectedDays] = useState<string[]>([]);
+
+  // 훅 호출 이후에 가드 (rules-of-hooks)
+  if (!newPath) return null;
 
   // 푸시 알림 on 토글
   const handlePushNotificationOnToggle = () => {
@@ -36,7 +38,6 @@ const OnboardingSetAlertScreen = () => {
 
   // 알림 받을 요일 선택
   const days = ['월', '화', '수', '목', '금', '토', '일'];
-  const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const toggleDay = (day: string) => {
     setSelectedDays((prevSelectedDays) => {
       if (prevSelectedDays.includes(day)) {
