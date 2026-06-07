@@ -33,6 +33,7 @@ const SearchPathResultDetailScreen = () => {
     if (notificationId) {
       mutate(notificationId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);

@@ -105,8 +105,10 @@ export const useCheckNicknameMutation = ({
 /**
  * 경로별 알림 설정 불러오기 훅
  */
-export const useGetPathNotiQuery = (myPathId: number) => {
-  const { data } = useQuery(['getPathNoti'], () => getPathNotiFetch(myPathId));
+export const useGetPathNotiQuery = (myPathId?: number) => {
+  const { data } = useQuery(['getPathNoti', myPathId], () => getPathNotiFetch(myPathId!), {
+    enabled: !!myPathId,
+  });
   return { pathNotiData: data };
 };
 
