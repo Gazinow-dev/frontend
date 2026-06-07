@@ -33,6 +33,29 @@ echo "[ci_post_clone] yarn=$(command -v yarn) ($(yarn -v))"
 cd "$APP_DIR"
 yarn install --frozen-lockfile
 
+# --- 3-1) 민감정보 설정 파일 생성 (Xcode Cloud 환경변수로부터) ---
+# .env.production / ios/sentry.properties 는 gitignore라 레포에 없다.
+# App Store Connect의 Xcode Cloud Environment Variables 값으로 빌드 시점에 생성한다.
+echo "[ci_post_clone] generating .env.production"
+cat > "$APP_DIR/.env.production" <<ENVEOF
+MODE=production
+API_BASE_URL=${API_BASE_URL}
+SENTRY_DSN=${SENTRY_DSN}
+AMPLITUDE_API_KEY=${AMPLITUDE_API_KEY}
+ENVEOF
+
+echo "[ci_post_clone] generating ios/sentry.properties"
+cat > "$APP_DIR/ios/sentry.properties" <<SENTRYEOF
+auth.token=${SENTRY_AUTH_TOKEN}
+defaults.org=${SENTRY_ORG}
+defaults.project=${SENTRY_PROJECT}
+defaults.url=${SENTRY_URL:-https://sentry.io}
+SENTRYEOF
+
+# 필수 환경변수 누락 시 빌드를 일찍 실패시켜 원인을 명확히 한다.
+: "${API_BASE_URL:?API_BASE_URL 환경변수가 비어있음 (Xcode Cloud Env Vars 확인)}"
+: "${SENTRY_AUTH_TOKEN:?SENTRY_AUTH_TOKEN 환경변수가 비어있음 (Xcode Cloud Env Vars 확인)}"
+
 # --- 4) Xcode 빌드 단계가 node를 찾을 수 있도록 NODE_BINARY 고정 ---
 # "Bundle React Native code and images" 등 빌드 페이즈는 ios/.xcode.env(.local)을 source 한다.
 # ci_post_clone의 PATH는 xcodebuild로 전파되지 않으므로 여기서 절대경로를 박아준다.
