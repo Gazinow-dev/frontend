@@ -106,7 +106,7 @@ const PathSelectScreen = () => {
                           station_departure: item.firstStartStation,
                           station_arrival: item.lastEndStation,
                           line_departure: item.subPaths[1].name,
-                          line_arrival: item.subPaths.at(-2)?.name!,
+                          line_arrival: item.subPaths[item.subPaths.length - 2].name,
                         });
                         setSelectedRoutePath(item);
                       }}

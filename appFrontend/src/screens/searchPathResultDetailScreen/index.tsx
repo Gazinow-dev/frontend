@@ -33,17 +33,19 @@ const SearchPathResultDetailScreen = () => {
     if (notificationId) {
       mutate(notificationId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isVerifiedUser = useAppSelect((state) => state.auth.isVerifiedUser);
 
   const { mutate: deleteMutate, isLoading } = useMutation(myPathDeleteFetch, {
     onSuccess: async () => {
+      const lastSubPath = resultData.subPaths[resultData.subPaths.length - 1];
       const trackData = {
         station_departure: resultData.subPaths[0].stations[0].stationName,
-        station_arrival: resultData.subPaths.at(-1)?.stations.at(-1)?.stationName!,
+        station_arrival: lastSubPath.stations[lastSubPath.stations.length - 1].stationName,
         line_departure: resultData.subPaths[0].name,
-        line_arrival: resultData.subPaths.at(-1)?.name!,
+        line_arrival: lastSubPath.name,
       };
       trackMapBookmarkDelete(trackData);
       setIsBookmarking(false);

@@ -21,11 +21,13 @@ const OnboardingWalkTimeScreen = () => {
   const { newPath } = useRoute().params as {
     newPath: OnboardingStackParamList['OnboardingWalkTime']['newPath'];
   };
-  if (!newPath) return null;
 
   const selectedStation = useAppSelect((state) => state.subwaySearch.selectedStation);
-
   const [walkTime, setWalkTime] = useState({ before: 5, after: 5 });
+
+  // 훅 호출 이후에 가드 (rules-of-hooks)
+  if (!newPath) return null;
+
   const adjust = (key: 'before' | 'after', delta: number) => {
     setWalkTime((prev) => ({
       ...prev,

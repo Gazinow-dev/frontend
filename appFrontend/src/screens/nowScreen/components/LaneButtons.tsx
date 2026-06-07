@@ -30,7 +30,10 @@ const LaneButtons = ({ activeButton, setActiveButton }: Props) => {
             route.subPaths.map((sub) => lineCodeToLineCapsule(sub.stationCode)),
           ) ?? [],
         ),
-      ].sort() ?? []
+      ]
+        // 매핑에 없는 노선 코드는 lineCodeToLineCapsule이 undefined를 반환하므로 제거
+        .filter((line): line is LineCapsules => line !== undefined)
+        .sort()
     );
   }, [isVerifiedUser, myRoutes]);
 

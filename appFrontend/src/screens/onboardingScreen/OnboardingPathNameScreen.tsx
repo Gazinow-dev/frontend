@@ -40,31 +40,30 @@ const OnboardingPathNameScreen = () => {
     walkTime: OnboardingStackParamList['OnboardingPathName']['walkTime'];
     alertSettings: OnboardingStackParamList['OnboardingPathName']['alertSettings'];
   };
-  if (!newPath) return null;
-
   const [pathName, setPathName] = useState('출근길');
-  const recommendedNames = ['출근길', '퇴근길', '학교가는 길', '집 가는 길'];
-
-  const pathData = {
-    station_departure: newPath.transitStationList[0].stationsName,
-    station_arrival: newPath.transitStationList.at(-1)?.stationsName!,
-    line_departure: newPath.transitStationList[0].line,
-    line_arrival: newPath.transitStationList.at(-1)?.line!,
-  };
-
-  useEffect(() => {
-    trackMapBookmark4Name(pathData);
-  }, []);
 
   const freshSubPathData: SubPath[] = useMemo(() => {
-    if (!newPath.subPaths) return [];
-    const subPaths = newPath.subPaths;
-    return Object.values(subPaths).filter((item) => !!item.stations.length);
+    if (!newPath?.subPaths) return [];
+    return Object.values(newPath.subPaths).filter((item) => !!item.stations.length);
   }, [newPath]);
+
+  // newPath가 보장된 시점(가드 통과 후/콜백 내)에만 사용
+  const buildPathData = () => ({
+    station_departure: newPath!.transitStationList[0].stationsName,
+    station_arrival:
+      newPath!.transitStationList[newPath!.transitStationList.length - 1].stationsName,
+    line_departure: newPath!.transitStationList[0].line,
+    line_arrival: newPath!.transitStationList[newPath!.transitStationList.length - 1].line,
+  });
+
+  useEffect(() => {
+    if (newPath) trackMapBookmark4Name(buildPathData());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // 경로 저장 + 알림 설정 저장 완료 후 마무리
   const finishOnboarding = () => {
-    trackMapBookmark5Finish({ ...pathData, name: pathName });
+    trackMapBookmark5Finish({ ...buildPathData(), name: pathName });
     showToast('saveRoute');
     onboardingNavigation.push('OnboardingCompleted', { pathName });
   };
@@ -85,7 +84,7 @@ const OnboardingPathNameScreen = () => {
       provider: { dayTimeRanges: { fromTime: string; toTime: string }[] },
     ) => {
       const trackData: DepArrNameAlert = {
-        ...pathData,
+        ...buildPathData(),
         name: pathName,
         alarm: 'on',
         starttime: provider.dayTimeRanges[0].fromTime.replace(':', ''),
@@ -118,6 +117,10 @@ const OnboardingPathNameScreen = () => {
     },
     onError: () => {},
   });
+
+  if (!newPath) return null;
+
+  const recommendedNames = ['출근길', '퇴근길', '학교가는 길', '집 가는 길'];
 
   const handleSave = () => {
     mutate({
