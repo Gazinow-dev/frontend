@@ -64,5 +64,21 @@ target 'gazinow' do
         Pod::UI.warn "[Podfile] fmt/base.h consteval block not found — fmt may have changed"
       end
     end
+
+    # Xcode 26 / Xcode Cloud: 빌드 머신이 Metal 툴체인을 자동 선택하면 TOOLCHAIN_DIR이
+    # XcodeDefault.xctoolchain 이 아니라 Metal.xctoolchain 을 가리킨다. CocoaPods가
+    # LIBRARY_SEARCH_PATHS 에 넣는 "${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}" 가
+    # 그쪽을 보게 되는데 Metal 툴체인에는 libswiftCompatibility50/51/56 등 Swift 호환
+    # 라이브러리가 없다. 그래서 링커가 이들을 못 찾고 SDK의 private SwiftUICore.tbd 를
+    # 직접 링크하려다 "not an allowed client of it" 에러로 죽는다.
+    # 항상 기본 툴체인을 가리키는 DT_TOOLCHAIN_DIR 로 바꿔 해결한다.
+    Dir.glob(File.join(__dir__, 'Pods', 'Target Support Files', '**', '*.xcconfig')).each do |xcconfig|
+      text = File.read(xcconfig)
+      patched = text.gsub(/[$][({]TOOLCHAIN_DIR[)}]\/usr\/lib\/swift/, '${DT_TOOLCHAIN_DIR}/usr/lib/swift')
+      if patched != text
+        File.write(xcconfig, patched)
+        Pod::UI.puts "[Podfile] Patched #{File.basename(xcconfig)}: TOOLCHAIN_DIR -> DT_TOOLCHAIN_DIR".green
+      end
+    end
   end
 end
