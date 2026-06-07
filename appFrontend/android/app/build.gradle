@@ -10,6 +10,10 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 
 apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
 
+react {
+    autolinkLibrariesWithApp()
+}
+
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -21,27 +25,20 @@ android {
         applicationId "com.gazinow.now"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 41
+        versionCode 42
         versionName "1.4.0"
-        externalNativeBuild {
-            cmake {
-                arguments "-DANDROID_ALIGNED_PAGESIZE=16384"
-            }
-        }
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
     }
-    
+
     packagingOptions {
         jniLibs {
+            // 16KB 페이지 대응: 압축 해제 패키징(정렬된 .so를 그대로 mmap)
             useLegacyPackaging = false
         }
-        resources {
-            excludes += "/**/libc++_shared.so"
-        }
     }
-    
+
     // 호환성을 위해 Java 버전을 11 또는 17로 하되, 하위 모듈과 맞춤
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -87,7 +84,6 @@ android {
 
 dependencies {
     implementation("com.facebook.react:react-android")
-    implementation("com.facebook.react:flipper-integration")
 
     implementation platform("com.google.firebase:firebase-bom:33.1.2")
     implementation("com.google.firebase:firebase-messaging")
@@ -98,8 +94,6 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-
-    implementation project(':react-native-splash-screen')
 }
 
 configurations.all {
@@ -110,34 +104,3 @@ configurations.all {
     }
 }
 
-// 16KB 페이지 지원 및 네이티브 라이브러리 설정
-tasks.withType(DefaultTask).configureEach { task ->
-    if (task.name.startsWith("package")) {
-        try {
-            task.setProperty("extractNativeLibs", true)
-        } catch (Exception e) {
-        }
-    }
-}
-
-// 모든 서브프로젝트(라이브러리)의 컴파일 옵션을 1.8로 강제하여 Android 15 호환성 이슈 해결
-subprojects {
-    afterEvaluate { project ->
-        if (project.hasProperty('android')) {
-            project.android {
-                compileOptions {
-                    sourceCompatibility JavaVersion.VERSION_11
-                    targetCompatibility JavaVersion.VERSION_11
-                }
-            }
-            if (project.plugins.hasPlugin('kotlin-android')) {
-                project.kotlinOptions {
-                    jvmTarget = '11'
-                }
-            }
-        }
-    }
-}
-
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle");
-applyNativeModulesAppBuildGradle(project)

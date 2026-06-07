@@ -16,6 +16,7 @@
 		37301F872DB87642004E55C8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 37301F862DB87641004E55C8 /* GoogleService-Info.plist */; };
 		3FBC03CB2B7E667E001E9FAC /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3FBC03CA2B7E667E001E9FAC /* Config.xcconfig */; };
 		3FBC03CC2B7E667E001E9FAC /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3FBC03CA2B7E667E001E9FAC /* Config.xcconfig */; };
+		605EB7E6848D8B73E87694A3 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4B9267B14F3D669089479330 /* PrivacyInfo.xcprivacy */; };
 		7699B88040F8A987B510C191 /* libPods-gazinow-gazinowTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-gazinow-gazinowTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8A9A42384254430591683B93 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 146AD95D5B9149CAA4392E16 /* Pretendard-Regular.otf */; };
@@ -51,6 +52,7 @@
 		3B4392A12AC88292D35C810B /* Pods-gazinow.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gazinow.debug.xcconfig"; path = "Target Support Files/Pods-gazinow/Pods-gazinow.debug.xcconfig"; sourceTree = "<group>"; };
 		3C64124AA72DCBB26DEDA805 /* Pods-gazinow-gazinowTests.staging.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gazinow-gazinowTests.staging.xcconfig"; path = "Target Support Files/Pods-gazinow-gazinowTests/Pods-gazinow-gazinowTests.staging.xcconfig"; sourceTree = "<group>"; };
 		3FBC03CA2B7E667E001E9FAC /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		4B9267B14F3D669089479330 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = gazinow/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-gazinow.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gazinow.release.xcconfig"; path = "Target Support Files/Pods-gazinow/Pods-gazinow.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-gazinow-gazinowTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gazinow-gazinowTests.debug.xcconfig"; path = "Target Support Files/Pods-gazinow-gazinowTests/Pods-gazinow-gazinowTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-gazinow.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-gazinow.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -110,6 +112,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				4B9267B14F3D669089479330 /* PrivacyInfo.xcprivacy */,
 			);
 			name = gazinow;
 			sourceTree = "<group>";
@@ -285,6 +288,7 @@
 				B6D06423675A4F9AB37DB0E3 /* Pretendard-Medium.otf in Resources */,
 				8A9A42384254430591683B93 /* Pretendard-Regular.otf in Resources */,
 				0BEF0B2E152B4957BE5CEFCC /* Pretendard-SemiBold.otf in Resources */,
+				605EB7E6848D8B73E87694A3 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,7 +491,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = gazinowTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -511,7 +515,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = gazinowTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -638,7 +642,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -658,9 +662,13 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				USE_HERMES = true;
 			};
 			name = Debug;
@@ -708,7 +716,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -727,7 +735,10 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = "$(inherited)  ";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
