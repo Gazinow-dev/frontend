@@ -24,13 +24,16 @@ const SavedPathsScreen = () => {
   const { mutate } = useMutation(myPathDeleteFetch, {
     onSuccess: async () => {
       if (!routeToDelete) return;
-      const trackData = {
-        station_departure: routeToDelete.subPaths[0].stations[0].stationName,
-        station_arrival: routeToDelete.subPaths.at(-1)?.stations.at(-1)?.stationName!,
-        line_departure: routeToDelete.subPaths[0].name,
-        line_arrival: routeToDelete.subPaths.at(-1)?.name!,
-      };
-      trackMapBookmarkDelete(trackData);
+      const stationArrival = routeToDelete.subPaths.at(-1)?.stations.at(-1)?.stationName;
+      const lineArrival = routeToDelete.subPaths.at(-1)?.name;
+      if (stationArrival && lineArrival) {
+        trackMapBookmarkDelete({
+          station_departure: routeToDelete.subPaths[0].stations[0].stationName,
+          station_arrival: stationArrival,
+          line_departure: routeToDelete.subPaths[0].name,
+          line_arrival: lineArrival,
+        });
+      }
       await queryClient.invalidateQueries('getRoads');
       showToast('deleteRoute');
     },
