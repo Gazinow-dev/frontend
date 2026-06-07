@@ -44,13 +44,24 @@ target 'gazinow' do
       :mac_catalyst_enabled => false
     )
 
-    # fmt 라이브러리(RCT-Folly가 사용)가 최신 Xcode/Clang의 consteval 평가와 충돌해
+    # fmt 라이브러리(RCT-Folly가 사용)가 최신 Apple Clang의 consteval 평가와 충돌해
     # "Call to consteval function ... is not a constant expression" 에러가 난다.
-    # FMT_USE_CONSTEVAL=0 으로 consteval 사용을 끄면 회피된다.
-    installer.pods_project.targets.each do |target|
-      target.build_configurations.each do |config|
-        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)']
-        config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'FMT_USE_CONSTEVAL=0'
+    # fmt/base.h 의 FMT_USE_CONSTEVAL 감지 블록에는 #ifndef 가드가 없어서
+    # -DFMT_USE_CONSTEVAL=0 컴파일 플래그가 헤더에 의해 다시 덮어써진다.
+    # 따라서 헤더의 첫 분기를 항상 참으로 만들어 FMT_USE_CONSTEVAL 0 을 강제한다.
+    fmt_base = File.join(__dir__, 'Pods', 'fmt', 'include', 'fmt', 'base.h')
+    if File.exist?(fmt_base)
+      text = File.read(fmt_base)
+      needle = "#if !defined(__cpp_lib_is_constant_evaluated)\n#  define FMT_USE_CONSTEVAL 0"
+      patched = "#if 1  // patched: disable consteval (Apple clang consteval bug)\n#  define FMT_USE_CONSTEVAL 0"
+      if text.include?(needle)
+        File.chmod(0644, fmt_base)  # CocoaPods가 헤더를 읽기전용으로 만들어 둔다
+        File.write(fmt_base, text.sub(needle, patched))
+        Pod::UI.puts "[Podfile] Patched fmt/base.h to force FMT_USE_CONSTEVAL=0".green
+      elsif text.include?(patched)
+        Pod::UI.puts "[Podfile] fmt/base.h already patched (FMT_USE_CONSTEVAL=0)".green
+      else
+        Pod::UI.warn "[Podfile] fmt/base.h consteval block not found — fmt may have changed"
       end
     end
   end
