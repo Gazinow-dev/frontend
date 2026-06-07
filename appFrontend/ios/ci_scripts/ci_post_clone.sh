@@ -52,9 +52,15 @@ defaults.project=${SENTRY_PROJECT}
 defaults.url=${SENTRY_URL:-https://sentry.io}
 SENTRYEOF
 
+# GoogleService-Info.plist (Firebase) 도 gitignore라 레포에 없다.
+# plist는 XML이라 base64로 인코딩한 환경변수(GOOGLE_SERVICE_INFO_PLIST_BASE64)에서 복원한다.
+echo "[ci_post_clone] restoring ios/GoogleService-Info.plist"
+echo "${GOOGLE_SERVICE_INFO_PLIST_BASE64}" | base64 --decode > "$APP_DIR/ios/GoogleService-Info.plist"
+
 # 필수 환경변수 누락 시 빌드를 일찍 실패시켜 원인을 명확히 한다.
 : "${API_BASE_URL:?API_BASE_URL 환경변수가 비어있음 (Xcode Cloud Env Vars 확인)}"
 : "${SENTRY_AUTH_TOKEN:?SENTRY_AUTH_TOKEN 환경변수가 비어있음 (Xcode Cloud Env Vars 확인)}"
+: "${GOOGLE_SERVICE_INFO_PLIST_BASE64:?GOOGLE_SERVICE_INFO_PLIST_BASE64 환경변수가 비어있음 (Xcode Cloud Env Vars 확인)}"
 
 # --- 4) Xcode 빌드 단계가 node를 찾을 수 있도록 NODE_BINARY 고정 ---
 # "Bundle React Native code and images" 등 빌드 페이즈는 ios/.xcode.env(.local)을 source 한다.
