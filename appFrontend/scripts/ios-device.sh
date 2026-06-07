@@ -6,10 +6,12 @@
 # ios-deploy는 iOS 17+ 기기를 지원하지 않아 "Installing and launching..."에서 멈춘다.
 # 이 스크립트는 Xcode와 동일하게 Apple의 devicectl(CoreDevice)로 설치/실행한다.
 #
+# 기본은 Debug + Metro 자동 실행 → Hot Reload 지원.
+#
 # 사용법:
-#   yarn ios:device                      # Release(기본) + .env.production, Metro 불필요(자체 번들)
-#   CONFIGURATION=Debug yarn ios:device  # Debug, 별도 터미널에서 `yarn start`(Metro) 필요
-#   ENVFILE=.env.development yarn ios:device
+#   yarn ios:device                         # Debug + .env.development, Metro 자동 실행(Hot Reload)
+#   ENVFILE=.env.production yarn ios:device # 다른 env로 Debug 실행
+#   CONFIGURATION=Release yarn ios:device   # Release(자체 번들, Metro/Hot Reload 없음)
 #
 set -euo pipefail
 
@@ -17,10 +19,11 @@ cd "$(dirname "$0")/.."
 
 SCHEME="gazinow"
 WORKSPACE="ios/gazinow.xcworkspace"
-CONFIGURATION="${CONFIGURATION:-Release}"
-export ENVFILE="${ENVFILE:-.env.production}"
+CONFIGURATION="${CONFIGURATION:-Debug}"
+export ENVFILE="${ENVFILE:-.env.development}"
 DERIVED="ios/build/device-dd"
 DEVICES_JSON="/tmp/gazinow-devices.json"
+METRO_PORT="${RCT_METRO_PORT:-8081}"
 
 # 1) 연결된 기기 자동 탐지
 echo "📱 기기 검색 (devicectl)..."
@@ -47,7 +50,27 @@ DEVICE_NAME=$(node -e '
 ' "$DEVICES_JSON" "$DEVICE_ID")
 echo "📱 대상: $DEVICE_NAME ($DEVICE_ID)"
 
-# 2) 빌드 (기기용)
+# 2) Debug면 Metro(번들 서버) 보장 → Hot Reload
+#    Debug 빌드는 JS를 번들에 넣지 않고 런타임에 Metro에서 받아오므로 Metro가 떠 있어야 한다.
+if [ "$CONFIGURATION" = "Debug" ]; then
+  if lsof -i ":$METRO_PORT" -sTCP:LISTEN >/dev/null 2>&1; then
+    echo "⚡️ Metro 이미 실행 중 (:$METRO_PORT)"
+  else
+    echo "⚡️ Metro 시작 (백그라운드, ENVFILE=$ENVFILE) → /tmp/gazinow-metro.log"
+    ENVFILE="$ENVFILE" nohup npx react-native start --reset-cache >/tmp/gazinow-metro.log 2>&1 &
+    disown || true
+    # Metro 기동 대기 (status 200 뜰 때까지, 최대 ~30초)
+    for _ in $(seq 1 30); do
+      if curl -s "http://localhost:${METRO_PORT}/status" 2>/dev/null | grep -q packager-status:running; then
+        echo "⚡️ Metro 준비 완료"
+        break
+      fi
+      sleep 1
+    done
+  fi
+fi
+
+# 3) 빌드 (기기용)
 echo "🛠  빌드 — $CONFIGURATION (ENVFILE=$ENVFILE)..."
 xcrun xcodebuild \
   -workspace "$WORKSPACE" \
@@ -58,14 +81,14 @@ xcrun xcodebuild \
   -allowProvisioningUpdates \
   build
 
-# 3) 산출물(.app) + 번들 ID 확인 (빌드 결과에서 직접 읽음)
+# 4) 산출물(.app) + 번들 ID 확인 (빌드 결과에서 직접 읽음)
 APP_PATH=$(ls -d "$DERIVED/Build/Products/$CONFIGURATION-iphoneos/"*.app 2>/dev/null | head -1)
 [ -d "$APP_PATH" ] || { echo "❌ .app 산출물을 찾지 못했습니다: $DERIVED"; exit 1; }
 BUNDLE_ID=$(/usr/libexec/PlistBuddy -c "Print :CFBundleIdentifier" "$APP_PATH/Info.plist")
 echo "📦 $APP_PATH"
 echo "🆔 $BUNDLE_ID"
 
-# 4) 설치 → 실행 (devicectl)
+# 5) 설치 → 실행 (devicectl)
 echo "⬇️  설치..."
 xcrun devicectl device install app --device "$DEVICE_ID" "$APP_PATH"
 
@@ -74,5 +97,6 @@ xcrun devicectl device process launch --device "$DEVICE_ID" "$BUNDLE_ID"
 
 echo "✅ 완료 — $DEVICE_NAME 에서 실행됨"
 if [ "$CONFIGURATION" = "Debug" ]; then
-  echo "ℹ️  Debug 빌드입니다. JS 번들을 위해 다른 터미널에서 'yarn start'(Metro)를 켜두세요."
+  echo "⚡️ Hot Reload 활성 (Metro 연결). 기기와 Mac이 같은 Wi-Fi인지 확인하세요."
+  echo "   JS가 안 받아지면 기기에서 앱 흔들기 → Settings에서 번들러 주소를 Mac IP로 지정."
 fi
