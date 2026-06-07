@@ -47,10 +47,12 @@ export PATH="$GEM_HOME/bin:$PATH"
 export BUNDLE_GEMFILE="$APP_DIR/Gemfile"
 
 cd "$APP_DIR"
-gem install bundler --no-document
-bundle install
+# Xcode Cloud의 시스템 Ruby는 2.6.10이라 최신 bundler(Ruby 3.2+ 요구)는 설치 불가.
+# Gemfile.lock의 "BUNDLED WITH"(1.17.2)와 동일하게 고정한다 (Ruby 2.6 호환).
+gem install bundler -v 1.17.2 --no-document
+bundle _1.17.2_ install
 
 cd "$APP_DIR/ios"
-bundle exec pod install --repo-update
+bundle _1.17.2_ exec pod install --repo-update
 
 echo "===== [ci_post_clone] done ====="
