@@ -41,7 +41,11 @@ echo "[ci_post_clone] wrote ios/.xcode.env.local -> NODE_BINARY=$(command -v nod
 
 # --- 5) CocoaPods 설치 ---
 # Gemfile은 appFrontend/ 에 있고, Podfile은 appFrontend/ios/ 에 있다.
+# 시스템 Ruby(/Library/Ruby) 디렉터리는 쓰기 권한이 없으므로 gem을 사용자 경로에 설치한다.
+export GEM_HOME="$HOME/.gem"
+export PATH="$GEM_HOME/bin:$PATH"
 export BUNDLE_GEMFILE="$APP_DIR/Gemfile"
+
 cd "$APP_DIR"
 gem install bundler --no-document
 bundle install
